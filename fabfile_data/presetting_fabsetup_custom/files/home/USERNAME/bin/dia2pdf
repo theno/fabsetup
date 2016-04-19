@@ -1,0 +1,15 @@
+#!/bin/bash
+
+##filname without extension
+ROOT=${1:0:${#1}-4}
+
+#TMPFILE=$(tempfile)
+
+#dia -e $TMPFILE -t eps $1
+dia -e dia2pdf-tmp -t eps $1
+
+#epstopdf -o=$ROOT.pdf $TMPFILE 
+epstopdf -o=$ROOT.pdf dia2pdf-tmp
+
+rm dia2pdf-tmp
+

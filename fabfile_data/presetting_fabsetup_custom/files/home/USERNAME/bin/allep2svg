@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for file in *.ep
+do
+  ep2svg $file
+done

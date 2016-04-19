@@ -1,0 +1,6 @@
+#!/bin/bash
+
+INFILE=${1}
+BASENAME=${1:0:${#1}-3}
+
+xsltproc ~/repos/pencil/app/content/pencil/exporter/Pencil2SVG.xslt ${INFILE} > ${BASENAME}.svg

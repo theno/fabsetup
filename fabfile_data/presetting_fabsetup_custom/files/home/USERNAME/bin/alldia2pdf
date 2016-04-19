@@ -1,0 +1,5 @@
+#!/bin/bash
+for file in *.dia
+do
+  dia2pdf $file
+done

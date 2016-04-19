@@ -1,0 +1,7 @@
+#!/bin/bash
+
+INFILE=${1}
+BASENAME=${1:0:${#1}-4}
+
+inkscape -D -z --file=${INFILE} --export-pdf=${BASENAME}.pdf
+#cairosvg ${INFILE} --format=PDF --out=${BASENAME}.pdf

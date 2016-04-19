@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# substituted variables:
+# [[[username]]]: {{username}}
+
+# Create a local backup of /root, /etc, and /home the simple way as tarballs.
+#
+# The tarballs will be created in /var/backup/local/.
+# Some automatically created files within /home/{{username}} will be ommitted.
+# There will be only one backup. Older backups will be removed!
+
+DATE=$(date +%F)
+
+BACKUP_DIR="/var/backup/local"
+mkdir -p $BACKUP_DIR
+
+#tar czvf root.${DATE}.tar.gz /root/
+#tar czvf root.${DATE}.tar.gz /root/
+
+for DIR in root etc
+do
+    tar czvf ${BACKUP_DIR}/${DIR}.${DATE}.tar.gz /${DIR}/
+done
+
+for DIR in home
+do
+    tar czvf ${BACKUP_DIR}/${DIR}.${DATE}.tar.gz \
+	    --exclude="/home/{{username}}/sites/*" \
+	    --exclude="/home/{{username}}/repos/*" \
+	    --exclude="/home/{{username}}/.local/share/letsencrypt/*" \
+	    /${DIR}/
+done
+
+cd $BACKUP_DIR
+ls | grep -v "${DATE}" | xargs rm -r
+
+cmd="ls -hal $BACKUP_DIR"
+echo -e "\n$cmd"
+eval "$cmd"

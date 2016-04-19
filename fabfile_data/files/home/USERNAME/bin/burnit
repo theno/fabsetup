@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Decode & burn flacs+cd.toc to CD
+#
+# Usage: Insert empty CD into cdrom tray
+#        $ cd /dir/with/flacs_and_cd.toc
+#        $ burnit
+#
+# For context and further information see:
+#   http://forums.debian.net/viewtopic.php?f=16&t=36826
+#
+# This script uses a temporary directory for *.wav extraction
+# (which would have been removed only after burn-success).
+
+CUR_DIR=`pwd`
+CUR_FILENAME=`basename "${CUR_DIR}"`
+
+TMP_DIR=`mktemp -d --suff=".${CUR_FILENAME}.burnit"`
+
+cp cd.toc "${TMP_DIR}/cd.toc"\
+  && for FLAC_FILE in *.flac; do flac -d -f "${FLAC_FILE}" --output-prefix="${TMP_DIR}/"; done\
+  && cd "${TMP_DIR}"\
+  && echo -e "\ntemporary directory for *.wav:\n\"${TMP_DIR}\"\n"\
+  && cdrdao write cd.toc\
+  && rm *.wav\
+  && rm cd.toc\
+  && cd "${CUR_DIR}"
+
+rmdir "${TMP_DIR}"
+eject
+
+
+# Oneliner alternative (but needs write access on source dir):
+#flac -d -f *.flac && cdrdao write cd.toc && rm *.wav
