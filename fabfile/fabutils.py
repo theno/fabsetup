@@ -133,6 +133,7 @@ def install_packages(packages, what_for='for a complete setup to work properly')
     with quiet():
         dpkg = _has_dpkg()
         sudoer = _is_sudoer()
+    do_install = True
     if not (sudoer and dpkg):
         go_on = True
         if dpkg and not sudoer:
@@ -147,9 +148,11 @@ def install_packages(packages, what_for='for a complete setup to work properly')
                 flo('Required {what_for}: '),
                 packages_str, '   Continue?']))
             go_on = query_yes_no(question, default='yes')
+            do_install = False
         if not go_on:
             sys.exit('Abort')
-    run(flo('sudo  apt-get install  {packages_str}'))
+    if do_install:
+        run(flo('sudo  apt-get install  {packages_str}'))
 
 
 def install_package(package):
