@@ -13,7 +13,7 @@ from fabric.state import env
 from fabric.network import needs_host
 
 from utils import flo, print_full_name, print_doc1, blue, yellow, magenta
-from utils import filled_out_template
+from utils import filled_out_template, query_yes_no
 
 
 @needs_host
@@ -85,16 +85,24 @@ def needs_repo_fabsetup_custom(func):
     return wrapper
 
 
+def _non_installed(packages):
+    result = []
+    with quiet():
+        for pkg in packages:
+            if run(flo('dpkg --list {pkg}')).return_code != 0:
+                result.append(pkg)
+    return result
+
+
 def needs_packages(*packages):
     '''Decorator, ensures that packages are installed.'''
     def real_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
-            for package in packages:
-                with quiet():
-                    res = run(flo('dpkg --list {package}'))
-                if res.return_code != 0:
-                    install_package(package)
+            non_installed = _non_installed(packages)
+            if non_installed:
+                what_for = 'in order to run this task'
+                install_packages(non_installed, what_for=what_for)
             return func(*args, **kwargs)
         return wrapper
     return real_decorator
@@ -109,10 +117,40 @@ def task(func):
     return fabric.api.task(print_full_name(color=magenta)(print_doc1(func)))
 
 
-def install_packages(packages):
+def _is_sudoer():
+    '''Return True if current user is a sudoer, else False.'''
+    return run('sudo -v').return_code == 0
+
+
+def _has_dpkg():
+    '''Return True if command dpkg is available, else False.'''
+    return run('which dpkg').return_code == 0
+
+
+def install_packages(packages, what_for='for a complete setup to work properly'):
     '''Install Ubuntu packages given by list.'''
     packages_str = '  '.join(packages)
-    run(flo('sudo  apt-get install  {packages_str}')) # FIXME: incorporate fabrics sudo()
+    with quiet():
+        dpkg = _has_dpkg()
+        sudoer = _is_sudoer()
+    if not (sudoer and dpkg):
+        go_on = True
+        if dpkg and not sudoer:
+            question = yellow(' '.join([
+                'This deb packages are missing to be installed',
+                flo("{what_for}: "),
+                ', '.join(_non_installed(packages)),
+                '  Continue anyway?']))
+            go_on = query_yes_no(question, default='no')
+        else:
+            question = yellow(' '.join([
+                flo('Required {what_for}: '),
+                packages_str, '   Continue?']))
+            go_on = query_yes_no(question, default='yes')
+        if not go_on:
+            sys.exit('Abort')
+    else:
+        run(flo('sudo  apt-get install  {packages_str}'))
 
 
 def install_package(package):
