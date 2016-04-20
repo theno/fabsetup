@@ -149,8 +149,7 @@ def install_packages(packages, what_for='for a complete setup to work properly')
             go_on = query_yes_no(question, default='yes')
         if not go_on:
             sys.exit('Abort')
-    else:
-        run(flo('sudo  apt-get install  {packages_str}'))
+    run(flo('sudo  apt-get install  {packages_str}'))
 
 
 def install_package(package):
