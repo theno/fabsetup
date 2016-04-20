@@ -5,10 +5,10 @@ Set up and maintain a local or remote (Ubuntu) linux system.
 
 ## Let's bubble
 
-fabsetup is a fabric script, so every command starts with a `fab`.
+__fabsetup__ is a __[fabric](http://www.fabfile.org/)__ script, so every command starts with a __`fab`__.
 
 It is somehow like a Thermomix for linux setup recipies.  Let's page through
-the cookbook and rustle up some snack:
+the cookbook and rustle up some snacks:
 
   ```sh
   # go to the fabsetup repository
