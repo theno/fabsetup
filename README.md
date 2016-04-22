@@ -11,7 +11,8 @@ stands for a recipe.  Sometimes, you don't like a recipe and want
 to cook your own meal or you would like to make custom additions.
 This works with [`fabsetup_custom`](./howtos/fabsetup_custom.md).
 
-__fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__ script, so every command starts with a __`fab`__:
+__fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__
+script, so every command starts with a __`fab`__:
 
   ```sh
   # go to the fabsetup repository
@@ -28,8 +29,11 @@ __fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__ script
   fab setup.regex_repl
   ```
 
-Okay, that was just an appetizer. Now we should satisfy the very hunger with this howtos:
- * Customize fabsetup: [Initialize git repository `fabsetup_custom`](./howtos/fabsetup_custom.md)
+Okay, that was just an appetizer. Now we should satisfy the very hunger with
+this howtos:
+
+ * Customize fabsetup: [Initialize git repository
+   `fabsetup_custom`](./howtos/fabsetup_custom.md)
  * [Set up an environment without sudo access](./howtos/no-sudo.md)
  * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
  * [Host an Owncloud Service](./howtos/owncloud.md)
