@@ -4,11 +4,11 @@ Set up and maintain a local or remote (Ubuntu) linux system.
 
 ## Let's bubble
 
-__fabsetup__ is somehow like a Thermomix for linux setup recipies:
-The tasks are the programs of the Thermomix and tell it what to do.
-The __[Howtos](./howtos "cookbook")__ are the cookbook, each howto
-stands for a recipe.  Sometimes, you don't like a recipe and want
-to cook your own meal or you would like to make custom additions.
+__fabsetup__ is somehow like a Thermomix for linux setup recipies: The tasks
+are the programs of the Thermomix and tell it what to do.  The
+__[Howtos](./howtos "cookbook")__ are the cookbook, each howto stands for a
+recipe.  The recipes are easy and short.  Sometimes, you don't like a recipe
+and want to cook your own meal or you would like to make custom additions.
 This works with [`fabsetup_custom`](./howtos/fabsetup_custom.md).
 
 __fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__
