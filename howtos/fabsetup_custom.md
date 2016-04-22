@@ -10,7 +10,21 @@ Initialize git repository `fabsetup_custom`:
   fab INIT
   ```
 
-Structure of `fabsetup_custom`:
+Structure of git repo `fabsetup_custom`:
+
+  ```sh
+  tree ~/repos/fabsetup/fabsetup_custom/
+  
+  ~/repos/fabsetup/fabsetup_custom/
+  ├── config.py
+  ├── fabfile_additions
+  │   ├── custom.py
+  │   └── __init__.py
+  └── files
+      └── ...
+  ```
+
+
 * Custom tasks are defined in:
   * `fabsetup_custom/fabsetup_additions/__init__.py`
   * `fabsetup_custom/fabsetup_additions/custom.py`
