@@ -62,6 +62,6 @@ and run the task `setup.service.fdroid` again, e.g.
 
   ```sh
   cd  ~/repos/fabsetup
-  fab  setup.service.fdroid  -H <your_domain>
+  fab  up  setup.service.fdroid  -H <your_domain>
   # Answer question "package fdroidserver already installed, update?" with 'yes'
   ```
