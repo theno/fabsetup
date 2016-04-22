@@ -1,4 +1,4 @@
-# Howto: fabsetup_custom
+# fabsetup_custom
 
 For custom tasks, files, templates and configurations you can use the git
 repository `fabsetup_custom`.
