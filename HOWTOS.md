@@ -1,4 +1,4 @@
-# Own F-Droid Repository
+# 1. Howto: Own F-Droid Repository
 
 With an [own](https://f-droid.org/wiki/page/Setup_an_FDroid_App_Repo "own froid
 repo") F-Droid Repository (f-droid repo) hosted by yourself you can provide any
@@ -12,33 +12,30 @@ installed.  As an alternative to Google's play-store you can then use
 you also want to install apps, which are not available in F-Droid's main
 repository.
 
-## Install and set up your f-droid repo
+## 1.1 Install and set up your f-droid repo
 
 Scenario: You have a shell with sudo access on an internet hosting machine
-(server) running (ubuntu) linux.
+(`<your_domain>`) running (ubuntu) linux.
 
 On your local pc open a shell, go to the fabsetup dir and run the task
 `setup.service.fdroid`. This will happen on your server:
-* install and enable nginx service
+* Install and enable nginx service
   * deinstall and disable apache service
-* install fdroidserver from the personal package archive
+* Install fdroidserver from the personal package archive
   ([ppa](https://wiki.ubuntuusers.de/Launchpad/PPA/)) of the
   [guardianproject](https://guardianproject.info/)
 * Create a f-droid repo
-* Set up the f-droid repo as a https website served by the nginx service
+* Set up the f-droid repo as a https website served by the nginx service  
 
   ```sh
-  cd ~/repos/fabsetup
-  fab setup.service.fdroid -H <server>
+  cd  ~/repos/fabsetup
+  fab  setup.service.fdroid  -H <your_domain>
   ```
 
-## Create webserver certificate for your f-droid repo via letsencrypt
+## 1.2 Create webserver certificate for your f-droid repo via letsencrypt
 
-In your custom fabsetup repo in the `config.py` file uncomment the line
-  ```python
-  #        'fdroid.{{hostname}}',
-  ```
-and replace `{{hostname}}` by the domain of your internet host, e.g.
+In your custom fabsetup repo in the `config.py` file set the domain name of
+your f-droid repo, e.g. (here with `example.com` as `<your_domain>`):
   ```python
   domain_groups = [
       [
@@ -51,18 +48,21 @@ and replace `{{hostname}}` by the domain of your internet host, e.g.
 
 Now create a certificate using task `setup.server_letsencrypt`:
   ```sh
-  fab setup.server_letsencrypt -H <server>
+  fab  setup.server_letsencrypt  -H <you_domain>
   ```
 
 Save the changes of your custom fabsetup repo, e.g.
   ```sh
-  cd ~/repos/fabsetup/fabsetup_custom
-  git commit -am 'add domain fdroid.example.com for letsencrypt certificates'
+  cd  ~/repos/fabsetup/fabsetup_custom
+  git  commit  -am 'add domain fdroid.example.com for letsencrypt certificates'
   ```
 
 Your repo is now available at this URL: `https://fdroid.<your_domain>/repo`
 
-## Add android apps manually
+*Hint: If you host non-free apps with your f-droid repo it must not be publicly
+available.*
+
+## 1.3 Add android apps manually
 
 Every time when task `setup.service.fdroid` is executed it looks for .apk files
 placed at `~/sites/fdroid.<your_domain>/apks/` and copies them to the repo dir.
@@ -72,9 +72,7 @@ and run the task `setup.service.fdroid` again, e.g.
   ```sh
   scp  path/to/your/app.apk  example.com:~/sites/fdroid.example.com/apks/
 
-  cd ~/repos/fabsetup
-  fab setup.service.fdroid
+  cd  ~/repos/fabsetup
+  fab  setup.service.fdroid  -H <your_domain>
   ```
 
-Hint: If you host non-free apps with your f-droid repo it must not be publicly
-available.
