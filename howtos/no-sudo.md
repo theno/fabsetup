@@ -11,8 +11,14 @@ While not all tasks could be executed without `sudo`, this one could work:
   ```sh
   cd ~/repos/fabsetup
 
+  fab  --set nosudo  setup.i3
+  fab  --set nosudo  setup.irssi
   fab  --set nosudo  setup.pencil
+  fab  --set nosudo  setup.pyenv
+  fab  --set nosudo  setup.ripping_of_cds
   fab  --set nosudo  setup.regex_repl
+  fab  --set nosudo  setup.solarized
+  fab  --set nosudo  setup.tmux
   fab  --set nosudo  setup.vim
   ```
 
