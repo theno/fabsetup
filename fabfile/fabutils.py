@@ -86,12 +86,12 @@ def needs_repo_fabsetup_custom(func):
 
 
 def _non_installed(packages):
-    result = []
+    non_installed = []
     with quiet():
         for pkg in packages:
             if run(flo('dpkg --list {pkg}')).return_code != 0:
-                result.append(pkg)
-    return result
+                non_installed.append(pkg)
+    return non_installed
 
 
 def needs_packages(*packages):
@@ -117,9 +117,19 @@ def task(func):
     return fabric.api.task(print_full_name(color=magenta)(print_doc1(func)))
 
 
-def _is_sudoer():
-    '''Return True if current user is a sudoer, else False.'''
-    return run('sudo -v').return_code == 0
+def _is_sudoer(what_for=''):
+    '''Return True if current user is a sudoer, else False.
+    
+    Should be called non-eager if sudo is wanted only.
+    '''
+    if env.get('nosudo', None) == None:
+        if what_for:
+            print(yellow(what_for))
+        with quiet():
+            env.nosudo = run('sudo -v').return_code != 0
+        if env.nosudo:
+            print('Cannot execute sudo-commands')
+    return not env.nosudo
 
 
 def _has_dpkg():
@@ -128,31 +138,43 @@ def _has_dpkg():
 
 
 def install_packages(packages, what_for='for a complete setup to work properly'):
-    '''Install Ubuntu packages given by list.'''
-    packages_str = '  '.join(packages)
-    with quiet():
-        dpkg = _has_dpkg()
-        sudoer = _is_sudoer()
-    do_install = True
-    if not (sudoer and dpkg):
+    '''Try to install .deb packages given by list.
+    
+    Return True, if packages could be installed or are installed already or if
+    they cannot be installed but the user gives feedback to continue.  Else
+    return False.
+    '''
+    res = True
+    non_installed_packages = _non_installed(packages)
+    packages_str = '  '.join(non_installed_packages)
+    if non_installed_packages:
+        with quiet():
+            dpkg = _has_dpkg()
+        hint = '  (You may have to install them manually)'
+        do_install = False
         go_on = True
-        if dpkg and not sudoer:
-            question = yellow(' '.join([
-                'This deb packages are missing to be installed',
-                flo("{what_for}: "),
-                ', '.join(_non_installed(packages)),
-                '  Continue anyway?']))
-            go_on = query_yes_no(question, default='no')
+        if dpkg:
+            if _is_sudoer('Want to install dpkg packages'):
+                do_install = True
+            else:
+                do_install = False # cannot install anything
+                info = yellow(' '.join([
+                    'This deb packages are missing to be installed',
+                    flo("{what_for}: "), ', '.join(non_installed_packages),]))
+                question = '  Continue anyway?'
+                go_on = query_yes_no(info + hint + question, default='no')
         else:
-            question = yellow(' '.join([
-                flo('Required {what_for}: '),
-                packages_str, '   Continue?']))
-            go_on = query_yes_no(question, default='yes')
-            do_install = False
+            # dpkg == False, unable to determine if packages are installed
+            do_install = False # cannot install anything
+            info = yellow(' '.join([flo('Required {what_for}: '),
+                                    ', '.join(non_installed_packages),]))
+            go_on = query_yes_no(info + hint + '  Continue?', default='yes')
         if not go_on:
             sys.exit('Abort')
-    if do_install:
-        run(flo('sudo  apt-get install  {packages_str}'))
+        if do_install:
+            command = flo('sudo  apt-get install {packages_str}')
+            res = run(command).return_code == 0
+    return res
 
 
 def install_package(package):
