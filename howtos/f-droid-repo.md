@@ -34,7 +34,7 @@ On a local shell, go to the fabsetup dir and run the task
 
 ## Create webserver certificate for your f-droid repo via letsencrypt
 
-Add `fdroid.<your_domain>` entry within in the `domain_groups` and create a
+Add an `fdroid.<your_domain>` entry within in the `domain_groups` and create a
 webserver certificate as described in the howto [Webserver Certificates with
 Letsencrypt](./letsencrypt.md).
 
@@ -56,4 +56,12 @@ and run the task `setup.service.fdroid` again, e.g.
 
   cd  ~/repos/fabsetup
   fab  setup.service.fdroid  -H <your_domain>
+  ```
+
+## Update
+
+  ```sh
+  cd  ~/repos/fabsetup
+  fab  setup.service.fdroid  -H <your_domain>
+  # Answer question "package fdroidserver already installed, update?" with 'yes'
   ```

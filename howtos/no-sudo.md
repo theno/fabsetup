@@ -16,6 +16,6 @@ While not all tasks could be executed without `sudo`, this one could work:
   fab  --set nosudo  setup.vim
   ```
 
-If executed together with `-H localhost` they can be used to setup a local environment
-on a machine maintained by others where you cannot execute `sudo`, e.g. at your
-uni or at work.
+If executed together with `-H localhost` they can be used to setup a local
+environment on a machine maintained by others where you cannot execute `sudo`,
+e.g. at your uni or at work.
