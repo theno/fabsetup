@@ -17,7 +17,7 @@ repository.
 Scenario: You have a shell with sudo access on an internet hosting machine
 (`<your_domain>`) running (ubuntu) linux.
 
-On your local pc open a shell, go to the fabsetup dir and run the task
+On a local shell, go to the fabsetup dir and run the task
 `setup.service.fdroid`. This will happen on your server:
 * Install and enable nginx service
   * deinstall and disable apache service
