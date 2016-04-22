@@ -20,7 +20,7 @@ Scenario: You have a shell with sudo access on an internet hosting machine
 On a local shell, go to the fabsetup dir and run the task
 `setup.service.fdroid`. This will happen on your server:
 * Install and enable nginx service
-  * deinstall and disable apache service
+  * disable and deinstall apache service httpd
 * Install fdroidserver from the personal package archive
   ([ppa](https://wiki.ubuntuusers.de/Launchpad/PPA/)) of the
   [guardianproject](https://guardianproject.info/)
