@@ -1,4 +1,4 @@
-# 1. Howto: Own F-Droid Repository
+# Howto: Own F-Droid Repository
 
 With an [own](https://f-droid.org/wiki/page/Setup_an_FDroid_App_Repo "own froid
 repo") F-Droid Repository (f-droid repo) hosted by yourself you can provide any
@@ -12,7 +12,7 @@ installed.  As an alternative to Google's play-store you can then use
 you also want to install apps, which are not available in F-Droid's main
 repository.
 
-## 1.1 Install and set up your f-droid repo
+## Install and set up your f-droid repo
 
 Scenario: You have a shell with sudo access on an internet hosting machine
 (`<your_domain>`) running (ubuntu) linux.
@@ -32,7 +32,7 @@ On your local pc open a shell, go to the fabsetup dir and run the task
   fab  setup.service.fdroid  -H <your_domain>
   ```
 
-## 1.2 Create webserver certificate for your f-droid repo via letsencrypt
+## Create webserver certificate for your f-droid repo via letsencrypt
 
 In your custom fabsetup repo in the `config.py` file set the domain name of
 your f-droid repo, e.g. (here with `example.com` as `<your_domain>`):
@@ -62,7 +62,7 @@ Your repo is now available at this URL: `https://fdroid.<your_domain>/repo`
 *Hint: If you host non-free apps with your f-droid repo it must not be publicly
 available.*
 
-## 1.3 Add android apps manually
+## Add android apps manually
 
 Every time when task `setup.service.fdroid` is executed it looks for .apk files
 placed at `~/sites/fdroid.<your_domain>/apks/` and copies them to the repo dir.
@@ -75,4 +75,3 @@ and run the task `setup.service.fdroid` again, e.g.
   cd  ~/repos/fabsetup
   fab  setup.service.fdroid  -H <your_domain>
   ```
-
