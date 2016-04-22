@@ -10,7 +10,7 @@ This will happen on your server:
   * Therefore, deinstall and disable apache service
 * Install owncloud
 * Set up owncloud as a web service
-* Host owncloud as a site via nginx
+* Host owncloud as a https site via nginx
 
 On a local shell, go to the fabsetup dir and run the task
 `setup.service.owncloud`:
