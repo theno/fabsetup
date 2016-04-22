@@ -90,7 +90,19 @@ def solarized():
 
 @task
 def vim():
-    '''Customize vim, install package manager pathogen and some packages.'''
+    '''Customize vim, install package manager pathogen and some vim-packages.
+
+    pathogen will be installed as a git repo at ~/repos/vim-pathogen and
+    activated in vim by a symbolic link at ~/.vim/autoload/pathogen.vim
+
+    A ~/.vimrc will be installed which loads the package manager within of vim.
+
+    The vim packages vim-colors-solarized, nerdtree, and tagbar are installed
+    as git repos placed at dir ~/.vim/bundle/
+
+    If you want to install more vim packages also place them at this dir, cf.
+    https://logicalfriday.com/2011/07/18/using-vim-with-pathogen/
+    '''
     # custom ~/.vimrc
     put('fabfile_data/files/home/USERNAME/.vimrc', '~/.vimrc')
 
