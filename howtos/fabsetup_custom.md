@@ -16,20 +16,13 @@ Structure of git repo `fabsetup_custom`:
   tree ~/repos/fabsetup/fabsetup_custom/
   
   ~/repos/fabsetup/fabsetup_custom/
-  ├── config.py
+  ├── config.py          # <-- configurations are made here
   ├── fabfile_additions
-  │   ├── custom.py
-  │   └── __init__.py
+  │   ├── custom.py      # <--- custom tasks, e.g. for 'fab custom.latex'
+  │   └── __init__.py    # <-- custom tasks, eg. for 'fab setup_webserver' (without custom prefix)
   └── files
-      └── ...
+      └── ...            # <--- custom files and templates
   ```
-
-
-* Custom tasks are defined in:
-  * `fabsetup_custom/fabsetup_additions/__init__.py`
-  * `fabsetup_custom/fabsetup_additions/custom.py`
-* Custom files and templates are placed at `fabsetup_custom/files/*`.
-* Configurations are made in `fabsetup_custom/config.py`.
 
 Every time you change anything in your `fabsetup_custom` repo you should commit
 the changes and create a backup.  Note: the `fabsetup_custom` repo should not
