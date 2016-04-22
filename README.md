@@ -27,11 +27,11 @@ stands for a recipe.
   ```
 
 Okay, that was just an appetizer. Now we should satisfy the very hunger with this howtos:
- * [Initialize git repository `fabsetup_custom`](./howtos/fabsetup_custom.md)
+ * Customize fabsetup: [Initialize git repository `fabsetup_custom`](./howtos/fabsetup_custom.md)
  * [Set up an environment without sudo access](./howtos/no-sudo.md)
  * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
  * [Host an Owncloud Service](./howtos/owncloud.md)
- * [Own F-Droid Repository](./howtos/f-droid-repo.md)
+ * [Host an own F-Droid Repository](./howtos/f-droid-repo.md)
 
 ## Installation
 
