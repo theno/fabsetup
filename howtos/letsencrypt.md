@@ -11,13 +11,13 @@ set the domain names of your sites.  For example, if your domain is
   domain_groups = [
       # SAN-DN entries of the first certificate
       [
-	  # the first entry defines the name of the certificate file and must
-	  # be the domain name for the tasks 'setup.service.fdroid' and
-	  # 'setup.service.owncloud' to work properly
-	  'example.com',
+          # the first entry defines the name of the certificate file and must
+          # be the domain name for the tasks 'setup.service.fdroid' and
+          # 'setup.service.owncloud' to work properly
+          'example.com',
           'fdroid.example.com',
-	  'owncloud.example.com',
-	  'www.example.com',
+          'owncloud.example.com',
+          'www.example.com',
       ],
 
       # second certificate
@@ -31,7 +31,7 @@ set the domain names of your sites.  For example, if your domain is
 
 Now create a certificate using task `setup.server_letsencrypt`:
   ```sh
-  fab  setup.server_letsencrypt  -H <you_domain>
+  fab  setup.server_letsencrypt  -H <your_domain>
   ```
 
 Don't forget to save the changes of your custom fabsetup repo, e.g.
