@@ -8,7 +8,8 @@ __fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__ script
 
 It is somehow like a Thermomix for linux setup recipies:
 The tasks are the programs of the Thermomix and tell it what to do.
-The [Howtos](./fabfile/__init__.py "cookbook") are the cookbook, each howto stands for a recipe.
+The __[Howtos](./HOWTOS.md "cookbook")__ are the cookbook, each howto
+stands for a recipe.
 
   ```sh
   # go to the fabsetup repository
