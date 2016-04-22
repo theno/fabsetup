@@ -26,7 +26,7 @@ stands for a recipe.
   fab setup.regex_repl
   ```
 
-Okay, that was just an appetizer. Now we should satisfy the very hunger; Howtos:
+Okay, that was just an appetizer. Now we should satisfy the very hunger with this howtos:
  * [Initialize git repository `fabsetup_custom`](./howtos/fabsetup_custom.md)
  * [Set up an environment without sudo access](./howtos/no-sudo.md)
  * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
