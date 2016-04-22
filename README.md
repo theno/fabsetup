@@ -25,8 +25,9 @@ script, so every command starts with a __`fab`__:
   fab -d setup.vim
     
   # run tasks
-  fab setup.pencil -H localhost
+  fab setup.pencil -H localhost  # local
   fab setup.regex_repl
+  fab up -H example.com          # or remote
   ```
 
 Okay, that was just an appetizer. Now we should satisfy the very hunger with
