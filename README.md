@@ -19,7 +19,7 @@ stands for a recipe.
   fab -l
     
   # show details
-  fab -d setup.pencil
+  fab -d setup.vim
     
   # run tasks
   fab setup.pencil -H localhost
