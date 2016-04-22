@@ -26,17 +26,12 @@ stands for a recipe.
   fab setup.regex_repl
   ```
 
-Okay, that was just an appetizer. Now we should satisfy the very hunger:
-
-  ```sh
-  # initialize a git repository for customizations
-  fab INIT
-    
-  # set up machines by running tasks of tasks
-  fab setup_webserver -H <your_server_on_the_internet>
-  fab setup_desktop -H localhost
-  ```
-
+Okay, that was just an appetizer. Now we should satisfy the very hunger; Howtos:
+ * [Initialize git repository `fabsetup_custom`](./howtos/fabsetup_custom.md)
+ * [Set up an environment without sudo access](./howtos/no-sudo.md)
+ * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
+ * [Host an Owncloud Service](./howtos/owncloud.md)
+ * [Own F-Droid Repository](./howtos/f-droid-repo.md)
 
 ## Installation
 

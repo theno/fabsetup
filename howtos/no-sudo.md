@@ -1,6 +1,6 @@
 # Run Tasks without sudo
 
-If you don't have root access on your machine you can tell `fabsetup` to not
+If you don't have root access on a machine you can tell `fabsetup` to not
 use the `sudo` command:
 
   ```sh
