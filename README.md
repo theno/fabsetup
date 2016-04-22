@@ -27,16 +27,11 @@ stands for a recipe.
   ```
 
 Okay, that was just an appetizer. Now we should satisfy the very hunger:
-
-  ```sh
-  # initialize a git repository for customizations
-  fab INIT
-    
-  # set up machines by running tasks of tasks
-  fab setup_webserver -H <your_server_on_the_internet>
-  fab setup_desktop -H localhost
-  ```
-
+ * Howto: [Initialize git repository `fabsetup_custom`](./howtos/fabsetup_custom.md)
+ * Howto: [Set up an environment without sudo access](./howtos/no-sudo.md)
+ * Howto: [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
+ * Howto: [Host an Owncloud Service](./howtos/owncloud.md)
+ * Howto: [Own F-Droid Repository](./howtos/f-droid-repo.md)
 
 ## Installation
 
