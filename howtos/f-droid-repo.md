@@ -34,30 +34,12 @@ On your local pc open a shell, go to the fabsetup dir and run the task
 
 ## Create webserver certificate for your f-droid repo via letsencrypt
 
-In your custom fabsetup repo in the `config.py` file set the domain name of
-your f-droid repo, e.g. (here with `example.com` as `<your_domain>`):
-  ```python
-  domain_groups = [
-      [
-          'fdroid.example.com',
-	  # ...
-      ],
-      # ...
-  ]
-  ```
+Add `fdroid.<your_domain>` entry within in the `domain_groups` and create a
+webserver certificate as described in the howto [Webserver Certificates with
+Letsencrypt](./letsencrypt.md).
 
-Now create a certificate using task `setup.server_letsencrypt`:
-  ```sh
-  fab  setup.server_letsencrypt  -H <you_domain>
-  ```
-
-Save the changes of your custom fabsetup repo, e.g.
-  ```sh
-  cd  ~/repos/fabsetup/fabsetup_custom
-  git  commit  -am 'add domain fdroid.example.com for letsencrypt certificates'
-  ```
-
-Your repo is now available at this URL: `https://fdroid.<your_domain>/repo`
+Your f-droid repo is now available at this URL:
+`https://fdroid.<your_domain>/repo`
 
 *Hint: If you host non-free apps with your f-droid repo it must not be publicly
 available.*
