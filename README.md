@@ -4,12 +4,12 @@ Set up and maintain a local or remote (Ubuntu) linux system.
 
 ## Let's bubble
 
-__fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__ script, so every command starts with a __`fab`__.
-
-It is somehow like a Thermomix for linux setup recipies:
+__fabsetup__ is somehow like a Thermomix for linux setup recipies:
 The tasks are the programs of the Thermomix and tell it what to do.
 The __[Howtos](./howtos "cookbook")__ are the cookbook, each howto
 stands for a recipe.
+
+__fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__ script, so every command starts with a __`fab`__:
 
   ```sh
   # go to the fabsetup repository
