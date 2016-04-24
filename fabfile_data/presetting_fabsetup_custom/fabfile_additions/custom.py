@@ -3,7 +3,12 @@ from fabfile.fabutils import install_packages, install_user_command, run, task
 
 
 def users_bin_dir():
-    '''Put custom commands at '~/bin/'.'''
+    '''Put custom commands at '~/bin/'
+    
+    For the conversion of diagrams into the pdf format:
+    * dia2pdf, ep2svg, svg2pdf
+    * alldia2pdf, allep2svg, alldia2pdf
+    '''
     # circumvent circular import, cf. http://stackoverflow.com/a/18486863
     from fabfile.setup import pencil
     pencil() # used by ~/bin/ep2svg
@@ -28,8 +33,13 @@ def users_bin_dir():
 def latex():
     '''Install all packages and tools required to compile my latex documents.
     
-    A complete latex installation "requires" the execution of the task
-    'setup.users_bin_dir', too.
+    * Install or update a lot of latex packages.
+    * Install or update pencil, dia, inkscape, xsltproc for diagrams and
+      images.
+    * Install or update util commands for conversion of dia, ep, svg into pdf
+      files.
+    * Checkout or update a haw-thesis template git repository which uses all of
+      the upper mentioned tools.
     '''
     users_bin_dir()
     # circumvent circular import, cf. http://stackoverflow.com/a/18486863
