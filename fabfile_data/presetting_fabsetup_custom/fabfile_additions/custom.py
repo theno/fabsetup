@@ -1,5 +1,6 @@
 from fabfile.fabutils import checkup_git_repo, flo, install_package
-from fabfile.fabutils import install_packages, install_user_command, run, task
+from fabfile.fabutils import install_packages, install_user_command, run
+from fabfile.fabutils import custom_task as task # here every task is custom
 
 
 def users_bin_dir():

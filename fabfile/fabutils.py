@@ -62,7 +62,7 @@ def needs_repo_fabsetup_custom(func):
             print(yellow('\n** **     Init ') + yellow('fabsetup_custom', bold=True) + yellow('      ** **\n'))
             print(yellow('** Create files in dir fabsetup_custom **'))
             local(flo('mkdir -p {custom_dir}'))
-            local(flo('cp -rv --no-clobber {presetting_dir}/. {custom_dir}'))
+            local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
         else:
             with quiet():
                 local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
@@ -76,9 +76,11 @@ def needs_repo_fabsetup_custom(func):
             print(yellow("** But do not make it public, it's custom **\n", bold=True))
         else:
             with quiet():
-                res = local(flo('cd {custom_dir} && git status --porcelain'), capture=True)
+                cmd = flo('cd {custom_dir} && git status --porcelain')
+                res = local(cmd, capture=True)
                 if res:
                     print(yellow('\n** git repo  fabsetup_custom  has uncommitted changes: **'))
+                    print(cmd)
                     print(yellow(res, bold=True))
                     print(yellow("** Don't forget to commit them and make a backup of your repo **\n"))
         return func(*args, **kwargs)
@@ -115,6 +117,12 @@ def task(func):
     On execution, each task prints out its name and its first docstring line.
     '''
     return fabric.api.task(print_full_name(color=magenta)(print_doc1(func)))
+
+
+def custom_task(func):
+    '''Decorator task() composed with decorator needs_repo_fabsetup_custom().
+    '''
+    return task(needs_repo_fabsetup_custom(func))
 
 
 def _is_sudoer(what_for=''):

@@ -7,7 +7,8 @@ custom_path = join(dirname(dirname(__file__)), 'fabfile')
 sys.path = [custom_path] + sys.path
 
 from fabfile import setup
-from fabfile.fabutils import checkup_git_repo, install_packages, run, task
+from fabfile.fabutils import checkup_git_repo, install_packages, run
+from fabfile.fabutils import custom_task as task # here every task is custom
 
 import custom # enable task custom.latex
 
