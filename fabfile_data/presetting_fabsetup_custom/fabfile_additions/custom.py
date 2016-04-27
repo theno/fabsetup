@@ -1,6 +1,9 @@
-from fabfile.fabutils import checkup_git_repo, flo, install_package
-from fabfile.fabutils import install_packages, install_user_command, run
-from fabfile.fabutils import custom_task as task # here every task is custom
+from fabfile.fabutils import checkup_git_repo, checkup_git_repos, flo
+from fabfile.fabutils import install_package, install_packages
+from fabfile.fabutils import install_user_command, run
+from fabfile.fabutils import custom_task as task # here, every task is custom
+
+import config
 
 
 def users_bin_dir():
@@ -47,3 +50,20 @@ def latex():
     from fabfile.setup import latex
     latex()
     checkup_git_repo('https://github.com/theno/haw-inf-thesis-template.git')
+
+
+@task
+def github():
+    '''Checkout or update github repositories.
+
+    The git repos are defined in github_repos in config.py.
+    '''
+    checkup_git_repos(config.github_repos)
+
+
+@task
+def vim():
+    '''Set up my vim environment.'''
+    from fabfile.setup import vim
+    vim()
+    checkup_git_repos(config.vim_package_repos, base_dir='~/.vim/bundle')
