@@ -47,6 +47,7 @@ def regex_repl():
 
 
 @task
+@needs_packages('pkg-config')
 def i3():
     '''Install and customize the tiling window manager i3.'''
     install_package('i3')
@@ -55,7 +56,7 @@ def i3():
     # setup: hide the mouse if not in use
     # in ~/.i3/config: 'exec /home/<USERNAME>/repos/hhpc/hhpc -i 10 &'
     install_packages(['make', 'pkg-config', 'gcc', 'libc6-dev', 'libx11-dev'])
-    checkup_git_repo(url='git@github.com:aktau/hhpc.git')
+    checkup_git_repo(url='https://github.com/aktau/hhpc.git')
     run('cd ~/repos/hhpc  &&  make')
 
 
@@ -249,7 +250,7 @@ def server_customizations():
 @task
 def pencil():
     '''Install or update Pencil, a GUI prototyping tool.'''
-    checkup_git_repo(url='git@github.com:prikhi/pencil.git')
+    checkup_git_repo(url='https://github.com/prikhi/pencil.git')
     run('cd ~/repos/pencil/build && ./build.sh  linux')
     install_user_command('pencil')
 
@@ -311,7 +312,7 @@ def server_letsencrypt():
      * https://letsencrypt.readthedocs.org/en/latest/
      * https://tty1.net/blog/2015/using-letsencrypt-in-manual-mode_en.html
     '''
-    checkup_git_repo(url='git@github.com:letsencrypt/letsencrypt.git')
+    checkup_git_repo(url='https://github.com/letsencrypt/letsencrypt.git')
     sudo('service nginx stop')
     options = ' '.join([
         '--standalone',

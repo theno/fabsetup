@@ -14,7 +14,7 @@ set colorcolumn=80
 set textwidth=79
 set number
 
-nmap <F8> :NERDTreeToggle<CR>
+nmap <F8> :NERDTreeMirrorToggle<CR>
 nmap <F9> :TagbarToggle<CR>
 
 let g:tagbar_autoclose=1
