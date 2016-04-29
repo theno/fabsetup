@@ -47,6 +47,9 @@ let g:NERDTreeCaseSensitiveSort = 0
 let g:NERDTreeIgnore = ['\~$', '\.pyc']
 let g:NERDTreeWinSize = 31
 
+"workaround for bug https://github.com/jistr/vim-nerdtree-tabs/issues/53
+let g:nerdtree_tabs_open_on_console_startup = 1
+
 let g:nerdtree_tabs_smart_startup_focus = 1
 let g:nerdtree_tabs_open_on_new_tab = 1
 let g:nerdtree_tabs_meaningful_tab_names = 1
