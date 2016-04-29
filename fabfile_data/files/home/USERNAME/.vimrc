@@ -41,7 +41,21 @@ set mouse=a
 
 set modeline
 
-nmap <F8> :NERDTreeMirrorToggle<CR>
+let g:NERDTreeAutoCenter = 1
+let g:NERDTreeAutoCenterThreshold = 3
+let g:NERDTreeCaseSensitiveSort = 0
+let g:NERDTreeIgnore = ['\~$', '\.pyc']
+let g:NERDTreeWinSize = 31
+
+let g:nerdtree_tabs_smart_startup_focus = 1
+let g:nerdtree_tabs_open_on_new_tab = 1
+let g:nerdtree_tabs_meaningful_tab_names = 1
+let g:nerdtree_tabs_synchronize_view = 1
+let g:nerdtree_tabs_synchronize_focus = 1
+let g:nerdtree_tabs_focus_on_files = 1
+let g:nerdtree_tabs_autoclose = 1
+nmap <F8> <plug>NERDTreeMirrorToggle<CR>
+"nmap <F8> <plug>NERDTreeTabsToggle<CR>
 
 "Tagbar http://www.vim.org/scripts/script.php?script_id=3465
 let g:tagbar_autoclose=1
