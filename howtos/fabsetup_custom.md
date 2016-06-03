@@ -14,7 +14,7 @@ Structure of git repo `fabsetup_custom`:
 
   ```sh
   tree ~/repos/fabsetup/fabsetup_custom/
-  
+
   ~/repos/fabsetup/fabsetup_custom/
   ├── config.py          # <-- configurations are made here
   ├── fabfile_

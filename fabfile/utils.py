@@ -24,7 +24,7 @@ def doc1():
 
 def _wrap_with(color_code):
     '''Color wrapper.
-    
+
     Example:
         >>> blue = _wrap_with('34')
         >>> print(blue('text'))
@@ -61,11 +61,11 @@ def print_doc1(*args, **kwargs):
         >>> @print_doc1
         ... def foo():
         ...     """First line of docstring.
-        ... 
+        ...
         ...     another line.
-        ...     """ 
+        ...     """
         ...     pass
-        ... 
+        ...
         >>> foo()
         \033[34mFirst line of docstring.\033[0m
     '''

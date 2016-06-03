@@ -53,7 +53,7 @@ if not isdir(fabsetup_custom_dir):
         # Next time, the task setup_webserver from
         # fabsetup_custom/fabfile_/__init__.py will be executed
         # instead
-        
+
 else:
     # import custom tasks from
     # ../fabsetup_custom/fabfile_/__init__.py

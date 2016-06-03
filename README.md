@@ -20,10 +20,10 @@ script, so every command starts with a __`fab`__:
 
   # table of content
   fab -l
-    
+
   # show details
   fab -d setup.vim
-    
+
   # run tasks
   fab setup.pencil -H localhost  # local
   fab setup.regex_repl
