@@ -35,7 +35,7 @@ def ripping_of_cds():
 @task
 def regex_repl():
     '''Install RegexREPL, a helper tool for building regular expressions.
-    
+
     More infos:
      * https://github.com/theno/RegexREPL
      * REPL: https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop
@@ -63,8 +63,8 @@ def i3():
 @task
 def solarized():
     '''Set solarized colors in urxvt, tmux, and vim.
-    
-    More Infos: 
+
+    More Infos:
     * Getting solarized colors right with urxvt, st, tmux and vim:
       https://bbs.archlinux.org/viewtopic.php?id=164108
 
@@ -75,7 +75,7 @@ def solarized():
       https://michaelheap.com/getting-solarized-working-on-ubuntu/
 
     * tmux and 256 colors:
-      http://unix.stackexchange.com/a/118903 
+      http://unix.stackexchange.com/a/118903
     '''
     install_packages(['rxvt-unicode', 'tmux', 'vim'])
     put('fabfile_data/files/home/USERNAME/.Xresources', '~/.Xresources')
@@ -133,7 +133,7 @@ def vim():
 @task
 def tmux():
     '''Customize tmux for solarized colors and other things.
-    
+
     Tweaks for:
      * enable 256 colors
      * correct highlighting within man pages,
@@ -163,7 +163,7 @@ tic /tmp/screen.terminfo'''
 @needs_packages('git')
 def pyenv():
     '''Install or update the pyenv python environment.
-    
+
     Checkout or update the pyenv repo at ~/.pyenv and enable the pyenv.
     Pyenv wird also als Github-Repo "installiert" unter ~/.pyenv
 
@@ -196,7 +196,7 @@ def pyenv():
 @task
 def virtualbox_host():
     '''Install a VirtualBox host system.
-    
+
     More Infos:
      * overview:     https://wiki.ubuntuusers.de/VirtualBox/
      * installation: https://wiki.ubuntuusers.de/VirtualBox/Installation/
@@ -271,7 +271,7 @@ def server_prepare_root_bin_dir():
 @task
 def latex():
     '''Install a lot of packages to compile latex documents.
-    
+
     A latex installation may be "completed" by the execution of the task
     'setup.users_bin_dir'.
     '''
@@ -290,7 +290,7 @@ def latex():
 @needs_repo_fabsetup_custom
 def irssi():
     '''Set up irc client irssi.
-    
+
     More infos:
      * https://wiki.archlinux.org/index.php/Irssi
     '''

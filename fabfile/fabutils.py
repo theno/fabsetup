@@ -91,7 +91,7 @@ def _non_installed(packages):
     non_installed = []
     with quiet():
         for pkg in packages:
-            if run(flo('dpkg --list {pkg}')).return_code != 0:
+            if run(flo('dpkg --status {pkg}')).return_code != 0:
                 non_installed.append(pkg)
     return non_installed
 
@@ -113,7 +113,7 @@ def needs_packages(*packages):
 def task(func):
     '''Composition of decorator functions for inherent self-documentation on
     task execution.
-    
+
     On execution, each task prints out its name and its first docstring line.
     '''
     return fabric.api.task(print_full_name(color=magenta)(print_doc1(func)))
@@ -127,14 +127,19 @@ def custom_task(func):
 
 def _is_sudoer(what_for=''):
     '''Return True if current user is a sudoer, else False.
-    
+
     Should be called non-eager if sudo is wanted only.
     '''
     if env.get('nosudo', None) == None:
         if what_for:
             print(yellow(what_for))
         with quiet():
-            env.nosudo = run('sudo -v').return_code != 0
+            # possible outputs:
+            #  en: "Sorry, user winhost-tester may not run sudo on <hostname>"
+            #  en: "sudo: a password is required"     (=> is sudoer)
+            #  de: "sudo: Ein Passwort ist notwendig" (=> is sudoer)
+            output = run('sudo -nv', capture=True)
+            env.nosudo = not (output.startswith('sudo: ') or output == '')
         if env.nosudo:
             print('Cannot execute sudo-commands')
     return not env.nosudo
@@ -147,10 +152,11 @@ def _has_dpkg():
 
 def install_packages(packages, what_for='for a complete setup to work properly'):
     '''Try to install .deb packages given by list.
-    
-    Return True, if packages could be installed or are installed already or if
-    they cannot be installed but the user gives feedback to continue.  Else
-    return False.
+
+    Return True, if packages could be installed or are installed already, or if
+    they cannot be installed but the user gives feedback to continue.
+
+    Else return False.
     '''
     res = True
     non_installed_packages = _non_installed(packages)
