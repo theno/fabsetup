@@ -98,6 +98,7 @@ def reboot():
 @task
 def dfh():
     '''Print used disc space.'''
+    run('sudo  df -ih')
     run('sudo  df -h')
 
 
