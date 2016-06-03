@@ -40,7 +40,7 @@ if not isdir(fabsetup_custom_dir):
         # decorator @needs_repo_fabsetup_custom makes the job
         print('Init completed. Now run this task again.')
         # Next time, the task setup_desktop from
-        # fabsetup_custom/fabfile_additions/__init__.py will be executed
+        # fabsetup_custom/fabfile_/__init__.py will be executed
         # instead
 
 
@@ -51,14 +51,14 @@ if not isdir(fabsetup_custom_dir):
         # decorator @needs_repo_fabsetup_custom makes the job
         print('Init completed. Now run this task again.')
         # Next time, the task setup_webserver from
-        # fabsetup_custom/fabfile_additions/__init__.py will be executed
+        # fabsetup_custom/fabfile_/__init__.py will be executed
         # instead
         
 else:
     # import custom tasks from
-    # ../fabsetup_custom/fabfile_additions/__init__.py
+    # ../fabsetup_custom/fabfile_/__init__.py
     sys.path = [fabsetup_custom_dir] + sys.path
-    import fabfile_additions as _
+    import fabfile_ as _
     globals().update(_.__dict__)
     del _
 
