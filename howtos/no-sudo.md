@@ -4,7 +4,7 @@ If you don't have root access on a machine you can tell `fabsetup` to not
 use the `sudo` command:
 
   ```sh
-  fab  --set nosudo  <task_name>
+  fab  --set nosudo  <task_name>  -H localhost
   ```
 
 While not all tasks could be executed without `sudo`, this one could work:
