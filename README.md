@@ -2,6 +2,14 @@
 
 Set up and maintain a local or remote (Ubuntu) linux system.
 
+## Installation
+
+  ```sh
+  sudo apt-get install  git  fabric
+  mkdir ~/repos && cd ~/repos
+  git clone  https://github.com/theno/fabsetup.git
+  ```
+
 ## Let's bubble
 
 __fabsetup__ is somehow like a Thermomix for linux setup recipies: The tasks
@@ -39,11 +47,3 @@ this howtos:
  * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
  * [Host an Owncloud Service](./howtos/owncloud.md)
  * [Host an own F-Droid Repository](./howtos/f-droid-repo.md)
-
-## Installation
-
-  ```sh
-  sudo apt-get install  git  fabric
-  mkdir ~/repos && cd ~/repos
-  git clone  https://github.com/theno/fabsetup.git
-  ```
