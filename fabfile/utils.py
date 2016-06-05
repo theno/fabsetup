@@ -133,7 +133,7 @@ def query_yes_no(question, default="yes"):
 
     "question" is a string that is presented to the user.
     "default" is the presumed answer if the user just hits <Enter>.
-    It must be "yes" (the default), "no" or None (which means an answer
+    It must be "yes" (the default), "no", or None (which means an answer
     of the user is required).
 
     The "answer" return value is True for "yes" or False for "no".
