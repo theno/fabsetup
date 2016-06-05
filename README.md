@@ -26,7 +26,7 @@ script, so every command starts with a __`fab`__:
   # go to the fabsetup repository
   cd ~/repos/fabsetup
 
-  # table of content
+  # list all tasks
   fab -l
 
   # show details
