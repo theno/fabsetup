@@ -123,6 +123,10 @@ def vim():
             'url': 'https://github.com/scrooloose/nerdtree.git',
         },
         {
+            'name': 'vim-nerdtree-tabs',
+            'url': 'https://github.com/jistr/vim-nerdtree-tabs.git',
+        },
+        {
             'name': 'tagbar',
             'url': 'https://github.com/majutsushi/tagbar.git',
         },
