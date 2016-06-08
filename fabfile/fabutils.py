@@ -217,7 +217,6 @@ def checkup_git_repos(repos, base_dir='~/repos'):
                     'git clone  {url}  {name}'
             ])))
         else:
-            # FIXME: reset + fetch instead of pull
             run(flo('cd {base_dir}/{name}  &&  git pull'))
 
 
