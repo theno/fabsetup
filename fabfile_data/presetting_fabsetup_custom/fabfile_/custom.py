@@ -8,7 +8,7 @@ import config
 
 def users_bin_dir():
     '''Put custom commands at '~/bin/'
-    
+
     For the conversion of diagrams into the pdf format:
     * dia2pdf, ep2svg, svg2pdf
     * alldia2pdf, allep2svg, alldia2pdf
@@ -36,7 +36,7 @@ def users_bin_dir():
 @task
 def latex():
     '''Install all packages and tools required to compile my latex documents.
-    
+
     * Install or update a lot of latex packages.
     * Install or update pencil, dia, inkscape, xsltproc for diagrams and
       images.

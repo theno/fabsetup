@@ -20,7 +20,7 @@ Structure of git repo `fabsetup_custom`:
   ├── fabfile_
   │   ├── custom.py      # <--- custom tasks, e.g. for 'fab custom.latex'
   │   └── __init__.py    # <-- custom tasks, eg. for 'fab setup_webserver'
-  └── files                                       (without 'custom.' prefix)
+  └── files                                   #  (without prefix 'custom.')
       └── ...            # <--- custom files and templates
   ```
 

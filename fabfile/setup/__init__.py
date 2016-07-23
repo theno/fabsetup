@@ -123,6 +123,10 @@ def vim():
             'url': 'https://github.com/scrooloose/nerdtree.git',
         },
         {
+            'name': 'vim-nerdtree-tabs',
+            'url': 'https://github.com/jistr/vim-nerdtree-tabs.git',
+        },
+        {
             'name': 'tagbar',
             'url': 'https://github.com/majutsushi/tagbar.git',
         },
@@ -201,6 +205,8 @@ def virtualbox_host():
      * overview:     https://wiki.ubuntuusers.de/VirtualBox/
      * installation: https://wiki.ubuntuusers.de/VirtualBox/Installation/
     '''
+    if query_yes_no(question='Uninstall virtualbox-dkms?', default='yes'):
+        run('sudo apt-get remove virtualbox-dkms')
     install_packages([
         'virtualbox',
         'virtualbox-qt',

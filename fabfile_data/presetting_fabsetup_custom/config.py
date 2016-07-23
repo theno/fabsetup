@@ -32,8 +32,4 @@ github_repos = [
 # task: custom.vim
 
 vim_package_repos = [
-    {
-        'name': 'vim-nerdtree-tabs',
-        'url': 'https://github.com/jistr/vim-nerdtree-tabs.git',
-    },
 ]
