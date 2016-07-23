@@ -252,3 +252,25 @@ sudo dpkg -i $lms_deb
     print('    > ' + cyan(flo('chown -R {username}.lms  <path/to/your/media>')))
     hostname = env.host
     print(flo('\n    lms frontend available at http://{hostname}:9000'))
+
+
+@task
+def samba():
+    '''Install smb server samba and create a share (common read-write-access).
+
+    More infos:
+     * https://wiki.ubuntuusers.de/Samba%20Server/
+    '''
+    username = env.user
+    install_packages(['samba'])
+    run(flo('sudo smbpasswd -a {username}'))
+
+    path = '$HOME/shared'
+    sharename = 'shared'
+    comment = '"smb share; everyone has full access (read/write)"'
+    acl = flo('Everyone:F,{username}:F guest_ok=y')
+
+    with warn_only():
+        run(flo('mkdir {path}'))
+    run(flo('net usershare add {sharename} {path} {comment} {acl}'))
+    run(flo('net usershare info {sharename}'))
