@@ -272,5 +272,5 @@ def samba():
 
     with warn_only():
         run(flo('mkdir {path}'))
-    run(flo('net usershare add {sharename} {path} {comment} {acl}'))
-    run(flo('net usershare info {sharename}'))
+    run(flo('sudo net usershare add {sharename} {path} {comment} {acl}'))
+    run(flo('sudo net usershare info {sharename}'))
