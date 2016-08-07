@@ -1,6 +1,6 @@
 from fabfile.fabutils import checkup_git_repo, checkup_git_repos, flo
 from fabfile.fabutils import install_package, install_packages
-from fabfile.fabutils import install_user_command, run
+from fabfile.fabutils import install_user_command, run, suggest_localhost
 from fabfile.fabutils import custom_task as task # here, every task is custom
 
 import config
@@ -34,6 +34,7 @@ def users_bin_dir():
 
 
 @task
+@suggest_localhost
 def latex():
     '''Install all packages and tools required to compile my latex documents.
 
@@ -53,6 +54,7 @@ def latex():
 
 
 @task
+@suggest_localhost
 def github():
     '''Checkout or update github repositories.
 
@@ -62,6 +64,7 @@ def github():
 
 
 @task
+@suggest_localhost
 def vim():
     '''Set up my vim environment.'''
     from fabfile.setup import vim

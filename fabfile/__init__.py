@@ -5,6 +5,7 @@ from fabric.api import env, execute, sudo, warn_only
 
 from fabutils import checkup_git_repo, install_package, install_packages, run
 from fabutils import task, needs_packages, needs_repo_fabsetup_custom
+from fabutils import suggest_localhost
 from utils import doc1, print_doc1, flo, print_full_name, query_yes_no
 from utils import black, red, green, yellow, blue, magenta, cyan, white
 
@@ -64,6 +65,7 @@ else:
 
 
 @task
+@suggest_localhost
 @needs_packages('debian-goodies') # for command 'checkrestart'
 def up():
     '''Update and upgrade all packages of the Debian or Ubuntu OS.'''
@@ -96,6 +98,7 @@ def reboot():
 
 
 @task
+@suggest_localhost
 def dfh():
     '''Print used disc space.'''
     run('sudo  df -ih')

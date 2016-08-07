@@ -16,12 +16,33 @@ from utils import flo, print_full_name, print_doc1, blue, yellow, magenta
 from utils import filled_out_template, query_yes_no
 
 
+def suggest_localhost(func):
+    '''Prompt user for value of env.host_string with default to 'localhost'
+    when env.host_string is empty.
+
+    Modification of decorator function fabric.network.needs_host
+    '''
+    from fabric.network import handle_prompt_abort, to_dict
+    @wraps(func)
+    def host_prompting_wrapper(*args, **kwargs):
+        while not env.get('host_string', False):
+            handle_prompt_abort("the target host connection string")
+            host_string = raw_input("No hosts found. Please specify"
+                   " host string for connection [localhost]: ")
+            if host_string == '':
+                host_string = 'localhost'
+            env.update(to_dict(host_string))
+        return func(*args, **kwargs)
+    host_prompting_wrapper.undecorated = func
+    return host_prompting_wrapper
+
+
 @needs_host
-def _func(kwargs, localhost=fabric.api.local, remote=fabric.api.run):
+def _func(kwargs, func_local=fabric.api.local, func_remote=fabric.api.run):
     env.host = env.host_string
-    func = remote
+    func = func_remote
     if env.host_string == 'localhost':
-        func = localhost
+        func = func_local
     else:
         kwargs.pop('capture', None)
     return func, kwargs

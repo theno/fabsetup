@@ -11,7 +11,7 @@ from fabric.contrib.files import exists
 from fabric.operations import put
 
 from ..fabutils import checkup_git_repo, install_package, install_packages
-from ..fabutils import needs_packages, task, run
+from ..fabutils import needs_packages, task, run, suggest_localhost
 from ..utils import flo, print_doc1, print_full_name, query_yes_no, query_input
 from ..utils import blue, cyan, magenta, filled_out_template
 
@@ -255,6 +255,7 @@ sudo dpkg -i $lms_deb
 
 
 @task
+@suggest_localhost
 def samba():
     '''Install smb server samba and create a share (common read-write-access).
 

@@ -8,6 +8,7 @@ sys.path = [custom_path] + sys.path
 
 from fabfile import setup
 from fabfile.fabutils import checkup_git_repo, install_packages, run
+from fabfile.fabutils import suggest_localhost
 from fabfile.fabutils import custom_task as task # here every task is custom
 
 import custom # enable task custom.latex
@@ -33,17 +34,21 @@ packages_webserver = usefull + [
 packages_desktop = usefull + [
     'arandr',
     'baobab',
+    'chromium-browser',
     'gitk',
+    'gthumb',
+    'k3b',
     'mplayer',
     'okular',
+    'openssh-server',
     'sshfs',
     'vlc',
     'youtube-dl',
-    'gthumb',
 ]
 
 
 @task
+@suggest_localhost
 def setup_desktop():
     '''Run setup tasks to set up a nicely configured desktop pc.
 

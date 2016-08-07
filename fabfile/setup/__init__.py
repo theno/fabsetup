@@ -6,7 +6,7 @@ from fabric.contrib.files import append
 
 from ..fabutils import exists, install_packages, install_package
 from ..fabutils import install_file, install_user_command, needs_packages
-from ..fabutils import needs_repo_fabsetup_custom, put, run
+from ..fabutils import needs_repo_fabsetup_custom, put, run, suggest_localhost
 from ..fabutils import checkup_git_repo, checkup_git_repos, task
 from ..utils import doc1, print_doc1, flo, print_full_name, query_yes_no
 from ..utils import black, red, green, yellow, blue, magenta, cyan, white
@@ -16,6 +16,7 @@ import service
 
 
 @task
+@suggest_localhost
 def ripping_of_cds():
     '''Install the tools ripit and burnit in order to rip and burn audio cds.
 
@@ -33,6 +34,7 @@ def ripping_of_cds():
 
 
 @task
+@suggest_localhost
 def regex_repl():
     '''Install RegexREPL, a helper tool for building regular expressions.
 
@@ -47,6 +49,7 @@ def regex_repl():
 
 
 @task
+@suggest_localhost
 @needs_packages('pkg-config')
 def i3():
     '''Install and customize the tiling window manager i3.'''
@@ -61,6 +64,7 @@ def i3():
 
 
 @task
+@suggest_localhost
 def solarized():
     '''Set solarized colors in urxvt, tmux, and vim.
 
@@ -90,6 +94,7 @@ def solarized():
 
 
 @task
+@suggest_localhost
 def vim():
     '''Customize vim, install package manager pathogen and some vim-packages.
 
@@ -135,6 +140,7 @@ def vim():
 
 
 @task
+@suggest_localhost
 def tmux():
     '''Customize tmux for solarized colors and other things.
 
@@ -198,6 +204,7 @@ def pyenv():
 
 
 @task
+@suggest_localhost
 def virtualbox_host():
     '''Install a VirtualBox host system.
 
@@ -254,6 +261,7 @@ def server_customizations():
 
 
 @task
+@suggest_localhost
 def pencil():
     '''Install or update Pencil, a GUI prototyping tool.'''
     checkup_git_repo(url='https://github.com/prikhi/pencil.git')
@@ -275,6 +283,7 @@ def server_prepare_root_bin_dir():
 
 
 @task
+@suggest_localhost
 def latex():
     '''Install a lot of packages to compile latex documents.
 
