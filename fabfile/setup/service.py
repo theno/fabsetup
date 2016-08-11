@@ -226,6 +226,7 @@ def lms():
 
     More infos:
      * http://wiki.slimdevices.com/index.php/Logitech_Media_Server
+     * http://wiki.slimdevices.com/index.php/DebianPackage
      * http://www.mysqueezebox.com/download
      * XSqueeze on Kodi:
        * http://kodi.wiki/view/Add-on:XSqueeze
