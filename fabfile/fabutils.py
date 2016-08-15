@@ -54,7 +54,8 @@ def run(*args, **kwargs):
 
 
 def exists(*args, **kwargs):
-    func, kwargs = _func(kwargs, localhost=os.path.exists, remote=fabric.contrib.files.exists)
+    func, kwargs = _func(kwargs, func_local=os.path.exists,
+            func_remote=fabric.contrib.files.exists)
     if func == os.path.exists:
         args_list = list(args)
         args_list[0] = os.path.expanduser(args[0])
@@ -63,7 +64,7 @@ def exists(*args, **kwargs):
 
 
 def put(*args, **kwargs):
-    func, kwargs = _func(kwargs, remote=fabric.operations.put)
+    func, kwargs = _func(kwargs, func_remote=fabric.operations.put)
     if func == fabric.api.local:
         from_, to = [os.path.expanduser(arg) for arg in args]
         args = [flo('cp  {from_}  {to}')]
