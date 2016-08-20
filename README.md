@@ -10,7 +10,7 @@ Set up and maintain a local or remote (Ubuntu) linux system.
   git clone  https://github.com/theno/fabsetup.git
   ```
 
-## Let's bubble
+## Let's bubble -- How To Use Fabsetup
 
 __fabsetup__ is somehow like a Thermomix for linux setup recipies: The tasks
 are the programs of the Thermomix and tell it what to do.  The
@@ -26,16 +26,28 @@ script, so every command starts with a __`fab`__:
   # go to the fabsetup repository
   cd ~/repos/fabsetup
 
-  # list all tasks
+
+  # list all tasks: '-l'
   fab -l
 
-  # show details
+  # show details: '-d'
   fab -d setup.vim
 
+
   # run tasks
-  fab setup.pencil -H localhost  # local
+  
+  ## on your local host:
+  fab setup.pencil -H localhost
+
+  ## remote host:
+  fab up -H example.com
+
+  ## when no host specified you would be asked for:
   fab setup.regex_repl
-  fab up -H example.com          # or remote
+  #<output. here it defaults to 'localhost'>
+  #regex_repl
+  #Install RegexREPL, a helper tool for building regular expressions.
+  #No hosts found. Please specify host string for connection [localhost]:
   ```
 
 Okay, that was just an appetizer. Now we should satisfy the very hunger with
