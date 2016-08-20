@@ -10,7 +10,7 @@ Set up and maintain a local or remote (Ubuntu) linux system.
   git clone  https://github.com/theno/fabsetup.git
   ```
 
-## Let's bubble -- How To Use Fabsetup
+## Let's bubble: How to use fabsetup
 
 __fabsetup__ is somehow like a Thermomix for linux setup recipies: The tasks
 are the programs of the Thermomix and tell it what to do.  The
