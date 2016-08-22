@@ -1,4 +1,6 @@
 import inspect
+import os.path
+import shutil
 import sys
 from functools import wraps
 
@@ -50,14 +52,62 @@ white = _wrap_with('37')
 default_color = _wrap_with('0')
 
 
+def first_paragraph(multiline_str, without_trailing_dot=True, maxlength=None):
+    '''Return first paragraph of multiline_str as a oneliner.
+
+    When without_trailing_dot is True, the last char of the first paragraph
+    will be removed, if it is a dot ('.').
+
+    Examples:
+        >>> multiline_str = 'first line\\nsecond line\\n\\nnext paragraph'
+        >>> print(first_paragraph(multiline_str))
+        first line second line
+
+        >>> multiline_str = 'first \\n second \\n  \\n next paragraph '
+        >>> print(first_paragraph(multiline_str))
+        first second
+
+        >>> multiline_str = 'first line\\nsecond line\\n\\nnext paragraph'
+        >>> print(first_paragraph(multiline_str, maxlength=3))
+        fir
+
+        >>> multiline_str = 'first line\\nsecond line\\n\\nnext paragraph'
+        >>> print(first_paragraph(multiline_str, maxlength=78))
+        first line second line
+
+        >>> multiline_str = 'first line.'
+        >>> print(first_paragraph(multiline_str))
+        first line
+
+        >>> multiline_str = 'first line.'
+        >>> print(first_paragraph(multiline_str, without_trailing_dot=False))
+        first line.
+
+        >>> multiline_str = ''
+        >>> print(first_paragraph(multiline_str))
+        <BLANKLINE>
+    '''
+    stripped = '\n'.join([line.strip() for line in multiline_str.splitlines()])
+    paragraph = stripped.split('\n\n')[0]
+    res = paragraph.replace('\n', ' ')
+    if without_trailing_dot:
+        res = res.rsplit('.', 1)[0]
+    if maxlength:
+        res = res[0:maxlength]
+    return res
+
+
+# for decorator with arguments see: http://stackoverflow.com/a/5929165
 def print_doc1(*args, **kwargs):
-    '''Decorator, print the first line of the decorated functions docstring.
+    '''Print the first paragraph of the docstring of the decorated function.
+
+    The paragraph will be printed as a oneliner.
 
     May be invoked as a simple, argument-less decorator (i.e. ``@print_doc1``)
-    or with named arguments ``color`` or ``bold`` (eg.
-    ``@print_doc1(color=utils.red, bold=True)``).
+    or with named arguments ``color``, ``bold`` or ``indent`` (eg.
+    ``@print_doc1(color=utils.red, bold=True, indent=' ')``).
 
-    Example:
+    Examples:
         >>> @print_doc1
         ... def foo():
         ...     """First line of docstring.
@@ -67,23 +117,36 @@ def print_doc1(*args, **kwargs):
         ...     pass
         ...
         >>> foo()
-        \033[34mFirst line of docstring.\033[0m
+        \033[34mFirst line of docstring\033[0m
+
+        >>> @print_doc1
+        ... def foo():
+        ...     """First paragraph of docstring which contains more than one
+        ...     line.
+        ...
+        ...     Another paragraph.
+        ...     """
+        ...     pass
+        ...
+        >>> foo()
+        \033[34mFirst paragraph of docstring which contains more than one line\033[0m
     '''
     color = kwargs.get('color', blue)
     bold = kwargs.get('bold', False)
+    indent = kwargs.get('indent', '')
 
-    # for decorator with arguments see: http://stackoverflow.com/a/5929165
     def real_decorator(func):
         '''real decorator function'''
         @wraps(func)
         def wrapper(*args, **kwargs):
             '''the wrapper function'''
             try:
-                print(color(func.__doc__.splitlines()[0], bold))
-            except AttributeError as error:
+                prgf = first_paragraph(func.__doc__)
+                print(color(indent + prgf, bold))
+            except AttributeError as exc:
                 name = func.__name__
                 print(red(flo('{name}() has no docstring')))
-                raise(error)
+                raise(exc)
             return func(*args, **kwargs)
         return wrapper
 
@@ -91,6 +154,7 @@ def print_doc1(*args, **kwargs):
     if not invoked:
         # invoke decorator function which returns the wrapper function
         return real_decorator(func=args[0])
+
     return real_decorator
 
 
@@ -220,6 +284,31 @@ def filled_out_template(filename, **substitutions):
         template = fp.read()
         res = filled_out_template_str(template, **substitutions)
     return res
+
+
+# cf. http://stackoverflow.com/a/126389
+def update_or_append_line(filename, prefix, new_line, keep_backup=True):
+    same_line_exists, line_updated = False, False
+    filename = os.path.expanduser(filename)
+    backup = filename + '~'
+    shutil.move(filename, backup)
+#    with open(filename, 'w') as dest, open(backup, 'r') as source:
+    with open(filename, 'w') as dest:
+        with open(backup, 'r') as source:
+            # try update..
+            for line in source:
+                if line == new_line:
+                    same_line_exists = True
+                if line.startswith(prefix):
+                    dest.write(new_line + '\n')
+                    line_updated = True
+                else:
+                    dest.write(line)
+            # ..or append
+            if not (same_line_exists or line_updated):
+                dest.write(new_line + '\n')
+    if not keep_backup:
+        os.remove(backup)
 
 
 if __name__ == '__main__':

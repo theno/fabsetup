@@ -90,21 +90,27 @@ def needs_repo_fabsetup_custom(func):
                 local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
 
         if not isdir(join(custom_dir, '.git')):
-            print(yellow('\n** Git repo fabsetup_custom: init and first commit **'))
+            print(yellow('\n** Git repo fabsetup_custom: init and first commit'
+                    '**'))
             local(flo('cd {custom_dir} && git init'))
             local(flo('cd {custom_dir} && git add .'))
             local(flo('cd {custom_dir} && git commit -am "Initial commit"'))
-            print(yellow("** Done. Don't forget to create a backup of your fabsetup_custom repo **\n"))
-            print(yellow("** But do not make it public, it's custom **\n", bold=True))
+            print(yellow("** Done. Don't forget to create a backup of your"
+                    'fabsetup_custom repo **\n'))
+            print(yellow("** But do not make it public, it's custom **\n",
+                    bold=True))
         else:
             with quiet():
                 cmd = flo('cd {custom_dir} && git status --porcelain')
                 res = local(cmd, capture=True)
                 if res:
-                    print(yellow('\n** git repo  fabsetup_custom  has uncommitted changes: **'))
+                    print(yellow('\n** git repo  ')
+                        + magenta('fabsetup_custom')
+                        + yellow('  has uncommitted changes: **'))
                     print(cmd)
                     print(yellow(res, bold=True))
-                    print(yellow("** Don't forget to commit them and make a backup of your repo **\n"))
+                    print(yellow("** Don't forget to commit them and make a "
+                            "backup of your repo **\n"))
         return func(*args, **kwargs)
     return wrapper
 
