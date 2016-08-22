@@ -10,7 +10,7 @@ from ..fabutils import needs_repo_fabsetup_custom, put, run, suggest_localhost
 from ..fabutils import checkup_git_repo, checkup_git_repos, task
 from ..utils import doc1, print_doc1, flo, print_full_name, query_yes_no
 from ..utils import black, red, green, yellow, blue, magenta, cyan, white
-from ..utils import filled_out_template
+from ..utils import filled_out_template, update_or_append_line
 
 import service
 
@@ -343,3 +343,38 @@ def server_letsencrypt():
         # FIXME 'letsencrypt-auto reenwal' of already existing certificates
     sudo('service nginx start')
     sudo('tree /etc/letsencrypt')
+
+
+@task
+@suggest_localhost
+def powerline_shell():
+    '''Install and set up powerline-shell prompt.
+
+    More infos:
+     * https://github.com/banga/powerline-shell
+     * https://github.com/ohnonot/powerline-shell
+     * https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
+    '''
+    # set up fonts for powerline
+    checkup_git_repo('https://github.com/powerline/fonts.git',
+            name='powerline-fonts')
+    run('cd ~/repos/powerline-fonts && ./install.sh')
+#    run('fc-cache -vf ~/.local/share/fonts')
+    prefix = 'URxvt*font: '
+    line = prefix + 'xft:Ubuntu Mono derivative Powerline' \
+            ':pixelsize=14,style=regular'
+    update_or_append_line(filename='~/.Xresources', prefix=prefix,
+            new_line=line)
+    if env.host_string == 'localhost':
+        run('xrdb  ~/.Xresources')
+
+    # set up powerline-shell
+    checkup_git_repo('https://github.com/banga/powerline-shell.git')
+#    checkup_git_repo('https://github.com/ohnonot/powerline-shell.git')
+    install_file(path='~/repos/powerline-shell/config.py')
+    run('cd ~/repos/powerline-shell && ./install.py')
+    enabler = '~/.bashrc_powerline_shell'
+    install_file(path=enabler)
+    prefix = flo('if [ -f {enabler} ]; ')
+    line = flo('if [ -f {enabler} ]; then source {enabler}; fi')
+    update_or_append_line(filename='~/.bashrc', prefix=prefix, new_line=line)
