@@ -1,3 +1,11 @@
+# task: setup.powerline_shell
+
+#font = 'Ubuntu Mono derivative Powerline:pixelsize=14,style=regular'
+font = 'DejaVu Sans Mono for Powerline:pixelsize=13,style=regular'
+#font = 'Source Code Pro for Powerline:pixelsize=14,style=regular'
+#font = 'Anonymice Powerline:pixelsize=14,style=regular'
+
+
 # task: setup.server_letsencrypt
 
 # for each group one certificate will be created

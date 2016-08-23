@@ -346,6 +346,7 @@ def server_letsencrypt():
 
 
 @task
+@needs_repo_fabsetup_custom # for import of domain_groups from config.py
 @suggest_localhost
 def powerline_shell():
     '''Install and set up powerline-shell prompt.
@@ -360,9 +361,9 @@ def powerline_shell():
             name='powerline-fonts')
     run('cd ~/repos/powerline-fonts && ./install.sh')
 #    run('fc-cache -vf ~/.local/share/fonts')
-    prefix = 'URxvt*font: '
-    line = prefix + 'xft:Ubuntu Mono derivative Powerline' \
-            ':pixelsize=14,style=regular'
+    prefix = 'URxvt*font: xft:'
+    from config import font
+    line = prefix + font
     update_or_append_line(filename='~/.Xresources', prefix=prefix,
             new_line=line)
     if env.host_string == 'localhost':
