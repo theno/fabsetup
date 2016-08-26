@@ -109,6 +109,8 @@ def vim():
     If you want to install more vim packages also place them at this dir, cf.
     https://logicalfriday.com/2011/07/18/using-vim-with-pathogen/
     '''
+    install_package('vim')
+
     # custom ~/.vimrc
     put('fabfile_data/files/home/USERNAME/.vimrc', '~/.vimrc')
 
