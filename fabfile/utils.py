@@ -203,7 +203,7 @@ def query_yes_no(question, default="yes"):
     The "answer" return value is True for "yes" or False for "no".
     """
     valid = {"yes": True, "y": True, "ye": True, '1': True,
-             "no": False, "n": False, '0': False,}
+             "no": False, "n": False, '0': False, }
     if default is None:
         prompt = " [y/n] "
     elif default == "yes":
@@ -288,27 +288,37 @@ def filled_out_template(filename, **substitutions):
 
 # cf. http://stackoverflow.com/a/126389
 def update_or_append_line(filename, prefix, new_line, keep_backup=True):
+    '''Search in file 'filename' for a line starting with 'prefix' and replace
+    the line by 'new_line'.
+
+    If a line starting with 'prefix' not exists 'new_line' will be appended.
+    If the file not exists, it will be created.
+    '''
     same_line_exists, line_updated = False, False
     filename = os.path.expanduser(filename)
-    backup = filename + '~'
-    shutil.move(filename, backup)
-#    with open(filename, 'w') as dest, open(backup, 'r') as source:
-    with open(filename, 'w') as dest:
-        with open(backup, 'r') as source:
-            # try update..
-            for line in source:
-                if line == new_line:
-                    same_line_exists = True
-                if line.startswith(prefix):
+    if os.path.isfile(filename):
+        backup = filename + '~'
+        shutil.move(filename, backup)
+    #    with open(filename, 'w') as dest, open(backup, 'r') as source:
+        with open(filename, 'w') as dest:
+            with open(backup, 'r') as source:
+                # try update..
+                for line in source:
+                    if line == new_line:
+                        same_line_exists = True
+                    if line.startswith(prefix):
+                        dest.write(new_line + '\n')
+                        line_updated = True
+                    else:
+                        dest.write(line)
+                # ..or append
+                if not (same_line_exists or line_updated):
                     dest.write(new_line + '\n')
-                    line_updated = True
-                else:
-                    dest.write(line)
-            # ..or append
-            if not (same_line_exists or line_updated):
-                dest.write(new_line + '\n')
-    if not keep_backup:
-        os.remove(backup)
+        if not keep_backup:
+            os.remove(backup)
+    else:
+        with open(filename, 'w') as dest:
+            dest.write(new_line + '\n')
 
 
 if __name__ == '__main__':
