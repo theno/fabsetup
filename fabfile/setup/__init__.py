@@ -363,9 +363,9 @@ def powerline_shell():
             name='powerline-fonts')
     run('cd ~/repos/powerline-fonts && ./install.sh')
 #    run('fc-cache -vf ~/.local/share/fonts')
-    prefix = 'URxvt*font: xft:'
-    from config import font
-    line = prefix + font
+    prefix = 'URxvt*font: '
+    from config import fontlist
+    line = prefix + fontlist
     update_or_append_line(filename='~/.Xresources', prefix=prefix,
             new_line=line)
     if env.host_string == 'localhost':

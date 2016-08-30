@@ -192,7 +192,7 @@
 
 ! Select the fonts to be used. This is a comma separated list of font names that are checked in order when trying to find glyphs for characters. The first font defines the cell size for characters; other fonts might be
 ! URxvt*font: fontlist
-URxvt*font: xft:Ubuntu Mono:pixelsize=14,style=regular
+URxvt*font: xft:Ubuntu Mono:pixelsize=14:style=regular
 
 ! URxvt*boldFont: fontlist
 
