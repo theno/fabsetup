@@ -358,7 +358,10 @@ def powerline_shell():
      * https://github.com/ohnonot/powerline-shell
      * https://askubuntu.com/questions/283908/how-can-i-install-and-use-powerline-plugin
     '''
+    assert env.host == 'localhost', 'This task cannot run on a remote host'
+
     # set up fonts for powerline
+
     checkup_git_repo('https://github.com/powerline/fonts.git',
             name='powerline-fonts')
     run('cd ~/repos/powerline-fonts && ./install.sh')
@@ -372,10 +375,21 @@ def powerline_shell():
         run('xrdb  ~/.Xresources')
 
     # set up powerline-shell
+
     checkup_git_repo('https://github.com/banga/powerline-shell.git')
 #    checkup_git_repo('https://github.com/ohnonot/powerline-shell.git')
     install_file(path='~/repos/powerline-shell/config.py')
     run('cd ~/repos/powerline-shell && ./install.py')
+
+    question = 'Use normal question mark (u003F) for untracked files instead '\
+        'of fancy "black question mark ornament" (u2753, which may not work)?'
+    if query_yes_no(question, default='no'):
+        filename = '~/repos/powerline-shell/powerline-shell.py'
+        update_or_append_line(filename, keep_backup=False,
+                              prefix="        'untracked': u'\u2753',",
+                              new_line="        'untracked': u'\u003F',")
+        run(flo('chmod u+x  {filename}'))
+
     enabler = '~/.bashrc_powerline_shell'
     install_file(path=enabler)
     prefix = flo('if [ -f {enabler} ]; ')
