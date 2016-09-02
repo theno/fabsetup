@@ -98,9 +98,9 @@ def owncloud():
 @needs_packages('nginx')
 @needs_packages('software-properties-common')  # for cmd 'add-apt-repository'
 def fdroid():
-    '''Setup an F-Droid App Repo.
+    '''Set up an F-Droid App Repo.
 
-    More Infos:
+    More infos:
      * https://f-droid.org/wiki/page/Setup_an_FDroid_App_Repo
      * https://f-droid.org/wiki/page/Installing_the_Server_and_Repo_Tools
     '''
@@ -179,6 +179,17 @@ def fdroid():
     ])))
 
     sudo('service nginx reload')
+
+
+@task
+@needs_packages('nginx')
+def trac():
+    '''Set up a trac project.
+
+    More infos:
+     * https://trac.edgewall.org/wiki/TracNginxRecipe
+    '''
+    pass
 
 
 @task
