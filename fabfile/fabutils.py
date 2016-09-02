@@ -23,12 +23,13 @@ def suggest_localhost(func):
     Modification of decorator function fabric.network.needs_host
     '''
     from fabric.network import handle_prompt_abort, to_dict
+
     @wraps(func)
     def host_prompting_wrapper(*args, **kwargs):
         while not env.get('host_string', False):
             handle_prompt_abort("the target host connection string")
-            host_string = raw_input("No hosts found. Please specify"
-                   " host string for connection [localhost]: ")
+            host_string = raw_input("No hosts found. Please specify "
+                                    "host string for connection [localhost]: ")
             if host_string == '':
                 host_string = 'localhost'
             env.update(to_dict(host_string))
@@ -55,7 +56,7 @@ def run(*args, **kwargs):
 
 def exists(*args, **kwargs):
     func, kwargs = _func(kwargs, func_local=os.path.exists,
-            func_remote=fabric.contrib.files.exists)
+                         func_remote=fabric.contrib.files.exists)
     if func == os.path.exists:
         args_list = list(args)
         args_list[0] = os.path.expanduser(args[0])
@@ -75,13 +76,16 @@ def put(*args, **kwargs):
 def needs_repo_fabsetup_custom(func):
     '''Decorator, ensures that fabsetup_custom exists and it's a git repo.'''
     from fabric.api import local
+
     @wraps(func)
     def wrapper(*args, **kwargs):
         custom_dir = join(dirname(dirname(__file__)), 'fabsetup_custom')
         presetting_dir = join(dirname(dirname(__file__)), 'fabfile_data',
-                'presetting_fabsetup_custom')
+                              'presetting_fabsetup_custom')
         if not isdir(custom_dir):
-            print(yellow('\n** **     Init ') + yellow('fabsetup_custom', bold=True) + yellow('      ** **\n'))
+            print(yellow('\n** **     Init ') +
+                  yellow('fabsetup_custom', bold=True) +
+                  yellow('      ** **\n'))
             print(yellow('** Create files in dir fabsetup_custom **'))
             local(flo('mkdir -p {custom_dir}'))
             local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
@@ -91,26 +95,26 @@ def needs_repo_fabsetup_custom(func):
 
         if not isdir(join(custom_dir, '.git')):
             print(yellow('\n** Git repo fabsetup_custom: init and first commit'
-                    '**'))
+                         '**'))
             local(flo('cd {custom_dir} && git init'))
             local(flo('cd {custom_dir} && git add .'))
             local(flo('cd {custom_dir} && git commit -am "Initial commit"'))
             print(yellow("** Done. Don't forget to create a backup of your"
-                    'fabsetup_custom repo **\n'))
+                         'fabsetup_custom repo **\n'))
             print(yellow("** But do not make it public, it's custom **\n",
-                    bold=True))
+                         bold=True))
         else:
             with quiet():
                 cmd = flo('cd {custom_dir} && git status --porcelain')
                 res = local(cmd, capture=True)
                 if res:
-                    print(yellow('\n** git repo  ')
-                        + magenta('fabsetup_custom')
-                        + yellow('  has uncommitted changes: **'))
+                    print(yellow('\n** git repo  ') +
+                          magenta('fabsetup_custom  ') +
+                          yellow('has uncommitted changes: **'))
                     print(cmd)
                     print(yellow(res, bold=True))
                     print(yellow("** Don't forget to commit them and make a "
-                            "backup of your repo **\n"))
+                                 "backup of your repo **\n"))
         return func(*args, **kwargs)
     return wrapper
 
@@ -125,7 +129,7 @@ def _non_installed(packages):
 
 
 def needs_packages(*packages):
-    '''Decorator, ensures that packages are installed.'''
+    '''Decorator, ensures that packages are installed (local or remote).'''
     def real_decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -178,7 +182,8 @@ def _has_dpkg():
     return run('which dpkg').return_code == 0
 
 
-def install_packages(packages, what_for='for a complete setup to work properly'):
+def install_packages(packages,
+                     what_for='for a complete setup to work properly'):
     '''Try to install .deb packages given by list.
 
     Return True, if packages could be installed or are installed already, or if

@@ -23,7 +23,7 @@ def owncloud():
 
     Package 'owncloud' pulls package 'mysql' which asks for a password.
     '''
-    hostname = re.sub(r'^[^@]+@', '', env.host) # without username if any
+    hostname = re.sub(r'^[^@]+@', '', env.host)  # without username if any
     sitename = query_input(
                    question='\nEnter site-name of Your Owncloud web service',
                    default=flo('owncloud.{hostname}'), color=cyan)
@@ -57,7 +57,7 @@ def owncloud():
     filename = 'owncloud_site_config.template'
     path = flo('fabfile_data/files/etc/nginx/sites-available/{filename}')
     from_str = filled_out_template(path, username=username, sitename=sitename,
-            hostname=hostname)
+                                   hostname=hostname)
     with tempfile.NamedTemporaryFile(prefix=filename) as tmp_file:
         with open(tmp_file.name, 'w') as fp:
             fp.write(from_str)
@@ -96,7 +96,7 @@ def owncloud():
 
 @task
 @needs_packages('nginx')
-@needs_packages('software-properties-common') # for command 'add-apt-repository'
+@needs_packages('software-properties-common')  # for cmd 'add-apt-repository'
 def fdroid():
     '''Setup an F-Droid App Repo.
 
@@ -104,30 +104,31 @@ def fdroid():
      * https://f-droid.org/wiki/page/Setup_an_FDroid_App_Repo
      * https://f-droid.org/wiki/page/Installing_the_Server_and_Repo_Tools
     '''
-    hostname = re.sub(r'^[^@]+@', '', env.host) # without username if any
+    hostname = re.sub(r'^[^@]+@', '', env.host)  # without username if any
     sitename = query_input(
                    question='\nEnter site-name of Your F-Droid web service',
                    default=flo('fdroid.{hostname}'))
     username = env.user
 
     print(magenta(' install fdroidserver'))
-    res = run(
-        'dpkg --get-selections | grep -q "^fdroidserver[[:space:]]*install$" >/dev/null',
-        warn_only=True
-    )
+    res = run('dpkg --get-selections | '
+              'grep -q "^fdroidserver[[:space:]]*install$" >/dev/null',
+              warn_only=True)
     package_installed = res.return_code == 0
-    question = 'package fdroidserver already installed, update? (needs some time)'
+    question = 'package fdroidserver already installed, update? ' \
+               '(needs some time)'
     if package_installed and not query_yes_no(question, default='no'):
         print('skip update')
     else:
         with hide('output'):
             sudo('yes "" | add-apt-repository  ppa:guardianproject/ppa')
             sudo('apt-get update')
-            # why 'android-libhost-dev' (avoid "Failed to get apk information" on
-            # 'fdroid update --create-metadata'):
+            # why 'android-libhost-dev' (avoid "Failed to get apk information"
+            # on 'fdroid update --create-metadata'):
             # https://f-droid.org/forums/topic/failed-to-get-apk-information-2/#post-15777
             install_packages(['fdroidserver', 'android-libhost-dev'])
-            sudo('yes "" | add-apt-repository --remove  ppa:guardianproject/ppa')
+            sudo('yes "" | add-apt-repository --remove  '
+                 'ppa:guardianproject/ppa')
             sudo('apt-get update')
 
     site_dir = flo('/home/{username}/sites/{sitename}')
@@ -163,7 +164,7 @@ def fdroid():
     filename = 'fdroid_site_config.template'
     path = flo('fabfile_data/files/etc/nginx/sites-available/{filename}')
     from_str = filled_out_template(path, username=username, sitename=sitename,
-            hostname=hostname)
+                                   hostname=hostname)
     with tempfile.NamedTemporaryFile(prefix=filename) as tmp_file:
         with open(tmp_file.name, 'w') as fp:
             fp.write(from_str)
@@ -200,7 +201,8 @@ def vnc_raspi_osmc():
             'libconfig++-dev',
     ])
 
-    print(blue('Build vnc server for raspberry pi using dispmanx (dispmanx_vnc)'))
+    print(blue('Build vnc server for raspberry pi using dispmanx '
+               '(dispmanx_vnc)'))
     checkup_git_repo(url='https://github.com/patrikolausson/dispmanx_vnc.git')
     run('cd ~/repos/dispmanx_vnc  &&  make')
 
@@ -213,8 +215,10 @@ def vnc_raspi_osmc():
     run('sudo  chmod +x  /usr/bin/dispmanx_vncserver')
     put('fabfile_data/files/etc/dispmanx_vncserver.conf', '/tmp/')
     run('sudo mv  /tmp/dispmanx_vncserver.conf  /etc/dispmanx_vncserver.conf')
-    put('fabfile_data/files/etc/systemd/system/dispmanx_vncserver.service', '/tmp/')
-    run('sudo mv  /tmp/dispmanx_vncserver.service  /etc/systemd/system/dispmanx_vncserver.service')
+    put('fabfile_data/files/etc/systemd/system/dispmanx_vncserver.service',
+        '/tmp/')
+    run('sudo mv  /tmp/dispmanx_vncserver.service  '
+        '/etc/systemd/system/dispmanx_vncserver.service')
     run('sudo systemctl start dispmanx_vncserver.service')
     run('sudo systemctl enable dispmanx_vncserver.service')
     run('sudo systemctl daemon-reload')
@@ -233,7 +237,7 @@ def lms():
        * http://forum.kodi.tv/showthread.php?tid=122199
     '''
     # cf. http://wiki.slimdevices.com/index.php/DebianPackage#installing_7.9.0
-    cmds='''\
+    cmds = '''\
 url="http://www.mysqueezebox.com/update/?version=7.9.0&revision=1&geturl=1&os=deb"
 latest_lms=$(wget -q -O - "$url")
 mkdir -p ~/.logitech_media_server_sources
