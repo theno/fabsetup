@@ -55,12 +55,12 @@ def latex():
 
 @task
 @suggest_localhost
-def github():
-    '''Checkout or update github repositories.
+def repos():
+    '''Checkout or update (git) repositories, mostly from github.
 
-    The git repos are defined in github_repos in config.py.
+    The repositories are defined in list 'git_repos' in config.py.
     '''
-    checkup_git_repos(config.github_repos)
+    checkup_git_repos(config.git_repos)
 
 
 @task

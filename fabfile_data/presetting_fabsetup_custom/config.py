@@ -26,9 +26,9 @@ domain_groups = [
 #fdroid_repo_secret = '{{fdroid_repo_secret}}'
 
 
-# task: custom.github
+# task: custom.repos
 
-github_repos = [
+git_repos = [
     {
 #        'name': 'pyopenssl', # optional, will be derived from url by default
         'url': 'https://github.com/pyca/pyopenssl.git',
