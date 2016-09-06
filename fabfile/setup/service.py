@@ -182,19 +182,16 @@ def fdroid():
 
 
 @task
-@needs_packages('nginx', 'postgresql', 'python-pip', 'git',
-                'postgresql-contrib', 'libpq-dev', 'python-dev')
+@needs_packages('nginx', 'postgresql', 'python-pip', 'git')
 def trac():
     '''Set up a trac project.
 
-    This trac installation uses python2, git, postgres (psycopg2) and nginx.
+    This trac installation uses python2, git, sqlite (trac-default) and nginx.
 
     More infos:
      * https://trac.edgewall.org/wiki/TracInstall
-     * https://trac.edgewall.org/wiki/DatabaseBackend#Postgresql
      * https://trac.edgewall.org/wiki/TracFastCgi#NginxConfiguration
      * https://trac.edgewall.org/wiki/TracNginxRecipe
-     * packages required for psycopg2: http://stackoverflow.com/a/33808572
     '''
     run('sudo pip install --upgrade virtualenv')
 
@@ -209,33 +206,23 @@ def trac():
     run(flo('virtualenv --python={python_version}  {site_dir}/virtualenv'))
 
     bin_dir = flo('{site_dir}/virtualenv/bin')
-    run(flo('{bin_dir}/pip install --upgrade  genshi trac psycopg2'))
+    run(flo('{bin_dir}/pip install --upgrade  genshi trac'))
 
-    if query_yes_no('Restore trac environment from backup?', default=None):
-        pass
+    if query_yes_no('Restore trac environment from backup tarball?', default=None):
+        # FIXME stop trac is running already
+        filename = query_input('tarball path?')
+        run(flo('mkdir -p {site_dir}/tmp'))
+        run(flo('tar xf {filename}  --directory={site_dir}/tmp'))
+        run(flo('[ -d {site_dir}/tracenv ] && mv {site_dir}/tracenv  {site_dir}/tracenv.bak'))
+        run(flo('mv {site_dir}/tmp/tracenv_hotcopy  {site_dir}/tracenv'))
+        run(flo('rmdir {site_dir}/tmp'))
+        run(flo('{bin_dir}/trac-admin {site_dir}/tracenv  upgrade'))
+        run(flo('{bin_dir}/trac-admin {site_dir}/tracenv  wiki upgrade'))
     elif query_yes_no('Create a new trac environment?', default=None):
-        # check if role exists: http://stackoverflow.com/a/8546783
-        # howto run as other user: http://serverfault.com/a/601141
-        res = run(flo('sudo -u postgres  psql postgres -tAc '
-                      '"SELECT 1 FROM pg_roles '
-                      'WHERE rolname=\'{sitename}_user\'"'), capture=True)
-        if res != '1':
-            run(flo("sudo su - postgres -c "
-                    "'createuser --username=postgres --encrypted --pwprompt "
-                    "{sitename}_user'"))
+        run(flo('{bin_dir}/trac-admin  {site_dir}/tracenv  initenv'))
 
-        # check if db exists: http://stackoverflow.com/a/16783253
-        res = run(flo('sudo -u postgres  psql -lqt | cut -d \| -f 1 | '
-                      'grep -qw {sitename}'))
-        if res != '0':
-            run(flo("sudo su - postgres -c "
-                    "'createdb --username=postgres --owner={sitename}_user "
-                    "--encoding=UTF8 {sitename}'"))
-
-        # init trac environment
-        print(flo('Database connection string:  ' +
-                  blue('postgres://{sitename}_user:<PASSWORD>@/{sitename}')))
-        run(flo('{bin_dir}/trac-admin  {site_dir}/trac_environment  initenv'))
+    # test-run:
+    run(flo('{bin_dir}/tracd --port 8000 {site_dir}/tracenv'))
 
 
 @task
