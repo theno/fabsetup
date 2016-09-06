@@ -182,14 +182,60 @@ def fdroid():
 
 
 @task
-@needs_packages('nginx')
+@needs_packages('nginx', 'postgresql', 'python-pip', 'git',
+                'postgresql-contrib', 'libpq-dev', 'python-dev')
 def trac():
     '''Set up a trac project.
 
+    This trac installation uses python2, git, postgres (psycopg2) and nginx.
+
     More infos:
+     * https://trac.edgewall.org/wiki/TracInstall
+     * https://trac.edgewall.org/wiki/DatabaseBackend#Postgresql
+     * https://trac.edgewall.org/wiki/TracFastCgi#NginxConfiguration
      * https://trac.edgewall.org/wiki/TracNginxRecipe
+     * packages required for psycopg2: http://stackoverflow.com/a/33808572
     '''
-    pass
+    run('sudo pip install --upgrade virtualenv')
+
+    hostname = re.sub(r'^[^@]+@', '', env.host)  # without username if any
+    sitename = query_input(
+                   question='\nEnter site-name of Your trac web service',
+                   default=flo('trac.{hostname}'))
+    username = env.user
+    site_dir = flo('/home/{username}/sites/{sitename}')
+    run('mkdir -p {site_dir}')
+    python_version = 'python2'  # FIXME take latest python via pyenv
+    run(flo('virtualenv --python={python_version}  {site_dir}/virtualenv'))
+
+    bin_dir = flo('{site_dir}/virtualenv/bin')
+    run(flo('{bin_dir}/pip install --upgrade  genshi trac psycopg2'))
+
+    if query_yes_no('Restore trac environment from backup?', default=None):
+        pass
+    elif query_yes_no('Create a new trac environment?', default=None):
+        # check if role exists: http://stackoverflow.com/a/8546783
+        # howto run as other user: http://serverfault.com/a/601141
+        res = run(flo('sudo -u postgres  psql postgres -tAc '
+                      '"SELECT 1 FROM pg_roles '
+                      'WHERE rolname=\'{sitename}_user\'"'), capture=True)
+        if res != '1':
+            run(flo("sudo su - postgres -c "
+                    "'createuser --username=postgres --encrypted --pwprompt "
+                    "{sitename}_user'"))
+
+        # check if db exists: http://stackoverflow.com/a/16783253
+        res = run(flo('sudo -u postgres  psql -lqt | cut -d \| -f 1 | '
+                      'grep -qw {sitename}'))
+        if res != '0':
+            run(flo("sudo su - postgres -c "
+                    "'createdb --username=postgres --owner={sitename}_user "
+                    "--encoding=UTF8 {sitename}'"))
+
+        # init trac environment
+        print(flo('Database connection string:  ' +
+                  blue('postgres://{sitename}_user:<PASSWORD>@/{sitename}')))
+        run(flo('{bin_dir}/trac-admin  {site_dir}/trac_environment  initenv'))
 
 
 @task
