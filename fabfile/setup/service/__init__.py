@@ -10,10 +10,10 @@ from fabric.api import cd, env, hide, local, sudo, warn_only
 from fabric.contrib.files import exists
 from fabric.operations import put
 
-from ..fabutils import checkup_git_repo, install_package, install_packages
-from ..fabutils import needs_packages, task, run, suggest_localhost
-from ..utils import flo, print_doc1, print_full_name, query_yes_no, query_input
-from ..utils import blue, cyan, magenta, filled_out_template
+from ...fabutils import checkup_git_repo, install_package, install_packages
+from ...fabutils import needs_packages, task, run, suggest_localhost
+from ...utils import flo, print_doc1, print_full_name, query_yes_no, query_input
+from ...utils import blue, cyan, magenta, filled_out_template
 
 
 @task
@@ -186,12 +186,15 @@ def fdroid():
 def trac():
     '''Set up a trac project.
 
-    This trac installation uses python2, git, sqlite (trac-default) and nginx.
+    This trac installation uses python2, git, sqlite (trac-default), gunicorn,
+    and nginx.
 
     More infos:
      * https://trac.edgewall.org/wiki/TracInstall
      * https://trac.edgewall.org/wiki/TracFastCgi#NginxConfiguration
      * https://trac.edgewall.org/wiki/TracNginxRecipe
+     * https://trac.edgewall.org/wiki/Gunicorn
+     * http://www.obeythetestinggoat.com/book/chapter_08.html#_getting_to_a_production_ready_deployment
     '''
     run('sudo pip install --upgrade virtualenv')
 
