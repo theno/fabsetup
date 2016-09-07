@@ -30,6 +30,7 @@ def trac():
     site_dir = flo('/home/{username}/sites/{sitename}')
     bin_dir = flo('{site_dir}/virtualenv/bin')
 
+    # provisioning steps
     install_or_upgrade_virtualenv()
     create_directory_structure(site_dir)
     create_virtualenv(site_dir)
@@ -51,7 +52,7 @@ def install_or_upgrade_virtualenv():
 
 @subtask
 def create_directory_structure(site_dir):
-    run('mkdir -p {site_dir}')
+    run(flo('mkdir -p {site_dir}'))
 
 
 @subtask
