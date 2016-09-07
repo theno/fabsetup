@@ -12,7 +12,7 @@ from fabric.context_managers import quiet
 from fabric.state import env
 from fabric.network import needs_host
 
-from utils import flo, print_full_name, print_doc1, blue, yellow, magenta
+from utils import flo, print_full_name, print_doc1, blue, cyan, yellow, magenta
 from utils import filled_out_template, query_yes_no
 
 
@@ -148,13 +148,35 @@ def task(func):
 
     On execution, each task prints out its name and its first docstring line.
     '''
-    return fabric.api.task(print_full_name(color=magenta)(print_doc1(func)))
+    prefix = '\n# '
+    tail = '\n'
+    return fabric.api.task(print_full_name(color=magenta, prefix=prefix, tail=tail)(print_doc1(func)))
 
 
 def custom_task(func):
     '''Decorator task() composed with decorator needs_repo_fabsetup_custom().
     '''
     return task(needs_repo_fabsetup_custom(func))
+
+
+def subtask(*args, **kwargs):
+    '''Decorator which prints out the name of the decorated function on
+    execution.
+    '''
+    prefix = kwargs.get('prefix', '\n## ')
+    tail = kwargs.get('tail', '\n')
+    doc1 = kwargs.get('doc1', False)
+
+    def real_decorator(func):
+        if doc1:
+            return print_full_name(color=cyan, prefix=prefix, tail=tail)(print_doc1(func))
+        return print_full_name(color=cyan, prefix=prefix, tail=tail)(func)
+
+    invoked = bool(not args or kwargs)
+    if not invoked:
+        # invoke decorator function which returns the wrapper function
+        return real_decorator(func=args[0])
+    return real_decorator
 
 
 def _is_sudoer(what_for=''):

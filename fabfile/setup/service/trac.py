@@ -2,8 +2,8 @@ import re
 
 from fabric.api import env, hide
 
-from ...fabutils import needs_packages, run, task
-from ...utils import flo, query_input, query_yes_no
+from ...fabutils import needs_packages, run, subtask, task
+from ...utils import cyan, flo, print_full_name, query_input, query_yes_no
 
 
 @task
@@ -30,28 +30,31 @@ def trac():
     site_dir = flo('/home/{username}/sites/{sitename}')
     bin_dir = flo('{site_dir}/virtualenv/bin')
 
-    install_upgrade_virtualenv()
+    install_or_upgrade_virtualenv()
     create_directory_structure(site_dir)
     create_virtualenv(site_dir)
 
-    if query_yes_no('Restore trac environment from backup tarball?',
+    if query_yes_no('\nRestore trac environment from backup tarball?',
                     default=None):
         restore_tracenv_from_backup_tarball(site_dir, bin_dir)
-    elif query_yes_no('Create a new trac environment?', default=None):
+    elif query_yes_no('\nCreate a new trac environment?', default=None):
         init_tracenv(site_dir, bin_dir)
 
     # FIXME test-run:
-    run(flo('{bin_dir}/tracd --port 8000 {site_dir}/tracenv'))
+    run_tracd(site_dir, bin_dir)
 
 
-def install_upgrade_virtualenv():
+@subtask
+def install_or_upgrade_virtualenv():
     run('sudo pip install --upgrade virtualenv')
 
 
+@subtask
 def create_directory_structure(site_dir):
     run('mkdir -p {site_dir}')
 
 
+@subtask
 def create_virtualenv(site_dir):
     python_version = 'python2'  # FIXME take latest python via pyenv
     run(flo('virtualenv --python={python_version}  {site_dir}/virtualenv'))
@@ -59,6 +62,7 @@ def create_virtualenv(site_dir):
             'pip install --upgrade  genshi trac gunicorn'))
 
 
+@subtask
 def restore_tracenv_from_backup_tarball(site_dir, bin_dir):
     # FIXME stop trac is running already
     filename = query_input('tarball path?')
@@ -72,5 +76,12 @@ def restore_tracenv_from_backup_tarball(site_dir, bin_dir):
     run(flo('{bin_dir}/trac-admin {site_dir}/tracenv  wiki upgrade'))
 
 
+@subtask
 def init_tracenv(site_dir, bin_dir):
     run(flo('{bin_dir}/trac-admin  {site_dir}/tracenv  initenv'))
+
+
+@subtask(doc1=True)
+def run_tracd(site_dir, bin_dir):
+    '''Run tracd  -- only for testing purpose.'''
+    run(flo('{bin_dir}/tracd --port 8000 {site_dir}/tracenv'))
