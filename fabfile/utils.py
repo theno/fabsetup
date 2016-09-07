@@ -168,6 +168,7 @@ def print_full_name(*args, **kwargs):
     color = kwargs.get('color', default_color)
     bold = kwargs.get('bold', False)
     prefix = kwargs.get('prefix', '')
+    tail = kwargs.get('tail', '')
 
     def real_decorator(func):
         '''real decorator function'''
@@ -179,7 +180,7 @@ def print_full_name(*args, **kwargs):
                 first_line = func.__module__ + '.' + func.__qualname__
             except AttributeError as exc:
                 first_line = func.__name__
-            print(color(prefix + first_line, bold))
+            print(color(prefix + first_line + tail, bold))
             return func(*args, **kwargs)
         return wrapper
 
