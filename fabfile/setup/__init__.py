@@ -11,6 +11,7 @@ from ..fabutils import checkup_git_repo, checkup_git_repos, task
 from ..utils import doc1, print_doc1, flo, print_full_name, query_yes_no
 from ..utils import black, red, green, yellow, blue, magenta, cyan, white
 from ..utils import filled_out_template, update_or_append_line
+from ..utils import uncomment_or_update_or_append_line
 
 import service
 
@@ -390,8 +391,9 @@ def powerline_shell():
                               new_line="        'untracked': u'\u003F',")
         run(flo('chmod u+x  {filename}'))
 
-    enabler = '~/.bashrc_powerline_shell'
-    install_file(path=enabler)
-    prefix = flo('if [ -f {enabler} ]; ')
-    line = flo('if [ -f {enabler} ]; then source {enabler}; fi')
-    update_or_append_line(filename='~/.bashrc', prefix=prefix, new_line=line)
+    bash_snippet = '~/.bashrc_powerline_shell'
+    install_file(path=bash_snippet)
+    prefix = flo('if [ -f {bash_snippet} ]; ')
+    enabler = flo('if [ -f {bash_snippet} ]; then source {bash_snippet}; fi')
+    uncomment_or_update_or_append_line(filename='~/.bashrc', prefix=prefix,
+                                       new_line=enabler)
