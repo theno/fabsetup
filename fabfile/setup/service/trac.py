@@ -15,11 +15,11 @@ def trac():
     and nginx.
 
     More infos:
-     * https://trac.edgewall.org/wiki/TracInstall
-     * https://trac.edgewall.org/wiki/TracFastCgi#NginxConfiguration
-     * https://trac.edgewall.org/wiki/TracNginxRecipe
-     * https://trac.edgewall.org/wiki/Gunicorn
-     * http://www.obeythetestinggoat.com/book/chapter_08.html#_getting_to_a_production_ready_deployment
+      https://trac.edgewall.org/wiki/TracInstall
+      https://trac.edgewall.org/wiki/TracFastCgi#NginxConfiguration
+      https://trac.edgewall.org/wiki/TracNginxRecipe
+      https://trac.edgewall.org/wiki/Gunicorn
+      http://www.obeythetestinggoat.com/book/chapter_08.html#_getting_to_a_production_ready_deployment
     '''
     hostname = re.sub(r'^[^@]+@', '', env.host)  # without username if any
     sitename = query_input(
