@@ -288,7 +288,8 @@ def filled_out_template(filename, **substitutions):
 
 
 # cf. http://stackoverflow.com/a/126389
-def update_or_append_line(filename, prefix, new_line, keep_backup=True):
+def update_or_append_line(filename, prefix, new_line, keep_backup=True,
+                          append=True):
     '''Search in file 'filename' for a line starting with 'prefix' and replace
     the line by 'new_line'.
 
@@ -313,13 +314,38 @@ def update_or_append_line(filename, prefix, new_line, keep_backup=True):
                     else:
                         dest.write(line)
                 # ..or append
-                if not (same_line_exists or line_updated):
+                if not (same_line_exists or line_updated) and append:
                     dest.write(new_line + '\n')
         if not keep_backup:
             os.remove(backup)
     else:
         with open(filename, 'w') as dest:
             dest.write(new_line + '\n')
+    return same_line_exists or line_updated
+
+
+def comment_out_line(filename, line, comment='#'):
+    '''Comment line out by putting a comment sign in front of the line.
+
+    If the file does not contain the line, the files content will not be
+    changed (but the file will be touched in every case).
+    '''
+    update_or_append_line(filename, prefix=line, new_line=comment+line,
+                          append=False)
+
+
+def uncomment_or_update_or_append_line(filename, prefix, new_line, comment='#',
+                                       keep_backup=True):
+    '''Remove the comment of an commented out line and make the line "active".
+
+    If such an commented out line not exists it would be appended.
+    '''
+    uncommented = update_or_append_line(filename, prefix=comment+prefix,
+                                        new_line=new_line,
+                                        keep_backup=keep_backup, append=False)
+    if not uncommented:
+        update_or_append_line(filename, prefix, new_line,
+                              keep_backup=keep_backup, append=True)
 
 
 if __name__ == '__main__':
