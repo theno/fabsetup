@@ -1,7 +1,6 @@
 import os.path
-import tempfile
 
-from fabric.api import cd, env, sudo
+from fabric.api import env, local, sudo
 from fabric.contrib.files import append
 
 from ..fabutils import exists, install_packages, install_package
@@ -13,7 +12,7 @@ from ..utils import black, red, green, yellow, blue, magenta, cyan, white
 from ..utils import filled_out_template, update_or_append_line
 from ..utils import uncomment_or_update_or_append_line
 
-import service
+import service  # "activate" service tasks
 
 
 @task
@@ -24,13 +23,11 @@ def ripping_of_cds():
     More info: http://forums.debian.net/viewtopic.php?f=16&t=36826
     '''
     # install and configure ripit
-    install_packages([
-        'ripit',
-    ])
+    install_package('ripit')
     install_file(path='~/.ripit/config', username=env.user)
     # install burnit
     run('mkdir -p  ~/bin')
-    put('fabfile_data/files/home/USERNAME/bin/burnit', '~/bin/burnit')
+    install_file('~/bin/burnit')
     run('chmod 755 ~/bin/burnit')
 
 
