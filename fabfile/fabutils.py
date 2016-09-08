@@ -13,7 +13,7 @@ from fabric.state import env
 from fabric.network import needs_host
 
 from utils import flo, print_full_name, print_doc1, blue, cyan, yellow, magenta
-from utils import filled_out_template, query_yes_no
+from utils import filled_out_template, query_yes_no, default_color
 
 
 def suggest_localhost(func):
@@ -163,14 +163,29 @@ def subtask(*args, **kwargs):
     '''Decorator which prints out the name of the decorated function on
     execution.
     '''
-    prefix = kwargs.get('prefix', '\n## ')
+    depth = kwargs.get('depth', 2)
+    prefix = kwargs.get('prefix', '\n' + '#' * depth + ' ')
     tail = kwargs.get('tail', '\n')
     doc1 = kwargs.get('doc1', False)
+    color = kwargs.get('color', cyan)
 
     def real_decorator(func):
         if doc1:
-            return print_full_name(color=cyan, prefix=prefix, tail=tail)(print_doc1(func))
-        return print_full_name(color=cyan, prefix=prefix, tail=tail)(func)
+            return print_full_name(color=color, prefix=prefix,
+                                   tail=tail)(print_doc1(func))
+        return print_full_name(color=color, prefix=prefix, tail=tail)(func)
+
+    invoked = bool(not args or kwargs)
+    if not invoked:
+        # invoke decorator function which returns the wrapper function
+        return real_decorator(func=args[0])
+    return real_decorator
+
+
+def subsubtask(*args, **kwargs):
+
+    def real_decorator(func):
+        return subtask(depth=3, color=default_color, *args, **kwargs)(func)
 
     invoked = bool(not args or kwargs)
     if not invoked:
