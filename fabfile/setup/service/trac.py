@@ -26,6 +26,7 @@ def trac():
       https://trac.edgewall.org/wiki/TracNginxRecipe
       https://trac.edgewall.org/wiki/Gunicorn
       http://www.obeythetestinggoat.com/book/chapter_08.html#_getting_to_a_production_ready_deployment
+      Setting REMOTE_USER for Trac in Gunicorn behind Nginx: http://serverfault.com/a/392096
     '''
     hostname = re.sub(r'^[^@]+@', '', env.host)  # without username if any
     sitename = query_input(
