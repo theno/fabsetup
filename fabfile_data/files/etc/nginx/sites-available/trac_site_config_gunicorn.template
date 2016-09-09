@@ -1,23 +1,39 @@
 # https://trac.edgewall.org/wiki/Gunicorn
 
+server {
+        listen 80;
+        server_name {{sitename}};
+        return 301 https://$server_name$request_uri;  # enforce https
+}
+
 upstream trac_gunicorn {
     server unix:///home/{{username}}/sites/{{sitename}}/run/trac.sock;
 }
 
 server {
-    listen 44433;
-#    server_name     {{sitename}};
-    server_name     localhost; # TODO: DEVEL
-#    access_log      /var/log/nginx/{{sitename}}.access.log;
-#    error_log       /var/log/nginx/{{sitename}}.error.log info;
-    access_log      /var/log/nginx/{{sitename}}_gunicorn.access.log;
-    error_log       /var/log/nginx/{{sitename}}_gunicorn.error.log info;
+    listen  443  ssl;
+    server_name  {{sitename}};
+
+#    ssl                  on;
+#    ssl_certificate     /etc/letsencrypt/live/{{dn_cn}}/fullchain.pem;
+#    ssl_certificate_key /etc/letsencrypt/live/{{dn_cn}}/privkey.pem;
+#
+#    ssl_session_timeout  5m;
+#
+#    ssl_protocols  SSLv2 SSLv3 TLSv1;
+#    ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+#    ssl_prefer_server_ciphers   on;
+
+    access_log      /var/log/nginx/{{sitename}}.access.log;
+    error_log       /var/log/nginx/{{sitename}}.error.log info;
+#    access_log      /var/log/nginx/{{sitename}}_gunicorn.access.log;
+#    error_log       /var/log/nginx/{{sitename}}_gunicorn.error.log info;
 
 
 #    include         "/etc/nginx/acl.conf";
 
     location / {
-        auth_basic "realm";
+        auth_basic "Login";
         auth_basic_user_file /home/{{username}}/sites/{{sitename}}/tracenv/conf/trac.htpasswd;
 
         proxy_pass      http://trac_gunicorn;
@@ -28,6 +44,9 @@ server {
         rewrite /(.*?)/chrome/site/(.*) /$1/htdocs/$2 break;
         root    /home/{{username}}/sites/{{sitename}}/tracenv;
     }
+
+    error_page 403 = /core/templates/403.php;
+    error_page 404 = /core/templates/404.php;
 }
 
 

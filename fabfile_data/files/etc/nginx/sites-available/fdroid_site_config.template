@@ -5,8 +5,8 @@ server {
 }
 
 server {
-    listen 443 ssl;
-    server_name {{sitename}};
+    listen  443  ssl;
+    server_name  {{sitename}};
 
     root /home/{{username}}/sites/{{sitename}}/fdroid;
 #    location / {

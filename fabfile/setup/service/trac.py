@@ -17,6 +17,9 @@ def trac():
     This trac installation uses python2, git, sqlite (trac-default), gunicorn,
     and nginx.
 
+    The connection is https-only and secured by a letsencrypt certificate.  This
+    certificate must be created separately with task setup.server_letsencrypt.
+
     More infos:
       https://trac.edgewall.org/wiki/TracInstall
       https://trac.edgewall.org/wiki/TracFastCgi#NginxConfiguration
@@ -41,11 +44,11 @@ def trac():
     configure_nginx(username, sitename, hostname)
 
 #TODO DEBUG
-#    if query_yes_no('\nRestore trac environment from backup tarball?',
-#                    default=None):
-#        restore_tracenv_from_backup_tarball(site_dir, bin_dir)
-#    elif query_yes_no('\nCreate a new trac environment?', default=None):
-#        init_tracenv(site_dir, bin_dir)
+    if query_yes_no('\nRestore trac environment from backup tarball?',
+                    default=None):
+        restore_tracenv_from_backup_tarball(site_dir, bin_dir)
+    elif query_yes_no('\nCreate a new trac environment?', default=None):
+        init_tracenv(site_dir, bin_dir, username)
 
     # FIXME test-run:
 #    run_tracd(site_dir, bin_dir)
@@ -68,7 +71,7 @@ def create_virtualenv(site_dir):
     python_version = 'python2'  # FIXME take latest python via pyenv
     run(flo('virtualenv --python={python_version}  {site_dir}/virtualenv'))
     run(flo('{site_dir}/virtualenv/bin/'
-            'pip install --upgrade  genshi trac gunicorn'))
+            'pip install --upgrade  pip genshi trac gunicorn'))
 
 
 @subsubtask
@@ -93,9 +96,17 @@ def restore_tracenv_from_backup_tarball(site_dir, bin_dir):
     upgrade_tracenv(site_dir, bin_dir)
 
 
+@subsubtask
+def trac_admin(site_dir, username):
+    run(flo('{site_dir}/virtualenv/bin/trac-admin {site_dir}/tracenv '
+            'permission add {username} TRAC_ADMIN'))
+    run(flo('htpasswd -c {site_dir}/tracenv/conf/trac.htpasswd  {username}'))
+
+
 @subtask
-def init_tracenv(site_dir, bin_dir):
+def init_tracenv(site_dir, bin_dir, username):
     run(flo('{bin_dir}/trac-admin  {site_dir}/tracenv  initenv'))
+    trac_admin(site_dir, username)
 
 
 @subtask(doc1=True)
