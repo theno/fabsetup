@@ -8,10 +8,9 @@ import tempfile
 
 from fabric.api import cd, env, hide, local, sudo, warn_only
 from fabric.contrib.files import exists
-from fabric.operations import put
 
 from ...fabutils import checkup_git_repo, install_package, install_packages
-from ...fabutils import needs_packages, task, run, suggest_localhost
+from ...fabutils import needs_packages, task, run, suggest_localhost, put
 from ...utils import flo, print_doc1, print_full_name, query_yes_no
 from ...utils import query_input, blue, cyan, magenta, filled_out_template
 
