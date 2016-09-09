@@ -1,8 +1,3 @@
-# substituted variables:
-# [[[hostname]]]: {{hostname}}
-# [[[sitename]]]: {{sitename}}
-# [[[username]]]: {{username}}
-
 server {
         listen 80;
         server_name {{sitename}};
@@ -23,3 +18,11 @@ server {
     error_page 403 = /core/templates/403.php;
     error_page 404 = /core/templates/404.php;
 }
+
+
+# ----
+# file created by github.com/theno/fabsetup
+# substituted variables:
+# [[[hostname]]]: {{hostname}}
+# [[[sitename]]]: {{sitename}}
+# [[[username]]]: {{username}}

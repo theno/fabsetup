@@ -72,6 +72,5 @@ server {
                 # Optional: Don't log access to assets
                 access_log off;
         }
-
 }
 
