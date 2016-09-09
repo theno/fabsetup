@@ -1,0 +1,89 @@
+# https://trac.edgewall.org/wiki/Gunicorn
+# http://trac.edgewall.org/wiki/TracFastCgi#NginxConfiguration
+
+upstream trac_gunicorn {
+    server unix:///home/{{username}}/sites/{{sitename}}/run/trac.sock;
+}
+
+
+server {
+#    listen       443;
+#    server_name  {{sitename}};
+    listen       44433;
+    server_name  localhost;
+
+#    ssl                  on;
+#    ssl_certificate     /etc/letsencrypt/live/{{dn_cn}}/fullchain.pem;
+#    ssl_certificate_key /etc/letsencrypt/live/{{dn_cn}}/privkey.pem;
+#
+#    ssl_session_timeout  5m;
+#
+#    ssl_protocols  SSLv2 SSLv3 TLSv1;
+#    ssl_ciphers  ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP;
+#    ssl_prefer_server_ciphers   on;
+
+    access_log      /var/log/nginx/{{sitename}}_gunicorn2.access.log;
+    error_log       /var/log/nginx/{{sitename}}_gunicorn2.error.log info;
+
+    # it makes sense to serve static resources through Nginx (or ``~ [/some/prefix]/chrome/(.*)``)
+# #    location ~ /chrome/(.*) {
+# #         alias /home/{{username}}/sites/{{sitename}}/tracenv/static/htdocs/$1;
+# #    }
+#     location ~ /(.*?)/chrome/site/ {
+#         rewrite /(.*?)/chrome/site/(.*) /$1/htdocs/$2 break;
+#         root    /home/{{username}}/sites/{{sitename}}/tracenv;
+#     }
+
+    # You can copy this whole location to ``location [/some/prefix](/login)``
+    # and remove the auth entries below if you want Trac to enforce
+    # authorization where appropriate instead of needing to authenticate
+    # for accessing the whole site.
+    # (Or ``~ location /some/prefix(/.*)``.)
+#    location ~ (/.*) {
+    location ~ / {
+        auth_basic            "trac realm";
+        auth_basic_user_file /home/{{username}}/sites/{{sitename}}/tracenv/conf/trac.htpasswd;
+
+        # socket address
+#        fastcgi_pass   unix:///home/{{username}}/sites/{{sitename}}/run/trac.sock;
+#        server          unix:///home/{{username}}/sites/{{sitename}}/run/trac.sock;
+        proxy_pass      http://trac_gunicorn;
+
+        # python - wsgi specific
+        fastcgi_param HTTPS on;
+
+        ## WSGI REQUIRED VARIABLES
+        # WSGI application name - trac instance prefix.
+        # (Or ``fastcgi_param  SCRIPT_NAME  /some/prefix``.)
+        fastcgi_param  SCRIPT_NAME        "";
+        fastcgi_param  PATH_INFO          $1;
+
+        ## WSGI NEEDED VARIABLES - trac warns about them
+        fastcgi_param  REQUEST_METHOD     $request_method;
+        fastcgi_param  SERVER_NAME        $server_name;
+        fastcgi_param  SERVER_PORT        $server_port;
+        fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+        fastcgi_param  QUERY_STRING       $query_string;
+
+        # For Nginx authentication to work - do not forget to comment these
+        # lines if not using Nginx for authentication
+        fastcgi_param  AUTH_USER          $remote_user;
+        fastcgi_param  REMOTE_USER        $remote_user;
+
+        # for ip to work
+        fastcgi_param REMOTE_ADDR         $remote_addr;
+
+        # For attchments to work
+        fastcgi_param    CONTENT_TYPE     $content_type;
+        fastcgi_param    CONTENT_LENGTH   $content_length;
+    }
+}
+
+
+# ----
+# file created by github.com/theno/fabsetup
+# substituted variables:
+# [[[hostname]]]: {{hostname}}
+# [[[sitename]]]: {{sitename}}
+# [[[username]]]: {{username}}
+# [[[dn_cn]]]: {{dn_cn}}

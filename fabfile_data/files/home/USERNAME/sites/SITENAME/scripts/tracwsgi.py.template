@@ -1,0 +1,71 @@
+# WSGI entry point for Gunicorn
+
+# smoke test:
+# > cd {{site_dir}}/scripts
+# > {{site_dir}}/virtualenv/bin/gunicorn -w2 tracwsgi:application -b 0.0.0.0:8000
+# Now you should be able to open in a browser: http://localhost:8000
+
+
+# gunicorn way
+import sys
+import os
+
+sys.stdout = sys.stderr
+
+os.environ['TRAC_ENV'] = '{{site_dir}}/tracenv'
+
+#import trac.web.main
+#application = trac.web.main.dispatch_request
+
+from trac.web.standalone import AuthenticationMiddleware
+from trac.web.main import dispatch_request
+from trac.web.auth import BasicAuthentication
+#from trac.web.auth import DigestAuthentication
+
+filename_htpasswd = '{{site_dir}}/tracenv/conf/trac.htpasswd'
+basic_auth = BasicAuthentication(filename_htpasswd, 'realm')
+#digest_auth = DigestAuthentication(filename_htpasswd, 'realm')
+
+def application(environ, start_application):
+#    auth = {'*': digest_auth}
+    auth = {'*': basic_auth}
+    environ['REMOTE_USER'] = environ.get('HTTP_REMOTE_USER')  # TODO DEBUG
+    wsgi_app = AuthenticationMiddleware(dispatch_request, auth)
+    return wsgi_app(environ, start_application)
+
+
+##!/usr/bin/env python
+#import os
+#sockaddr = '{{site_dir}}/run/trac.sock'
+#os.environ['TRAC_ENV'] = '{{site_dir}}/tracenv'
+#
+#try:
+#     from trac.web.main import dispatch_request
+#     import trac.web._fcgi
+#
+#     fcgiserv = trac.web._fcgi.WSGIServer(dispatch_request, 
+#          bindAddress = sockaddr, umask = 7)
+#     fcgiserv.run()
+#
+#except SystemExit:
+#    raise
+#except Exception, e:
+#    print 'Content-Type: text/plain\r\n\r\n',
+#    print 'Oops...'
+#    print
+#    print 'Trac detected an internal error:'
+#    print
+#    print e
+#    print
+#    import traceback
+#    import StringIO
+#    tb = StringIO.StringIO()
+#    traceback.print_exc(file=tb)
+#    print tb.getvalue()
+
+
+
+# ----
+# file created by github.com/theno/fabsetup
+# substituted variables:
+# [[[site_dir]]]: {{site_dir}}

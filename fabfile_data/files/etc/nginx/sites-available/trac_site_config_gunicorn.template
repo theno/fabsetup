@@ -1,0 +1,42 @@
+# https://trac.edgewall.org/wiki/Gunicorn
+
+upstream trac_gunicorn {
+    server unix:///home/{{username}}/sites/{{sitename}}/run/trac.sock;
+}
+
+server {
+    listen 44433;
+#    server_name     {{sitename}};
+    server_name     localhost; # TODO: DEVEL
+#    access_log      /var/log/nginx/{{sitename}}.access.log;
+#    error_log       /var/log/nginx/{{sitename}}.error.log info;
+    access_log      /var/log/nginx/{{sitename}}_gunicorn.access.log;
+    error_log       /var/log/nginx/{{sitename}}_gunicorn.error.log info;
+
+
+#    include         "/etc/nginx/acl.conf";
+
+    location / {
+        auth_basic "realm";
+        auth_basic_user_file /home/{{username}}/sites/{{sitename}}/tracenv/conf/trac.htpasswd;
+
+        proxy_pass      http://trac_gunicorn;
+        proxy_set_header REMOTE_USER $remote_user;
+    }
+
+    location ~ /(.*?)/chrome/site/ {
+        rewrite /(.*?)/chrome/site/(.*) /$1/htdocs/$2 break;
+        root    /home/{{username}}/sites/{{sitename}}/tracenv;
+    }
+}
+
+
+
+
+# ----
+# file created by github.com/theno/fabsetup
+# substituted variables:
+# [[[hostname]]]: {{hostname}}
+# [[[sitename]]]: {{sitename}}
+# [[[username]]]: {{username}}
+# [[[dn_cn]]]: {{dn_cn}}
