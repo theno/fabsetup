@@ -323,6 +323,9 @@ def install_file(path, **substitutions):
         from_tail = join('files', 'home', 'USERNAME', path[2:])
     from_common = join(from_head, 'fabfile_data', from_tail)
     from_custom = join(from_head, 'fabsetup_custom', from_tail)
+    sitename = substitutions.get('SITENAME', False)
+    if sitename:
+        path = path.replace('SITENAME', sitename)
     path_dir = dirname(path)
     if isfile(from_custom):
         run(flo('mkdir -p  {path_dir}'))
