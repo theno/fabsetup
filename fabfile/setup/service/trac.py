@@ -2,6 +2,7 @@ import re
 import tempfile
 
 from fabric.api import env, hide
+from fabric.context_managers import warn_only
 
 from ...fabutils import install_file, needs_packages, run, subtask, subsubtask
 from ...fabutils import task, put
@@ -37,24 +38,30 @@ def trac():
     site_dir = flo('/home/{username}/sites/{sitename}')
     bin_dir = flo('{site_dir}/virtualenv/bin')
 
-    # provisioning steps
-    install_or_upgrade_virtualenv()
-    create_directory_structure(site_dir)
-    create_virtualenv(site_dir)
-    set_up_gunicorn(site_dir, sitename)
-    configure_nginx(username, sitename, hostname)
+#    # provisioning steps
+#    install_or_upgrade_virtualenv()
+#    create_directory_structure(site_dir)
+#    create_virtualenv(site_dir, sitename)
+#    set_up_gunicorn(site_dir, sitename)
+#    configure_nginx(username, sitename, hostname)
 
 #TODO DEBUG
     if query_yes_no('\nRestore trac environment from backup tarball?',
                     default=None):
         restore_tracenv_from_backup_tarball(site_dir, bin_dir)
-    elif query_yes_no('\nCreate a new trac environment?', default=None):
-        init_tracenv(site_dir, bin_dir, username)
+    else:
+        tracenv_exists = False
+        with warn_only():
+            if run(flo('[ -d {site_dir}/tracenv ]')).return_code == 0:
+                tracenv_exists = True
+        if not tracenv_exists:
+            init_tracenv(site_dir, bin_dir, username)
 
     # FIXME test-run:
 #    run_tracd(site_dir, bin_dir)
-    run_gunicorn(site_dir)
+#    run_gunicorn(site_dir)
 #    run_wsgi(site_dir)
+    gunicorn_upstart(sitename, username, site_dir)
 
 
 @subtask
@@ -67,12 +74,24 @@ def create_directory_structure(site_dir):
     run(flo('mkdir -p {site_dir}'))
 
 
-@subtask
-def create_virtualenv(site_dir):
+@subsubtask
+def stop_gunicorn_daemon(sitename):
+    with warn_only():
+        run(flo('sudo stop gunicorn-{sitename}'))
+
+
+@subsubtask
+def create_virtualenv_(site_dir):
     python_version = 'python2'  # FIXME take latest python via pyenv
     run(flo('virtualenv --python={python_version}  {site_dir}/virtualenv'))
     run(flo('{site_dir}/virtualenv/bin/'
             'pip install --upgrade  pip genshi trac gunicorn'))
+
+
+@subtask
+def create_virtualenv(site_dir, sitename):
+    stop_gunicorn_daemon(sitename)
+    create_virtualenv_(site_dir)
 
 
 @subsubtask
@@ -169,6 +188,29 @@ def run_gunicorn(site_dir):
 #    run(flo('cd {site_dir}/scripts && {site_dir}/virtualenv/bin/gunicorn -w2 tracwsgi:application -b 0.0.0.0:8000'))
     socket = flo('unix://{site_dir}/run/trac.sock')
     run(flo('cd {site_dir}/scripts && {site_dir}/virtualenv/bin/gunicorn -w2 tracwsgi:application -b {socket}'))
+
+
+@subsubtask
+def install_gunicorn_upstart_script(sitename, username, site_dir):
+    socket = flo('unix://{site_dir}/run/trac.sock')
+    num_workers = 2
+    install_file('/etc/init/gunicorn-SITENAME.conf', sudo=True,
+                 SITENAME=sitename, site_dir=site_dir, username=username,
+                 socket=socket, num_workers=num_workers)
+
+
+@subsubtask
+def start_or_restart_gunicorn_daemon(sitename):
+    if 'running' in run(flo('status gunicorn-{sitename}'), capture=True):
+        run(flo('sudo restart gunicorn-{sitename}'))
+    else:
+        run(flo('sudo start gunicorn-{sitename}'))
+
+
+@subtask
+def gunicorn_upstart(sitename, username, site_dir):
+    install_gunicorn_upstart_script(sitename, username, site_dir)
+    start_or_restart_gunicorn_daemon(sitename)
 
 
 @subtask(doc1=True)

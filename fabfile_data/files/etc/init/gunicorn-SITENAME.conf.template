@@ -1,0 +1,23 @@
+description "Gunicorn server for trac"
+
+start on net-device-up
+stop on shutdown
+
+respawn
+
+setuid {{username}}
+chdir  {{site_dir}}/scripts
+
+exec ../virtualenv/bin/gunicorn \
+     --bind {{socket}} \
+     --workers {{num_workers}} \
+     tracwsgi:application
+
+
+# ----
+# file created by github.com/theno/fabsetup
+# substituted variables:
+# [[[site_dir]]]: {{site_dir}}
+# [[[username]]]: {{username}}
+# [[[socket]]]: {{socket}}
+# [[[num_workers]]]: {{num_workers}}

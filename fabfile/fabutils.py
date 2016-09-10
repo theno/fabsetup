@@ -308,7 +308,7 @@ def _install_file_from_template(from_template, to_, **substitutions):
         put(tmp_file.name, to_)
 
 
-def install_file(path, **substitutions):
+def install_file(path, sudo=False, **substitutions):
     '''Install file with path on the host target.
 
     The from file is the first of this list which exists:
@@ -318,7 +318,7 @@ def install_file(path, **substitutions):
      * common file.template
     '''
     from_head = dirname(dirname(__file__))
-    from_tail = join('files', path)
+    from_tail = join('files', path.lstrip(os.sep))
     if path.startswith('~/'):
         from_tail = join('files', 'home', 'USERNAME', path[2:])
     from_common = join(from_head, 'fabfile_data', from_tail)
@@ -326,19 +326,24 @@ def install_file(path, **substitutions):
     sitename = substitutions.get('SITENAME', False)
     if sitename:
         path = path.replace('SITENAME', sitename)
+    to_ = path
+    if sudo:
+        to_ = join(os.sep, 'tmp', 'fabsetup_' + os.path.basename(path))
     path_dir = dirname(path)
     if isfile(from_custom):
         run(flo('mkdir -p  {path_dir}'))
-        put(from_custom, path)
+        put(from_custom, to_)
     elif isfile(from_custom + '.template'):
-        _install_file_from_template(from_custom + '.template', to_=path,
+        _install_file_from_template(from_custom + '.template', to_=to_,
                 **substitutions)
     elif isfile(from_common):
         run(flo('mkdir -p  {path_dir}'))
-        put(from_common, path)
+        put(from_common, to_)
     else:
-        _install_file_from_template(from_common + '.template', to_=path,
+        _install_file_from_template(from_common + '.template', to_=to_,
                 **substitutions)
+    if sudo:
+        run(flo('sudo mv --force  {to_}  {path}'))
 
 
 def install_user_command(command, **substitutions):
