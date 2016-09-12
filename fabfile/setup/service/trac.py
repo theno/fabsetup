@@ -38,12 +38,12 @@ def trac():
     site_dir = flo('/home/{username}/sites/{sitename}')
     bin_dir = flo('{site_dir}/virtualenv/bin')
 
-#    # provisioning steps
-#    install_or_upgrade_virtualenv()
-#    create_directory_structure(site_dir)
-#    create_virtualenv(site_dir, sitename)
-#    set_up_gunicorn(site_dir, sitename)
-#    configure_nginx(username, sitename, hostname)
+    # provisioning steps
+    install_or_upgrade_virtualenv()
+    create_directory_structure(site_dir)
+    create_virtualenv(site_dir, sitename)
+    set_up_gunicorn(site_dir, sitename)
+    configure_nginx(username, sitename, hostname)
 
 #TODO DEBUG
     if query_yes_no('\nRestore trac environment from backup tarball?',
@@ -112,6 +112,7 @@ def restore_tracenv_from_backup_tarball(site_dir, bin_dir):
     run(flo('mv {site_dir}/tracenv  {site_dir}/tracenv.before_$(date +%F).bak'
             ' || true'))
     run(flo('mv {site_dir}/tmp/tracenv_hotcopy  {site_dir}/tracenv'))
+#    run(flo('mv {site_dir}/tmp/tracenv_jsh_hotcopy  {site_dir}/tracenv')) # TODO DEVEL
     run(flo('rmdir {site_dir}/tmp'))
     upgrade_tracenv(site_dir, bin_dir)
 

@@ -15,8 +15,8 @@ server {
     server_name  {{sitename}};
 
 #    ssl                  on;
-#    ssl_certificate     /etc/letsencrypt/live/{{dn_cn}}/fullchain.pem;
-#    ssl_certificate_key /etc/letsencrypt/live/{{dn_cn}}/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/{{dn_cn}}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{dn_cn}}/privkey.pem;
 #
 #    ssl_session_timeout  5m;
 #
