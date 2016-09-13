@@ -1,12 +1,12 @@
 # https://trac.edgewall.org/wiki/Gunicorn
 
 server {
-        listen 80;
-        server_name {{sitename}};
-        return 301 https://$server_name$request_uri;  # enforce https
+    listen 80;
+    server_name {{sitename}};
+    return 301 https://$server_name$request_uri;  # enforce https
 }
 
-upstream trac_gunicorn {
+upstream {{sitename}}_gunicorn {
     server unix:///home/{{username}}/sites/{{sitename}}/run/trac.sock;
 }
 
@@ -36,7 +36,7 @@ server {
         auth_basic "Login";
         auth_basic_user_file /home/{{username}}/sites/{{sitename}}/tracenv/conf/trac.htpasswd;
 
-        proxy_pass      http://trac_gunicorn;
+        proxy_pass      http://{{sitename}}_gunicorn;
         proxy_set_header REMOTE_USER $remote_user;
     }
 
