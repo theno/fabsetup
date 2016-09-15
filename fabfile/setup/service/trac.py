@@ -5,13 +5,19 @@ from fabric.api import env, hide
 from fabric.context_managers import warn_only
 
 from ...fabutils import install_file, needs_packages, run, subtask, subsubtask
-from ...fabutils import task, put
+from ...fabutils import task, put, exists
 from ...utils import cyan, flo, print_full_name, query_input, query_yes_no
 from ...utils import filled_out_template
 
 
+# FIXME test-run as comment: "usefull commands for debugging: ..."
+#    run_tracd(site_dir, bin_dir)
+#    run_gunicorn(site_dir)
+#    run_wsgi(site_dir)
+
+
 @task
-@needs_packages('nginx', 'postgresql', 'python-pip', 'git')
+@needs_packages('nginx', 'python-pip', 'python-pygments', 'git')
 def trac():
     '''Set up a trac project.
 
@@ -27,7 +33,8 @@ def trac():
       https://trac.edgewall.org/wiki/TracNginxRecipe
       https://trac.edgewall.org/wiki/Gunicorn
       http://www.obeythetestinggoat.com/book/chapter_08.html#_getting_to_a_production_ready_deployment
-      Setting REMOTE_USER for Trac in Gunicorn behind Nginx: http://serverfault.com/a/392096
+      Setting REMOTE_USER for Trac in Gunicorn behind Nginx:
+        http://serverfault.com/a/392096
     '''
     hostname = re.sub(r'^[^@]+@', '', env.host)  # without username if any
     sitename = query_input(
@@ -41,27 +48,25 @@ def trac():
     # provisioning steps
     install_or_upgrade_virtualenv()
     create_directory_structure(site_dir)
-    create_virtualenv(site_dir, sitename)
+    update_virtualenv(site_dir, sitename)
     set_up_gunicorn(site_dir, sitename)
     configure_nginx(username, sitename, hostname)
 
-#TODO DEBUG
     if query_yes_no('\nRestore trac environment from backup tarball?',
                     default=None):
         restore_tracenv_from_backup_tarball(site_dir, bin_dir)
-    else:
-        tracenv_exists = False
-        with warn_only():
-            if run(flo('[ -d {site_dir}/tracenv ]')).return_code == 0:
-                tracenv_exists = True
-        if not tracenv_exists:
-            init_tracenv(site_dir, bin_dir, username)
+    elif not tracenv_exists(site_dir):
+        init_tracenv(site_dir, bin_dir, username)
 
-    # FIXME test-run:
-#    run_tracd(site_dir, bin_dir)
-#    run_gunicorn(site_dir)
-#    run_wsgi(site_dir)
-    gunicorn_upstart(sitename, username, site_dir)
+    set_up_upstart_for_gunicorn(sitename, username, site_dir)
+
+
+def tracenv_exists(site_dir):
+    exists = False
+    with warn_only():
+        if run(flo('[ -d {site_dir}/tracenv ]')).return_code == 0:
+            exists = True
+    return exists
 
 
 @subtask
@@ -71,6 +76,9 @@ def install_or_upgrade_virtualenv():
 
 @subtask
 def create_directory_structure(site_dir):
+    '''Only create the site_dir.  The subdirds 'tracenv', 'virtualenv',
+    'scripts', and 'run' will be created on each subtask.
+    '''
     run(flo('mkdir -p {site_dir}'))
 
 
@@ -81,17 +89,18 @@ def stop_gunicorn_daemon(sitename):
 
 
 @subsubtask
-def create_virtualenv_(site_dir):
-    python_version = 'python2'  # FIXME take latest python via pyenv
-    run(flo('virtualenv --python={python_version}  {site_dir}/virtualenv'))
-    run(flo('{site_dir}/virtualenv/bin/'
-            'pip install --upgrade  pip genshi trac gunicorn'))
+def create_virtualenv(site_dir):
+    if not exists(flo('{site_dir}/virtualenv/bin/pip')):
+        python_version = 'python2'  # FIXME take latest python via pyenv
+        run(flo('virtualenv --python={python_version}  {site_dir}/virtualenv'))
 
 
 @subtask
-def create_virtualenv(site_dir, sitename):
+def update_virtualenv(site_dir, sitename):
     stop_gunicorn_daemon(sitename)
-    create_virtualenv_(site_dir)
+    create_virtualenv(site_dir)
+    run(flo('{site_dir}/virtualenv/bin/'
+            'pip install --upgrade  pip genshi trac gunicorn'))
 
 
 @subsubtask
@@ -172,7 +181,8 @@ def nginx_site_config(username, sitename, hostname):
 @subsubtask
 def create_wsgi_socket_dir(username, sitename):
     run(flo('mkdir -p /home/{username}/sites/{sitename}/run'))
-    run(flo('sudo chown {username}.www-data /home/{username}/sites/{sitename}/run'))
+    run(flo('sudo chown  {username}.www-data  '
+            '/home/{username}/sites/{sitename}/run'))
     run(flo('sudo chmod g+s /home/{username}/sites/{sitename}/run'))
 
 
@@ -186,9 +196,9 @@ def configure_nginx(username, sitename, hostname):
 @subtask(doc1=True)
 def run_gunicorn(site_dir):
     '''Run gunicorn  -- only for testing purposes -- localhost:44433'''
-#    run(flo('cd {site_dir}/scripts && {site_dir}/virtualenv/bin/gunicorn -w2 tracwsgi:application -b 0.0.0.0:8000'))
     socket = flo('unix://{site_dir}/run/trac.sock')
-    run(flo('cd {site_dir}/scripts && {site_dir}/virtualenv/bin/gunicorn -w2 tracwsgi:application -b {socket}'))
+    run(flo('cd {site_dir}/scripts && {site_dir}/virtualenv/bin/gunicorn '
+            '-w2 tracwsgi:application -b {socket}'))
 
 
 @subsubtask
@@ -209,7 +219,7 @@ def start_or_restart_gunicorn_daemon(sitename):
 
 
 @subtask
-def gunicorn_upstart(sitename, username, site_dir):
+def set_up_upstart_for_gunicorn(sitename, username, site_dir):
     install_gunicorn_upstart_script(sitename, username, site_dir)
     start_or_restart_gunicorn_daemon(sitename)
 
