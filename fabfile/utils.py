@@ -104,8 +104,8 @@ def print_doc1(*args, **kwargs):
     The paragraph will be printed as a oneliner.
 
     May be invoked as a simple, argument-less decorator (i.e. ``@print_doc1``)
-    or with named arguments ``color``, ``bold`` or ``indent`` (eg.
-    ``@print_doc1(color=utils.red, bold=True, indent=' ')``).
+    or with named arguments ``color``, ``bold``, ``prefix`` of ``tail``
+    (eg. ``@print_doc1(color=utils.red, bold=True, prefix=' ')``).
 
     Examples:
         >>> @print_doc1
@@ -131,9 +131,11 @@ def print_doc1(*args, **kwargs):
         >>> foo()
         \033[34mFirst paragraph of docstring which contains more than one line\033[0m
     '''
+    # output settings from kwargs or take defaults
     color = kwargs.get('color', blue)
     bold = kwargs.get('bold', False)
-    indent = kwargs.get('indent', '')
+    prefix = kwargs.get('prefix', '')
+    tail = kwargs.get('tail', '\n')
 
     def real_decorator(func):
         '''real decorator function'''
@@ -142,7 +144,7 @@ def print_doc1(*args, **kwargs):
             '''the wrapper function'''
             try:
                 prgf = first_paragraph(func.__doc__)
-                print(color(indent + prgf, bold))
+                print(color(prefix + prgf + tail, bold))
             except AttributeError as exc:
                 name = func.__name__
                 print(red(flo('{name}() has no docstring')))

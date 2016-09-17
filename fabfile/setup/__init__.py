@@ -1,6 +1,6 @@
 import os.path
 
-from fabric.api import env, local, sudo
+from fabric.api import env, local, sudo, warn_only
 from fabric.contrib.files import append
 
 from ..fabutils import exists, install_packages, install_package
@@ -394,3 +394,22 @@ def powerline_shell():
     enabler = flo('if [ -f {bash_snippet} ]; then source {bash_snippet}; fi')
     uncomment_or_update_or_append_line(filename='~/.bashrc', prefix=prefix,
                                        new_line=enabler)
+
+
+@task
+@suggest_localhost
+def telegram():
+    '''Install Telegram desktop client for linux (x64).
+
+    More infos:
+      https://telegram.org
+      https://desktop.telegram.org/
+    '''
+    run('mkdir -p /tmp/telegram', msg='Download and install Telegram:')
+    run('cd /tmp/telegram  &&  wget https://telegram.org/dl/desktop/linux')
+    run('cd /tmp/telegram  &&  tar xf linux')
+    with warn_only():
+        run('mv /tmp/telegram/Telegram  ~/bin')
+    run('rm -rf /tmp/telegram')
+    run('ln -snf ~/bin/Telegram/Telegram  ~/bin/telegram',
+            msg="\nCreate executable 'telegram':")

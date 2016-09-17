@@ -42,6 +42,7 @@ def suggest_localhost(func):
 def _func(kwargs, func_local=fabric.api.local, func_remote=fabric.api.run):
     env.host = env.host_string
     func = func_remote
+    print_msg(kwargs.pop('msg', None))
     if env.host_string == 'localhost':
         func = func_local
     else:
@@ -355,3 +356,8 @@ def install_user_command(command, **substitutions):
     path = flo('~/bin/{command}')
     install_file(path, **substitutions)
     run(flo('chmod 755 {path}'))
+
+
+def print_msg(msg):
+    if msg is not None:
+        print(cyan(flo('{msg}')))

@@ -7,7 +7,7 @@ to use the `sudo` command:
   fab  --set nosudo  <task_name>  -H localhost
   ```
 
-While not all tasks could be executed without `sudo`, this one could work:
+While not all tasks could be executed without `sudo`, this tasks work:
   ```sh
   cd ~/repos/fabsetup
 
@@ -19,6 +19,7 @@ While not all tasks could be executed without `sudo`, this one could work:
   fab  --set nosudo  setup.ripping_of_cds
   fab  --set nosudo  setup.regex_repl
   fab  --set nosudo  setup.solarized
+  fab  --set nosudo  setup.telegram
   fab  --set nosudo  setup.tmux
   fab  --set nosudo  setup.vim
   ```
