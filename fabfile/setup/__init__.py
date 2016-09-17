@@ -405,11 +405,14 @@ def telegram():
       https://telegram.org
       https://desktop.telegram.org/
     '''
-    run('mkdir -p /tmp/telegram', msg='Download and install Telegram:')
-    run('cd /tmp/telegram  &&  wget https://telegram.org/dl/desktop/linux')
-    run('cd /tmp/telegram  &&  tar xf linux')
-    with warn_only():
-        run('mv /tmp/telegram/Telegram  ~/bin')
-    run('rm -rf /tmp/telegram')
+    if not exists('~/bin/Telegram', msg='Download and install Telegram:'):
+        run('mkdir -p /tmp/telegram')
+        run('cd /tmp/telegram  &&  wget https://telegram.org/dl/desktop/linux')
+        run('cd /tmp/telegram  &&  tar xf linux')
+        with warn_only():
+            run('mv /tmp/telegram/Telegram  ~/bin')
+        run('rm -rf /tmp/telegram')
+    else:
+        print('skip download, dir ~/bin/Telegram already exists')
     run('ln -snf ~/bin/Telegram/Telegram  ~/bin/telegram',
             msg="\nCreate executable 'telegram':")
