@@ -202,6 +202,18 @@ def pyenv():
     else:
         run('curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash')
 
+    # add pyenv to $PATH and set up pyenv init
+    bash_snippet = '~/.bashrc_pyenv'
+    install_file(path=bash_snippet)
+    prefix = flo('if [ -f {bash_snippet} ]; ')
+    enabler = flo('if [ -f {bash_snippet} ]; then source {bash_snippet}; fi')
+    if env.host == 'localhost':
+        # FIXME: next function currently only works for localhost
+        uncomment_or_update_or_append_line(filename='~/.bashrc', prefix=prefix,
+                                       new_line=enabler)
+    else:
+        print(cyan('\nappend to ~/.bashrc:\n\n    ') + enabler)
+
 
 @task
 @suggest_localhost

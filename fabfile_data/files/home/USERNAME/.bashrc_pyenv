@@ -1,0 +1,10 @@
+# enable pyenv: https://github.com/yyuu/pyenv
+
+export PATH="$HOME/.pyenv/bin:$PATH"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+
+# ----
+# file created by github.com/theno/fabsetup
+# (task: setup.pyenv)
