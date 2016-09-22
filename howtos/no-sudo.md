@@ -13,6 +13,7 @@ While not all tasks could be executed without `sudo`, this tasks work:
 
   fab  --set nosudo  setup.i3
   fab  --set nosudo  setup.irssi
+  fab  --set nosudo  setup.nvm
   fab  --set nosudo  setup.pencil
   fab  --set nosudo  setup.powerline_shell
   fab  --set nosudo  setup.pyenv

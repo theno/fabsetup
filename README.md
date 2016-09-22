@@ -59,3 +59,4 @@ this howtos:
  * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
  * [Host an Owncloud Service](./howtos/owncloud.md)
  * [Host an own F-Droid Repository](./howtos/f-droid-repo.md)
+ * [Install latest Node.js via nvm](./howtos/nodejs.md)
