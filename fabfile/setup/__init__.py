@@ -13,6 +13,7 @@ from ..utils import filled_out_template, update_or_append_line
 from ..utils import uncomment_or_update_or_append_line
 
 import service  # "activate" service tasks
+from nvm import nvm
 
 
 @task
