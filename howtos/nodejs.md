@@ -1,10 +1,10 @@
-# Howto: Install latest version of Node.JS via Node Version Manager (nvm)
+# Howto: Install latest version of Node.JS via nvm
 
 More info:
 * Node Version Manager (nvm): https://github.com/creationix/nvm
 * Node.js: https://nodejs.org/en/
 
-## Install (or upgrade) Node Version Mangaer (nvm)
+## Install (or upgrade) nvm
 
   ```sh
   fab setup.nvm  -H localhost
