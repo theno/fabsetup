@@ -55,7 +55,6 @@ server {
 # ----
 # file created by github.com/theno/fabsetup
 # substituted variables:
-# [[[hostname]]]: {{hostname}}
 # [[[sitename]]]: {{sitename}}
 # [[[username]]]: {{username}}
 # [[[dn_cn]]]: {{dn_cn}}
