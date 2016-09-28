@@ -1,0 +1,62 @@
+upstream backend {
+    server unix:/var/run/php5-fpm.sock;
+}
+
+server {
+    listen 80;
+    server_name {{sitename}};
+    return 301 https://$server_name$request_uri;  # enforce https
+}
+
+server {
+    listen  443  ssl;
+    server_name {{sitename}};
+
+    root /home/{{username}}/sites/{{sitename}}/selfoss/;
+
+    ssl_certificate     /etc/letsencrypt/live/{{dn_cn}}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{dn_cn}}/privkey.pem;
+
+    access_log      /var/log/nginx/{{sitename}}.access.log;
+    error_log       /var/log/nginx/{{sitename}}.error.log info;
+
+
+    location ~* \ (gif|jpg|png) {
+        expires 30d;
+    }
+
+    location ~ ^/favicons/.*$ {
+        try_files $uri /data/$uri;
+    }
+
+    location ~ ^/thumbnails/.*$ {
+        try_files $uri /data/$uri;
+    }
+
+    location ~* ^/(data\/logs|data\/sqlite|config\.ini|\.ht) {
+        deny all;
+    }
+
+    location / {
+        index index.php index.html index.htm;
+        try_files $uri /public/$uri /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        if (!-f $document_root$fastcgi_script_name) {
+            return 404;
+        }
+        fastcgi_pass backend;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+        include fastcgi_params;
+    }
+}
+
+
+# ----
+# file created by github.com/theno/fabsetup
+# substituted variables:
+# [[[sitename]]]: {{sitename}}
+# [[[username]]]: {{username}}
+# [[[dn_cn]]]: {{dn_cn}}
