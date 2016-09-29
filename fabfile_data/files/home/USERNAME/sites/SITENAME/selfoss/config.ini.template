@@ -1,0 +1,10 @@
+; see http://selfoss.aditu.de for more information about
+; the configuration parameters
+[globals]
+salt={{salt}}
+
+
+# ----
+# file created by github.com/theno/fabsetup
+# substituted variables:
+# [[[salt]]]: {{salt}}
