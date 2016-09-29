@@ -14,6 +14,9 @@ from fabric.network import needs_host
 
 from utils import flo, print_full_name, print_doc1, blue, cyan, yellow, magenta
 from utils import filled_out_template, query_yes_no, default_color
+from utils import update_or_append_line as update_or_append_local
+from utils import comment_out_line as comment_out_local
+from utils import uncomment_or_update_or_append_line as uua_local
 
 
 def suggest_localhost(func):
@@ -361,3 +364,53 @@ def install_user_command(command, **substitutions):
 def print_msg(msg):
     if msg is not None:
         print(cyan(flo('{msg}')))
+
+
+@needs_host
+def update_or_append_line(filename, prefix, new_line, keep_backup=True,
+                          append=True):
+    '''Search in file 'filename' for a line starting with 'prefix' and replace
+    the line by 'new_line'.
+
+    If a line starting with 'prefix' not exists 'new_line' will be appended.
+    If the file not exists, it will be created.
+
+    Return False if new_line was appended, else True (i.e. if the prefix was
+    found within of the file).
+    '''
+    result = None
+    if env.host_string == 'localhost':
+        result = update_or_append_local(filename, prefix, new_line, keep_backup,
+                                        append)
+    else:
+        tmp_dir = tempfile.mkdtemp(suffix='', prefix='fabsetup_')
+#        fabric.api.local(flo('chmod 777 {tmp_dir}'))
+        local_path = os.path.join(tmp_dir, os.path.basename(filename))
+        fabric.operations.get(remote_path=filename, local_path=local_path,
+                              use_sudo=True, temp_dir='/tmp')
+        result = update_or_append_local(local_path, prefix, new_line,
+                                        keep_backup, append)
+        put(local_path, remote_path=filename, use_sudo=True, temp_dir='/tmp')
+        with quiet():
+            fabric.api.local(flo('rm -rf {tmp_dir}'))
+    return result
+
+
+def comment_out_line(filename, line, comment='#'):
+    '''Comment line out by putting a comment sign in front of the line.
+
+    If the file does not contain the line, the files content will not be
+    changed (but the file will be touched in every case).
+    '''
+    return comment_out_local(filename, line, comment,
+                             update_or_append_line=update_or_append_line)
+
+
+def uncomment_or_update_or_append_line(filename, prefix, new_line, comment='#',
+                                       keep_backup=True):
+    '''Remove the comment of an commented out line and make the line "active".
+
+    If such an commented out line not exists it would be appended.
+    '''
+    return uua_local(filename, prefix, new_line, comment, keep_backup,
+                     update_or_append_line=update_or_append_line)

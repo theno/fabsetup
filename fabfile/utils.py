@@ -297,6 +297,9 @@ def update_or_append_line(filename, prefix, new_line, keep_backup=True,
 
     If a line starting with 'prefix' not exists 'new_line' will be appended.
     If the file not exists, it will be created.
+
+    Return False if new_line was appended, else True (i.e. if the prefix was
+    found within of the file).
     '''
     same_line_exists, line_updated = False, False
     filename = os.path.expanduser(filename)
@@ -326,7 +329,8 @@ def update_or_append_line(filename, prefix, new_line, keep_backup=True,
     return same_line_exists or line_updated
 
 
-def comment_out_line(filename, line, comment='#'):
+def comment_out_line(filename, line, comment='#',
+                     update_or_append_line=update_or_append_line):
     '''Comment line out by putting a comment sign in front of the line.
 
     If the file does not contain the line, the files content will not be
@@ -337,7 +341,8 @@ def comment_out_line(filename, line, comment='#'):
 
 
 def uncomment_or_update_or_append_line(filename, prefix, new_line, comment='#',
-                                       keep_backup=True):
+                                       keep_backup=True,
+                                       update_or_append_line=update_or_append_line):
     '''Remove the comment of an commented out line and make the line "active".
 
     If such an commented out line not exists it would be appended.
