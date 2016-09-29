@@ -14,6 +14,7 @@ from ...fabutils import needs_packages, task, run, suggest_localhost, put
 from ...utils import flo, print_doc1, print_full_name, query_yes_no
 from ...utils import query_input, blue, cyan, magenta, filled_out_template
 
+from selfoss import selfoss
 from trac import trac
 
 
