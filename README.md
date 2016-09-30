@@ -10,14 +10,7 @@ Set up and maintain a local or remote (Ubuntu) linux system.
   git clone  https://github.com/theno/fabsetup.git
   ```
 
-## Let's bubble: How to use fabsetup
-
-__fabsetup__ is somehow like a Thermomix for linux setup recipies: The tasks
-are the programs of the Thermomix and tell it what to do.  The
-__[Howtos](./howtos "cookbook")__ are the cookbook, each howto stands for a
-recipe.  The recipes are easy and short (cf. [Thermomix-Breirezepte](https://github.com/theno/Breirezepte)).  Sometimes, you don't like a recipe
-and want to cook your own meal or you would like to make custom additions.
-This works with [`fabsetup_custom`](./howtos/fabsetup_custom.md).
+## How to use fabsetup
 
 __fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__
 script, so every command starts with a __`fab`__:
@@ -44,8 +37,7 @@ script, so every command starts with a __`fab`__:
   fab up -H example.com
   ```
 
-Okay, that was just an appetizer. Now we should satisfy the very hunger with
-this howtos:
+__[Setup-Howtos](./howtos "cookbook")__:
 
  * Customize fabsetup: [Initialize git repository
    `fabsetup_custom`](./howtos/fabsetup_custom.md)
