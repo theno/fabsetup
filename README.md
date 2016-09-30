@@ -33,21 +33,15 @@ script, so every command starts with a __`fab`__:
   # show details: '-d'
   fab -d setup.vim
 
-
   # run tasks
+  
+  fab setup.regex_repl
   
   ## on your local host:
   fab setup.pencil -H localhost
 
   ## remote host:
   fab up -H example.com
-
-  ## when no host specified you would be asked for:
-  fab setup.regex_repl
-  #<output. here it defaults to 'localhost'>
-  #regex_repl
-  #Install RegexREPL, a helper tool for building regular expressions.
-  #No hosts found. Please specify host string for connection [localhost]:
   ```
 
 Okay, that was just an appetizer. Now we should satisfy the very hunger with
