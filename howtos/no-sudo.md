@@ -1,7 +1,7 @@
 # Run Tasks without sudo
 
 If you don't have root access on a machine you can tell `fabsetup` to not
-to use the `sudo` command:
+use the `sudo` command:
 
   ```sh
   fab  --set nosudo  <task_name>  -H localhost
