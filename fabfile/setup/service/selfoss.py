@@ -113,7 +113,7 @@ def restore_settings_and_data(site_dir):
 @subtask
 def install_selfoss(sitename, site_dir, username):
     save_settings_and_data(site_dir)
-    run(flo("rsync -a --delete --force --exclude='.git'  ~/repos/selfoss  "
+    run(flo("sudo  rsync -a --delete --force --exclude='.git'  ~/repos/selfoss  "
             '{site_dir}'), msg='\n### install files')
     restored = restore_settings_and_data(site_dir)
     print_msg('\n### set write permissions for group www-data')
@@ -197,5 +197,5 @@ def nginx_site_config(username, sitename, hostname):
     run(flo('sudo mv /tmp/{filename} {to}'))
     run(flo('sudo chown root.root {to}'))
     run(flo('sudo chmod 644 {to}'))
-    run(flo('sudo  ln -snf ../sites-available/{sitename}'
+    run(flo('sudo  ln -snf ../sites-available/{sitename}  '
             '/etc/nginx/sites-enabled/{sitename}'))
