@@ -361,6 +361,7 @@ def install_user_command(command, **substitutions):
     run(flo('chmod 755 {path}'))
 
 
+# FIXME: should be moved to utils.py
 def print_msg(msg):
     if msg is not None:
         print(cyan(flo('{msg}')))
