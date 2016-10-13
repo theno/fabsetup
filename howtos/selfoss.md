@@ -1,4 +1,4 @@
-# Howto: Host an Selfoss Service
+# Howto: Host a Selfoss Service
 
 Selfoss is a "multipurpose rss reader, live stream, mashup, aggregation web
 application".
