@@ -45,5 +45,5 @@ __[Setup-Howtos](./howtos "cookbook")__:
  * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
  * [Host an Owncloud Service](./howtos/owncloud.md)
  * [Host an own F-Droid Repository](./howtos/f-droid-repo.md) (Android App Repository)
- * [Host an Selfoss Service](./howtos/selfoss.md) (RSS Reader Web Application)
+ * [Host a Selfoss Service](./howtos/selfoss.md) (RSS Reader Web Application)
  * [Install latest Node.js via nvm](./howtos/nodejs.md)
