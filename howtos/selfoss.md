@@ -4,8 +4,8 @@ Selfoss is a "multipurpose rss reader, live stream, mashup, aggregation web
 application".
 
 More infos:
-  http://selfoss.aditu.de/
-  https://github.com/SSilence/selfoss
+ * http://selfoss.aditu.de/
+ * https://github.com/SSilence/selfoss
 
 ## Install or update selfoss
 
