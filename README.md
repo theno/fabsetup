@@ -27,9 +27,9 @@ script, so every command starts with a __`fab`__:
   fab -d setup.vim
 
   # run tasks
-  
+
   fab setup.regex_repl
-  
+
   ## on your local host:
   fab setup.pencil -H localhost
 
@@ -44,5 +44,6 @@ __[Setup-Howtos](./howtos "cookbook")__:
  * [Set up an environment without sudo access](./howtos/no-sudo.md)
  * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
  * [Host an Owncloud Service](./howtos/owncloud.md)
- * [Host an own F-Droid Repository](./howtos/f-droid-repo.md)
+ * [Host an own F-Droid Repository](./howtos/f-droid-repo.md) (Android App Repository)
+ * [Host an Selfoss Service](./howtos/selfoss.md) (RSS Reader Web Application)
  * [Install latest Node.js via nvm](./howtos/nodejs.md)
