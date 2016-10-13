@@ -110,12 +110,19 @@ def restore_settings_and_data(site_dir):
     return result
 
 
+@subsubtask
+def install_spout_fulltextrssGoogleBot(sitename):
+    install_file('~/sites/SITENAME/selfoss/spouts/rss/fulltextrssGoogleBot.php',
+                 SITENAME=sitename)
+
+
 @subtask
 def install_selfoss(sitename, site_dir, username):
     save_settings_and_data(site_dir)
-    run(flo("sudo  rsync -a --delete --force --exclude='.git'  ~/repos/selfoss  "
-            '{site_dir}'), msg='\n### install files')
+    run(flo("sudo  rsync -a --delete --force --exclude='.git'  ~/repos/selfoss "
+            ' {site_dir}'), msg='\n### install files')
     restored = restore_settings_and_data(site_dir)
+    install_spout_fulltextrssGoogleBot(sitename)
     print_msg('\n### set write permissions for group www-data')
     for dirname in ['data/cache', 'data/favicons', 'data/logs',
                     'data/thumbnails', 'data/sqlite', 'public']:
