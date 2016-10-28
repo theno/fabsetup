@@ -279,27 +279,26 @@ def checkup_git_repos(repos, base_dir='~/repos'):
     '''
     run(flo('mkdir -p {base_dir}'))
     for repo in repos:
-        name = repo.get('name', None)
-        if not name:
-            name = re.match(r'.*/([^.]+)\.git', repo['url']).group(1)
-        assert name is not None
-        assert name != ''
-        if not exists(flo('{base_dir}/{name}/.git')):
-            url = repo['url']
-            run(flo('  &&  '.join([
-                    'cd {base_dir}',
-                    'git clone  {url}  {name}'
-            ])))
-        else:
-            run(flo('cd {base_dir}/{name}  &&  git pull'))
+        checkup_git_repo(url=repo['url'], name=repo.get('name', None),
+                         base_dir=base_dir)
 
 
 def checkup_git_repo(url, name=None, base_dir='~/repos'):
     '''Checkout or update a git repo.'''
-    if name:
-        checkup_git_repos([{'name': name, 'url': url}], base_dir)
+    if not name:
+#        name = re.match(r'.*/([^.]+)\.git', url).group(1)
+        name = re.match(r'.*/(.+)\.git', url).group(1)
+    assert name is not None, flo('Cannot extract repo name from repo: {url}')
+    assert name != '', flo('Cannot extract repo name from repo: {url} (empty)')
+    if not exists(flo('{base_dir}/{name}/.git')):
+        run(flo('  &&  '.join([
+                'cd {base_dir}',
+                'git clone  {url}  {name}'
+        ])), msg='clone repo')
     else:
-        checkup_git_repos([{'url': url}], base_dir)
+        run(flo('cd {base_dir}/{name}  &&  git pull'), msg='Update: '
+                                                           'pull from origin')
+    return name
 
 
 def _install_file_from_template(from_template, to_, **substitutions):
@@ -312,7 +311,7 @@ def _install_file_from_template(from_template, to_, **substitutions):
         put(tmp_file.name, to_)
 
 
-def install_file(path, sudo=False, **substitutions):
+def install_file(path, sudo=False, from_path=None, **substitutions):
     '''Install file with path on the host target.
 
     The from file is the first of this list which exists:
@@ -321,12 +320,16 @@ def install_file(path, sudo=False, **substitutions):
      * common file
      * common file.template
     '''
+    # source paths 'from_custom' and 'from_common'
     from_head = dirname(dirname(__file__))
-    from_tail = join('files', path.lstrip(os.sep))
-    if path.startswith('~/'):
-        from_tail = join('files', 'home', 'USERNAME', path[2:])
+    from_path = from_path or path
+    from_tail = join('files', from_path.lstrip(os.sep))
+    if from_path.startswith('~/'):
+        from_tail = join('files', 'home', 'USERNAME', from_path[2:])
     from_common = join(from_head, 'fabfile_data', from_tail)
     from_custom = join(from_head, 'fabsetup_custom', from_tail)
+
+    # target path 'to_' (path or tempfile)
     sitename = substitutions.get('SITENAME', False)
     if sitename:
         path = path.replace('SITENAME', sitename)
@@ -334,18 +337,20 @@ def install_file(path, sudo=False, **substitutions):
     if sudo:
         to_ = join(os.sep, 'tmp', 'fabsetup_' + os.path.basename(path))
     path_dir = dirname(path)
+
+    # copy file
     if isfile(from_custom):
         run(flo('mkdir -p  {path_dir}'))
         put(from_custom, to_)
     elif isfile(from_custom + '.template'):
         _install_file_from_template(from_custom + '.template', to_=to_,
-                **substitutions)
+                                    **substitutions)
     elif isfile(from_common):
         run(flo('mkdir -p  {path_dir}'))
         put(from_common, to_)
     else:
         _install_file_from_template(from_common + '.template', to_=to_,
-                **substitutions)
+                                    **substitutions)
     if sudo:
         run(flo('sudo mv --force  {to_}  {path}'))
 
@@ -381,8 +386,8 @@ def update_or_append_line(filename, prefix, new_line, keep_backup=True,
     '''
     result = None
     if env.host_string == 'localhost':
-        result = update_or_append_local(filename, prefix, new_line, keep_backup,
-                                        append)
+        result = update_or_append_local(filename, prefix, new_line,
+                                        keep_backup, append)
     else:
         tmp_dir = tempfile.mkdtemp(suffix='', prefix='fabsetup_')
 #        fabric.api.local(flo('chmod 777 {tmp_dir}'))
