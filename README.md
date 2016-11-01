@@ -1,6 +1,6 @@
 # fabsetup
 
-Set up and maintain a local or remote (Ubuntu) linux system.
+Set up and maintain on a local or remote (Ubuntu) linux system.
 
 ## Installation
 
