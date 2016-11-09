@@ -1,6 +1,7 @@
 # fabsetup
 
-Set up and maintain on a local or remote (Ubuntu) linux system.
+Fabric tasks in order to set up and maintain things on a local or remote
+(Ubuntu) linux system.
 
 ## Installation
 
@@ -47,3 +48,4 @@ __[Setup-Howtos](./howtos "cookbook")__:
  * [Host an own F-Droid Repository](./howtos/f-droid-repo.md) (Android App Repository)
  * [Host a Selfoss Service](./howtos/selfoss.md) (RSS Reader Web Application)
  * [Install latest Node.js via nvm](./howtos/nodejs.md)
+ * [Create or update a reveal.js presentation](./howtos/revealjs.md)

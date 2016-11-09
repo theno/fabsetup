@@ -14,6 +14,7 @@ from ..utils import uncomment_or_update_or_append_line
 
 import service  # "activate" service tasks
 from nvm import nvm
+from revealjs import decktape, revealjs
 
 
 @task
