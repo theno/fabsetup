@@ -20,7 +20,7 @@ More info:
 
   ```sh
   nvm use node
-  
+
   node  # or npm or ...
   ```
 
