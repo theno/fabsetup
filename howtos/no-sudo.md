@@ -23,6 +23,7 @@ While not all tasks could be executed without `sudo`, this tasks work:
   fab  --set nosudo  setup.telegram
   fab  --set nosudo  setup.tmux
   fab  --set nosudo  setup.vim
+  fab  --set nosudo  setup.revealjs
   ```
 
 If executed together with `-H localhost` they can be used to setup a local
