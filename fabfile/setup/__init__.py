@@ -6,7 +6,7 @@ from fabric.contrib.files import append
 from ..fabutils import exists, install_packages, install_package
 from ..fabutils import install_file, install_user_command, needs_packages
 from ..fabutils import needs_repo_fabsetup_custom, put, run, suggest_localhost
-from ..fabutils import checkup_git_repo, checkup_git_repos, task
+from ..fabutils import checkup_git_repo, checkup_git_repos, task, print_msg
 from ..utils import doc1, print_doc1, flo, print_full_name, query_yes_no
 from ..utils import black, red, green, yellow, blue, magenta, cyan, white
 from ..utils import filled_out_template, update_or_append_line
@@ -278,8 +278,17 @@ def server_customizations():
 @suggest_localhost
 def pencil():
     '''Install or update Pencil, a GUI prototyping tool.'''
+    print_msg('## install latest pencil\n')
     checkup_git_repo(url='https://github.com/prikhi/pencil.git')
-    run('cd ~/repos/pencil/build && ./build.sh  linux')
+
+    print_msg('\n## build properties\n')
+    update_or_append_line('~/repos/pencil/build/properties.sh',
+                          prefix='export MAX_VERSION=',
+                          new_line="export MAX_VERSION='100.*'")
+    run('cat ~/repos/pencil/build/properties.sh')
+
+    run('cd ~/repos/pencil/build && ./build.sh  linux',
+        msg='\n## build pencil\n')
     install_user_command('pencil')
 
 
