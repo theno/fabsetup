@@ -2,4 +2,4 @@
 
 # cf. https://github.com/prikhi/pencil#linux
 # xulrunner Outputs/Linux/application.ini || firefox --app Outputs/Linux/application.ini
-firefox --app ~/repos/pencil/build/Outputs/Linux/application.ini
+firefox --app ~/repos/pencil_v2/build/Outputs/Linux/application.ini

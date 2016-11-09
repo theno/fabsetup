@@ -1,0 +1,2 @@
+#!/bin/bash
+cd {{pencil_v3_repodir}} && npm start

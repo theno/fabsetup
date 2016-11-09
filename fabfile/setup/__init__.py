@@ -276,20 +276,45 @@ def server_customizations():
 
 @task
 @suggest_localhost
-def pencil():
-    '''Install or update Pencil, a GUI prototyping tool.'''
-    print_msg('## install latest pencil\n')
-    checkup_git_repo(url='https://github.com/prikhi/pencil.git')
+def pencil_v2():
+    '''Install or update Pencil version 2, a GUI prototyping tool.
+
+    More info:
+        github repo (forked version 2): https://github.com/prikhi/pencil
+    '''
+    repo_name = 'pencil_v2'
+    repo_dir = flo('~/repos/{repo_name}')
+
+    print_msg('## fetch latest pencil\n')
+    checkup_git_repo(url='https://github.com/prikhi/pencil.git',
+                     name=repo_name)
 
     print_msg('\n## build properties\n')
-    update_or_append_line('~/repos/pencil/build/properties.sh',
+    update_or_append_line(flo('{repo_dir}/build/properties.sh'),
                           prefix='export MAX_VERSION=',
                           new_line="export MAX_VERSION='100.*'")
-    run('cat ~/repos/pencil/build/properties.sh')
+    run(flo('cat {repo_dir}/build/properties.sh'))
 
-    run('cd ~/repos/pencil/build && ./build.sh  linux',
+    run(flo('cd {repo_dir}/build && ./build.sh  linux'),
         msg='\n## build pencil\n')
-    install_user_command('pencil')
+    install_user_command('pencil2')
+
+
+@task
+@suggest_localhost
+def pencil_v3():
+    '''Install or update Pencil version 3, a GUI prototyping tool.
+
+    More info:
+        Homepage: http://pencil.evolus.vn/Next.html
+        github repo: https://github.com/evolus/pencil
+    '''
+    repo_name = 'pencil_v3'
+    repo_dir = flo('~/repos/{repo_name}')
+    print_msg('## fetch latest pencil\n')
+    checkup_git_repo(url='https://github.com/evolus/pencil.git', name=repo_name)
+    run(flo('cd {repo_dir} && npm install'), msg='\n## install npms\n')
+    install_user_command('pencil3', pencil_v3_repodir=repo_dir)
 
 
 @task
