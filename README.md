@@ -32,7 +32,7 @@ script, so every command starts with a __`fab`__:
   fab setup.regex_repl
 
   ## on your local host:
-  fab setup.pencil -H localhost
+  fab setup.pencil_v3 -H localhost
 
   ## remote host:
   fab up -H example.com
