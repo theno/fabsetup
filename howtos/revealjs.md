@@ -1,9 +1,9 @@
 # Howto: Set up or update a reveal.js presentation with slides written in markdown
 
 More info:
-* reveal.js template presentation: https://theno.github.io/revealjs_template/
+* reveal.js template presentation: **https://theno.github.io/revealjs_template**
   * source: https://github.com/theno/revealjs_template
-* reveal.js: http://lab.hakim.se/reveal-js/
+* reveal.js: http://lab.hakim.se/reveal-js
   * source: https://github.com/hakimel/reveal.js
 
 ## Create a new presentation by installing the reveal.js template
