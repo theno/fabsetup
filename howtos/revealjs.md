@@ -8,8 +8,10 @@ More info:
 
 ## Create a new presentation by installing the reveal.js template
 
+At first, [install](https://github.com/theno/fabsetup#installation) fabric sript *fabsetup*. Then:
+
   ```sh
-  fab setup.revealjs  -H localhost
+  cd ~/repos/fabsetup  &&  fab setup.revealjs  -H localhost
   ```
 
 Running the task for the first time, a reveal.js template will be installed.
