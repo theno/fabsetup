@@ -298,6 +298,8 @@ def pencil_v2():
     run(flo('cd {repo_dir}/build && ./build.sh  linux'),
         msg='\n## build pencil\n')
     install_user_command('pencil2')
+    print_msg('\nNow You can start pencil version 2 with this command:\n\n'
+              '    pencil2')
 
 
 @task
@@ -316,6 +318,10 @@ def pencil_v3():
     run(flo('cd {repo_dir} && npm install'), msg='\n## install npms\n')
     install_user_command('pencil3', pencil_v3_repodir=repo_dir)
     run('ln -snf ~/bin/pencil3 ~/bin/pencil')
+    print_msg('\nNow You can start pencil version 3 with this command:\n\n'
+              '    pencil3\n\n'
+              'or with:\n\n'
+              '    pencil')
 
 
 @task
