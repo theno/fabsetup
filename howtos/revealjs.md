@@ -2,8 +2,9 @@
 
 More info:
 * reveal.js template presentation: https://theno.github.io/revealjs_template/
-* template demo: https://github.com/theno/revealjs_template
+  * source: https://github.com/theno/revealjs_template
 * reveal.js: http://lab.hakim.se/reveal-js/
+  * source: https://github.com/hakimel/reveal.js
 
 ## Create a new presentation by installing the reveal.js template
 
