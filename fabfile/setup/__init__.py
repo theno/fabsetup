@@ -315,6 +315,7 @@ def pencil_v3():
     checkup_git_repo(url='https://github.com/evolus/pencil.git', name=repo_name)
     run(flo('cd {repo_dir} && npm install'), msg='\n## install npms\n')
     install_user_command('pencil3', pencil_v3_repodir=repo_dir)
+    run('ln -snf ~/bin/pencil3 ~/bin/pencil')
 
 
 @task
