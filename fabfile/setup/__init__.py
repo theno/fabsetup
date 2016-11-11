@@ -276,13 +276,17 @@ def server_customizations():
 
 @task
 @suggest_localhost
-def pencil_v2():
-    '''Install or update Pencil version 2, a GUI prototyping tool.
+def pencil2():
+    '''Install or update latest Pencil version 2, a GUI prototyping tool.
+
+    Tip: For svg exports displayed proper in other programs (eg. inkscape,
+    okular, reveal.js presentations) only use the 'Common Shapes' and
+    'Desktop - Sketchy GUI' elements.
 
     More info:
         github repo (forked version 2): https://github.com/prikhi/pencil
     '''
-    repo_name = 'pencil_v2'
+    repo_name = 'pencil2'
     repo_dir = flo('~/repos/{repo_name}')
 
     print_msg('## fetch latest pencil\n')
@@ -297,26 +301,30 @@ def pencil_v2():
 
     run(flo('cd {repo_dir}/build && ./build.sh  linux'),
         msg='\n## build pencil\n')
-    install_user_command('pencil2')
+    install_user_command('pencil2', pencil2_repodir=repo_dir)
     print_msg('\nNow You can start pencil version 2 with this command:\n\n'
               '    pencil2')
 
 
 @task
 @suggest_localhost
-def pencil_v3():
-    '''Install or update Pencil version 3, a GUI prototyping tool.
+def pencil3():
+    '''Install or update latest Pencil version 3, a GUI prototyping tool.
+
+    While it is the newer one and the GUI is more fancy, it is the "more beta"
+    version of pencil.  For exmaple, to display a svg export may fail from
+    within a reveal.js presentation.
 
     More info:
         Homepage: http://pencil.evolus.vn/Next.html
         github repo: https://github.com/evolus/pencil
     '''
-    repo_name = 'pencil_v3'
+    repo_name = 'pencil3'
     repo_dir = flo('~/repos/{repo_name}')
     print_msg('## fetch latest pencil\n')
     checkup_git_repo(url='https://github.com/evolus/pencil.git', name=repo_name)
     run(flo('cd {repo_dir} && npm install'), msg='\n## install npms\n')
-    install_user_command('pencil3', pencil_v3_repodir=repo_dir)
+    install_user_command('pencil3', pencil3_repodir=repo_dir)
     run('ln -snf ~/bin/pencil3 ~/bin/pencil')
     print_msg('\nNow You can start pencil version 3 with this command:\n\n'
               '    pencil3\n\n'

@@ -103,7 +103,7 @@ def needs_repo_fabsetup_custom(func):
             local(flo('cd {custom_dir} && git init'))
             local(flo('cd {custom_dir} && git add .'))
             local(flo('cd {custom_dir} && git commit -am "Initial commit"'))
-            print(yellow("** Done. Don't forget to create a backup of your"
+            print(yellow("** Done. Don't forget to create a backup of your "
                          'fabsetup_custom repo **\n'))
             print(yellow("** But do not make it public, it's custom **\n",
                          bold=True))

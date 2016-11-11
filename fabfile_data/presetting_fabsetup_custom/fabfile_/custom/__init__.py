@@ -1,7 +1,7 @@
 from fabfile.fabutils import checkup_git_repo, checkup_git_repos, flo
 from fabfile.fabutils import install_package, install_packages
 from fabfile.fabutils import install_user_command, run, suggest_localhost
-from fabfile.fabutils import custom_task as task # here, every task is custom
+from fabfile.fabutils import custom_task as task  # here, every task is custom
 
 import config
 
@@ -14,8 +14,8 @@ def users_bin_dir():
     * alldia2pdf, allep2svg, alldia2pdf
     '''
     # circumvent circular import, cf. http://stackoverflow.com/a/18486863
-    from fabfile.setup import pencil
-    pencil() # used by ~/bin/ep2svg
+    from fabfile.setup import pencil2
+    pencil2() # used by ~/bin/ep2svg
     install_packages([
         'dia',
         'inkscape', # used by ~/bin/svg2pdf

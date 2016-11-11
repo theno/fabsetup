@@ -29,9 +29,8 @@ if not isdir(fabsetup_custom_dir):
         # decorator @needs_repo_fabsetup_custom makes the job
         print(green('Initialization finished\n'))
         print('List available tasks: ' + blue('fab -l'))
-        print(' '.join([
-            'Show details of a task: `fab -d <task>`, eg.:',
-            blue('fab -d setup_webserver'),]))
+        print('Show details of a task: `fab -d <task>`, eg.: ' +
+              blue('fab -d setup_webserver'))
 
 
     @task
