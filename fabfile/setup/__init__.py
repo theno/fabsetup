@@ -12,7 +12,9 @@ from ..utils import black, red, green, yellow, blue, magenta, cyan, white
 from ..utils import filled_out_template, update_or_append_line
 from ..utils import uncomment_or_update_or_append_line
 
-import service  # "activate" service tasks
+# "activate" tasks
+import service
+from powerline import powerline
 from nvm import nvm
 from revealjs import decktape, revealjs
 

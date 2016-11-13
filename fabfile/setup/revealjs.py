@@ -2,10 +2,10 @@ import os
 
 from fabric.context_managers import quiet
 
-from fabfile.fabutils import exists, run, task, print_msg, suggest_localhost
-from fabfile.fabutils import checkup_git_repo, subtask, subsubtask, install_file
-from fabfile.fabutils import update_or_append_line
-from fabfile.utils import flo, query_input, query_yes_no
+from ..fabutils import exists, run, task, print_msg, suggest_localhost
+from ..fabutils import checkup_git_repo, subtask, subsubtask, install_file
+from ..fabutils import update_or_append_line
+from ..utils import flo, query_input, query_yes_no
 
 
 @task
