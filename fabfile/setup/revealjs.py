@@ -1,16 +1,53 @@
 import os
 
 from fabric.context_managers import quiet
+from fabric.api import execute
 
 from ..fabutils import exists, run, task, print_msg, suggest_localhost
 from ..fabutils import checkup_git_repo, subtask, subsubtask, install_file
-from ..fabutils import update_or_append_line
+from ..fabutils import update_or_append_line, needs_repo_fabsetup_custom
 from ..utils import flo, query_input, query_yes_no
+
+
+_lazy_dict = {}
+_lazy_queries = {
+    'presi_title': {
+        'question': 'Presentation title?',
+        'default': None,  # will be derived from basedir
+    },
+    'presi_subtitle': {
+        'question': 'Presentation sub-title?',
+        'default': "It's about this and that",
+    },
+    'presi_description': {
+        'question': 'Short description of your presentation?',
+        'default': 'This presentation shows this, that and foo bar baz.'
+    },
+    'github_user': {
+        'question': 'github username?',
+        'default': None,
+    },
+    'github_repo': {
+        'question': 'github repo?',
+        'default': None,
+    },
+}
+
+
+def _lazy(key, default=None):
+    question = _lazy_queries[key]['question']
+    default = default or _lazy_queries[key]['default']
+    val = _lazy_dict.get(key, None)
+    if not val:
+        val = query_input(question, default)
+        _lazy_dict[key] = val
+    return val
 
 
 @task
 @suggest_localhost
-def revealjs():
+def revealjs(basedir=None, title=None, subtitle=None, description=None,
+             github_user=None, github_repo=None):
     '''Set up or update a reveals.js presentation with slides written in markdown.
 
     Several reveal.js plugins will be set up, too.
@@ -25,23 +62,31 @@ def revealjs():
         https://github.com/e-gor/Reveal.js-TOC-Progress
         https://github.com/e-gor/Reveal.js-Title-Footer
     '''
-    basedir = query_input('Base dir of the presentation?',
-                          default='~/repos/my_presi')
+    basedir = basedir or query_input('Base dir of the presentation?',
+                                     default='~/repos/my_presi')
     revealjs_repo_name = 'reveal.js'
     revealjs_dir = flo('{basedir}/{revealjs_repo_name}')
-    codebase_exists = lambda: exists(revealjs_dir)
-    question = "Base dir already contains a sub dir 'reveal.js'. " \
-               'Continue anyway and reset (and re-download) ' \
-               'reveal.js codebase? (else abort)'
-    if not codebase_exists() or query_yes_no(question, default='yes'):
+
+    _lazy_dict['presi_title'] = title
+    _lazy_dict['presi_subtitle'] = subtitle
+    _lazy_dict['presi_description'] = description
+    _lazy_dict['github_user'] = github_user
+    _lazy_dict['github_repo'] = github_repo
+
+    question = flo("Base dir already contains a sub dir '{revealjs_repo_name}'."
+                   ' Reset (and re-download) reveal.js codebase?')
+    if not exists(revealjs_dir) or query_yes_no(question, default='no'):
         run(flo('mkdir -p {basedir}'))
         set_up_revealjs_codebase(basedir, revealjs_repo_name)
         install_plugins(revealjs_dir)
-        apply_customizations(basedir, repo_dir=revealjs_dir)
-    if codebase_exists():
+        apply_customizations(repo_dir=revealjs_dir)
+    if exists(revealjs_dir):
+        install_files_in_basedir(basedir, repo_dir=revealjs_dir)
         init_git_repo(basedir)
         create_github_remote_repo(basedir)
         setup_npm(revealjs_dir)
+    else:
+        print('abort')
 
 
 def export_repo(parent_dir, repo_url, repo_name=None):
@@ -108,36 +153,6 @@ def install_plugins(revealjs_dir):
     install_plugin_title_footer(plugin_dir)
 
 
-_lazy_dict = {}
-_lazy_queries = {
-    'presi_title': {
-        'question': 'Presentation title?',
-        'default': None,  # derived from basedir
-    },
-    'presi_subtitle': {
-        'question': 'Presentation sub-title?',
-        'default': '[reveal.js][3] presentation written '
-                   'in [markdown][4] set up with [fabric][5] & [fabsetup][6]',
-    },
-    'presi_description': {
-        'question': 'Short description of your presentation?',
-        'default': '''\
-This presentation shows how to create a reveal.js presentation which will be
-set up with the fabric task `setup.revealjs` of fabsetup.'''
-    },
-}
-
-
-def _lazy(key, default=None):
-    question = _lazy_queries[key]['question']
-    default = default or _lazy_queries[key]['default']
-    val = _lazy_dict.get(key, None)
-    if not val:
-        val = query_input(question, default)
-        _lazy_dict[key] = val
-    return val
-
-
 @subsubtask
 def custom_index_html(basedir, repo_dir):
     if exists(flo('{repo_dir}/index.html')):
@@ -159,7 +174,6 @@ def custom_index_html(basedir, repo_dir):
                      presi_title_space=presi_title.replace('_', ' '))
         thanks_img_path = flo('{basedir}/img/thanks.jpg')
         if not exists(thanks_img_path):
-            run(flo('mkdir -p {basedir}/img'))
             install_file(path=thanks_img_path,
                          from_path='~/repos/my_presi/img/thanks.jpg')
 
@@ -243,14 +257,18 @@ def install_readme(basedir):
 
 
 @subtask
-def apply_customizations(basedir, repo_dir):
+def apply_customizations(repo_dir):
     '''Customize reveal.js codebase and installed plugins.'''
-    custom_index_html(basedir, repo_dir)
     tweak_css(repo_dir)
-    install_markdown_slides_template(basedir)
-    install_readme(basedir)
     symbolic_links(repo_dir)
     return repo_dir
+
+
+@subtask
+def install_files_in_basedir(basedir, repo_dir):
+    custom_index_html(basedir, repo_dir)
+    install_markdown_slides_template(basedir)
+    install_readme(basedir)
 
 
 @subtask
@@ -278,18 +296,21 @@ def remote_origin_configured(basedir):
 def _insert_repo_infos_into_readme(basedir, github_user, github_repo):
     print_msg('\nadd github user and repo name into README.md')
     filename = flo('{basedir}/README.md')
+    # FIXME: workaround: line starts with space "trick" for github.io link
+    #        correct solution would be: create util function update_line()
+    #                                   which will not append if prefix not
+    #                                   found in file
     update_or_append_line(filename,
-                          prefix='https://USER.github.io/REPO',
-                          new_line=flo('https://{github_user}.github.io/'
+                          #prefix=' https://USER.github.io/REPO',
+                          prefix=' https://',
+                          new_line=flo(' https://{github_user}.github.io/'
                                        '{github_repo}'))
     update_or_append_line(filename,
-                          prefix='https://github.com/USER/REPO/blob/master/'
-                                 'slides.md',
+                          #prefix='https://github.com/USER/REPO/blob/master/'
+                          #       'slides.md',
+                          prefix='https://github.com/',
                           new_line=flo('https://github.com/{github_user}/'
                                        '{github_repo}/blob/master/slides.md'))
-    run(flo('cd {basedir} && git add README.md'))
-    run(flo('cd {basedir} && git commit -am "Add github repo and user '
-            'into README.md"'))
 
 
 def _create_github_remote_repo(basedir):
@@ -298,10 +319,14 @@ def _create_github_remote_repo(basedir):
       https://developer.github.com/v3/repos/#create
       https://stackoverflow.com/a/10325316
     '''
-    github_user = query_input('github username?')
-    github_repo = query_input('github repo name?',
-                              default=os.path.basename(basedir))
+    github_user = _lazy('github_user')
+    github_repo = _lazy('github_repo', default=os.path.basename(basedir))
+
     _insert_repo_infos_into_readme(basedir, github_user, github_repo)
+    run(flo('cd {basedir} && git add README.md'))
+    run(flo('cd {basedir} && git commit -am "Add github repo and user '
+            'into README.md"'))
+
     print_msg('create github repo')
     run(flo("cd {basedir}  &&  "
             "curl -u '{github_user}' https://api.github.com/user/repos "
@@ -366,3 +391,42 @@ def decktape():
               'cd ~/bin/decktape/active && \\\n    '
               './phantomjs decktape.js --size 1280x800  localhost:8000  '
               '~/repos/my_presi/my_presi.pdf')
+
+
+@task
+@needs_repo_fabsetup_custom  # for import of github_user from config.py
+@suggest_localhost
+def revealjs_template():
+    '''Create or update the template presentation demo using task `revealjs`.
+    '''
+    from config import basedir, github_user, github_repo
+
+    run(flo('rm -f {basedir}/index.html'))
+    run(flo('rm -f {basedir}/slides.md'))
+    run(flo('rm -f {basedir}/README.md'))
+    run(flo('rm -rf {basedir}/img/'))
+
+    title = 'reveal.js template'
+    subtitle = '[reveal.js][3] presentation written ' \
+               'in [markdown][4] set up with [fabric][5] & [fabsetup][6]'
+    description = '''\
+This presentation shows how to create a reveal.js presentation which will be
+set up with the fabric task `setup.revealjs` of fabsetup.
+
+Also, you can use this presentation source as a reveal.js template:
+* Checkout this repo
+* Then set the title in the `index.html` and edit the
+  `slides.md`.'''
+
+    execute(revealjs, basedir, title, subtitle, description,
+            github_user, github_repo)
+
+    # (README.md was removed, but not the github remote repo)
+    print_msg('\n## Re-add github repo infos into README.md')
+    basename = os.path.basename(basedir)
+    _insert_repo_infos_into_readme(basedir, github_user=_lazy('github_user'),
+                                   github_repo=_lazy('github_repo',
+                                                     default=basename))
+
+    print_msg('\n## Assure symbolic link not tracked by git exists\n')
+    run(flo('ln -snf ../reveal.js  {basedir}/reveal.js/reveal.js'))

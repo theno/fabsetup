@@ -16,7 +16,7 @@ from ..utils import uncomment_or_update_or_append_line
 import service
 from powerline import powerline
 from nvm import nvm
-from revealjs import decktape, revealjs
+from revealjs import decktape, revealjs, revealjs_template
 
 
 @task

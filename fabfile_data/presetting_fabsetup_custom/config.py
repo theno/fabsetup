@@ -43,3 +43,10 @@ git_repos = [
 
 vim_package_repos = [
 ]
+
+
+# task: setup.revealjs_template
+
+basedir = '~/repos/revealjs_template'
+#github_user = '{{your_github_username}}'
+github_repo = 'revealjs_template'
