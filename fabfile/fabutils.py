@@ -420,3 +420,61 @@ def uncomment_or_update_or_append_line(filename, prefix, new_line, comment='#',
     '''
     return uua_local(filename, prefix, new_line, comment, keep_backup,
                      update_or_append_line=update_or_append_line)
+
+
+def _line_2_pair(line):
+    '''Return bash variable declaration as name-value pair.
+
+    Name as lower case str. Value itself only without surrounding '"' (if any).
+
+    For example, _line_2_pair('NAME="Ubuntu"') will return ('name', 'Ubuntu')
+    '''
+    key, val = line.split('=')
+    return key.lower(), val.strip('"')
+
+
+def _fetch_os_release_infos():
+    '''Return variable content of file '/etc/os-release' as dict.
+
+    Return-example (in case of an Ubuntu 16.04):
+        {
+            'name': 'Ubuntu',
+            'version': '16.04.1 LTS (Xenial Xerus)',
+            'version_id': '16.04',
+            ...
+        }
+    '''
+    os_release_dict = {}
+    lines = []
+    with fabric.api.hide('output'):
+        lines = run('cat /etc/os-release', capture=True).split('\n')
+    os_release_dict = dict([_line_2_pair(line.strip('\r')) for line in lines])
+    return os_release_dict
+
+
+def is_os(name, version_id=None):
+    '''
+    Args:
+        name: 'Debian GNU/Linux', 'Ubuntu'
+        version_id: None, '14.04' (Ubuntu), 16.04' (Ubuntu), '8' (Debian)
+    '''
+    result = False
+    os_release_infos = _fetch_os_release_infos()
+    if name == os_release_infos.get('name', None):
+        if version_id is None:
+            result = True
+        elif version_id == os_release_infos.get('version_id', None):
+            result = True
+    return result
+
+
+def is_debian(version_id=None):
+    return is_os(name='Debian GNU/Linux', version_id=version_id)
+
+
+def is_ubuntu(version_id=None):
+    return is_os(name='Ubuntu', version_id=version_id)
+
+
+def is_raspbian(version_id=None):
+    return is_os(name='Raspbian GNU/Linux', version_id=version_id)
