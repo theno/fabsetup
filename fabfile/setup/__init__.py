@@ -5,7 +5,7 @@ from fabric.contrib.files import append
 
 from ..fabutils import exists, install_packages, install_package
 from ..fabutils import install_file, install_user_command, needs_packages
-from ..fabutils import needs_repo_fabsetup_custom, put, run, suggest_localhost
+from ..fabutils import needs_repo_fabsetup_custom, run, suggest_localhost
 from ..fabutils import checkup_git_repo, checkup_git_repos, task, print_msg
 from ..utils import doc1, print_doc1, flo, print_full_name, query_yes_no
 from ..utils import black, red, green, yellow, blue, magenta, cyan, white
@@ -84,13 +84,13 @@ def solarized():
       http://unix.stackexchange.com/a/118903
     '''
     install_packages(['rxvt-unicode', 'tmux', 'vim'])
-    put('fabfile_data/files/home/USERNAME/.Xresources', '~/.Xresources')
+    install_file('~/.Xresources')
     if env.host_string == 'localhost':
         run('xrdb  ~/.Xresources')
 
     # install and call term_colors
     run('mkdir -p  ~/bin')
-    put('fabfile_data/files/home/USERNAME/bin/term_colors', '~/bin/term_colors')
+    install_file('~/bin/term_colors')
     run('chmod 755 ~/bin/term_colors')
     run('~/bin/term_colors')
 
@@ -113,15 +113,17 @@ def vim():
     '''
     install_package('vim')
 
-    # custom ~/.vimrc
-    put('fabfile_data/files/home/USERNAME/.vimrc', '~/.vimrc')
+    print_msg('## install ~/.vimrc\n')
+    install_file('~/.vimrc')
 
-    # first, install pathogen
+    print_msg('\n## set up pathogen\n')
     run('mkdir -p  ~/.vim/autoload  ~/.vim/bundle')
     checkup_git_repo(url='https://github.com/tpope/vim-pathogen.git')
-    run('ln -snf  ~/repos/vim-pathogen/autoload/pathogen.vim  ~/.vim/autoload/pathogen.vim')
-    # then, install vim packages
-    install_package('ctags') # required by package tagbar
+    run('ln -snf  ~/repos/vim-pathogen/autoload/pathogen.vim  '
+        '~/.vim/autoload/pathogen.vim')
+
+    print_msg('\n## install vim packages\n')
+    install_package('ctags')  # required by package tagbar
     repos = [
         {
             'name': 'vim-colors-solarized',
@@ -153,7 +155,7 @@ def tmux():
      * correct highlighting within man pages,
        cf. http://stackoverflow.com/a/10563271
     '''
-    put('fabfile_data/files/home/USERNAME/.tmux.conf', '~/.tmux.conf')
+    install_file('~/.tmux.conf')
 
     # create a terminfo file with modified sgr, smso, rmso, sitm and ritm
     # entries
@@ -327,11 +329,8 @@ def pencil3():
     checkup_git_repo(url='https://github.com/evolus/pencil.git', name=repo_name)
     run(flo('cd {repo_dir} && npm install'), msg='\n## install npms\n')
     install_user_command('pencil3', pencil3_repodir=repo_dir)
-    run('ln -snf ~/bin/pencil3 ~/bin/pencil')
     print_msg('\nNow You can start pencil version 3 with this command:\n\n'
-              '    pencil3\n\n'
-              'or with:\n\n'
-              '    pencil')
+              '    pencil3')
 
 
 @task
@@ -339,9 +338,7 @@ def server_prepare_root_bin_dir():
     '''Install custom commands for user root at '/root/bin/'.'''
     commands = ['run_backup']
     for command in commands:
-        put(flo('fabfile_data/files/root/bin/{command}'), '/tmp')
-        sudo('mkdir -p /root/bin')
-        sudo(flo('mv /tmp/{command} /root/bin/{command}'))
+        install_file(flo('/root/bin/{command}'), sudo=True)
         sudo(flo('chmod 755 /root/bin/{command}'))
         if command == 'run_backup':
             sudo('ln -snf /root/bin/run_backup /etc/cron.daily/run_backup')
@@ -375,8 +372,7 @@ def irssi():
      * https://wiki.archlinux.org/index.php/Irssi
     '''
     install_packages(['irssi'])
-    put('fabsetup_custom/files/home/USERNAME/.irssi/config',
-        os.path.expanduser('~/.irssi/config'))
+    install_file('~/.irssi/config')
     run(os.path.expanduser('chmod 600 ~/.irssi/config'))
     # TODO autostart irssi within of a tmux session "as a service"
 
