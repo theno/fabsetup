@@ -6,18 +6,17 @@ from fabric.api import env, execute, sudo, warn_only
 from fabutils import checkup_git_repo, install_package, install_packages, run
 from fabutils import task, needs_packages, needs_repo_fabsetup_custom
 from fabutils import suggest_localhost
+from fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
 from utils import doc1, print_doc1, flo, print_full_name, query_yes_no
 from utils import black, red, green, yellow, blue, magenta, cyan, white
 
 import sys
 from os.path import join, dirname, isdir
 
-# load fabric tasks from module setup
-import setup
+import setup  # load tasks from module setup
 
 
-fabsetup_custom_dir = join(dirname(dirname(__file__)), 'fabsetup_custom')
-if not isdir(fabsetup_custom_dir):
+if not isdir(FABSETUP_CUSTOM_DIR):
 
     from fabric.api import task
 
@@ -55,12 +54,7 @@ if not isdir(fabsetup_custom_dir):
         # instead
 
 else:
-    # import custom tasks from
-    # ../fabsetup_custom/fabfile_/__init__.py
-    sys.path = [fabsetup_custom_dir] + sys.path
-    import fabfile_ as _
-    globals().update(_.__dict__)
-    del _
+    import_fabsetup_custom()
 
 
 @task

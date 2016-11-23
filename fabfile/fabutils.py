@@ -19,6 +19,10 @@ from utils import comment_out_line as comment_out_local
 from utils import uncomment_or_update_or_append_line as uua_local
 
 
+FABSETUP_DIR = dirname(dirname(__file__))
+FABSETUP_CUSTOM_DIR = join(dirname(dirname(__file__)), 'fabsetup_custom')
+
+
 def suggest_localhost(func):
     '''Prompt user for value of env.host_string with default to 'localhost'
     when env.host_string is empty.
@@ -77,14 +81,23 @@ def put(*args, **kwargs):
     return func(*args, **kwargs)
 
 
+def import_fabsetup_custom():
+    # import custom tasks from
+    # ../fabsetup_custom/fabfile_/__init__.py
+    sys.path = [FABSETUP_CUSTOM_DIR] + sys.path
+    import fabfile_ as _
+    globals().update(_.__dict__)
+    del _
+
+
 def needs_repo_fabsetup_custom(func):
     '''Decorator, ensures that fabsetup_custom exists and it's a git repo.'''
     from fabric.api import local
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        custom_dir = join(dirname(dirname(__file__)), 'fabsetup_custom')
-        presetting_dir = join(dirname(dirname(__file__)), 'fabfile_data',
+        custom_dir = join(FABSETUP_DIR, 'fabsetup_custom')
+        presetting_dir = join(FABSETUP_DIR, 'fabfile_data',
                               'presetting_fabsetup_custom')
         if not isdir(custom_dir):
             print(yellow('\n** **     Init ') +
@@ -93,6 +106,7 @@ def needs_repo_fabsetup_custom(func):
             print(yellow('** Create files in dir fabsetup_custom **'))
             local(flo('mkdir -p {custom_dir}'))
             local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
+            import_fabsetup_custom()
         else:
             with quiet():
                 local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
@@ -328,7 +342,7 @@ def install_file(path, sudo=False, from_path=None, **substitutions):
      * common file.template
     '''
     # source paths 'from_custom' and 'from_common'
-    from_head = dirname(dirname(__file__))
+    from_head = FABSETUP_DIR
     from_path = from_path or path
     from_tail = join('files', from_path.lstrip(os.sep))
     if from_path.startswith('~/'):

@@ -50,3 +50,20 @@ vim_package_repos = [
 basedir = '~/repos/revealjs_template'
 #github_user = '{{your_github_username}}'
 github_repo = 'revealjs_template'
+
+
+# task: setup.vim_janus
+
+vim_janus_additional_addons = [
+    {
+        'name': 'vim-colors-solarized',
+        'url': 'git://github.com/altercation/vim-colors-solarized.git',
+    },
+    {
+        'name': 'vim-nerdtree-tabs',
+        'url': 'https://github.com/jistr/vim-nerdtree-tabs.git',
+    },
+    {
+        'url': 'https://github.com/klen/python-mode.git',
+    },
+]
