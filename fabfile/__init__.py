@@ -54,7 +54,7 @@ if not isdir(FABSETUP_CUSTOM_DIR):
         # instead
 
 else:
-    import_fabsetup_custom()
+    import_fabsetup_custom(globals())
 
 
 @task

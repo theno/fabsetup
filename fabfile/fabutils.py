@@ -81,12 +81,12 @@ def put(*args, **kwargs):
     return func(*args, **kwargs)
 
 
-def import_fabsetup_custom():
+def import_fabsetup_custom(globals_):
     # import custom tasks from
     # ../fabsetup_custom/fabfile_/__init__.py
     sys.path = [FABSETUP_CUSTOM_DIR] + sys.path
     import fabfile_ as _
-    globals().update(_.__dict__)
+    globals_.update(_.__dict__)
     del _
 
 
@@ -106,7 +106,7 @@ def needs_repo_fabsetup_custom(func):
             print(yellow('** Create files in dir fabsetup_custom **'))
             local(flo('mkdir -p {custom_dir}'))
             local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
-            import_fabsetup_custom()
+            import_fabsetup_custom(globals())
         else:
             with quiet():
                 local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
