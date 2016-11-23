@@ -271,7 +271,8 @@ def install_package(package):
 
 
 @needs_packages('git')
-def checkup_git_repos(repos, base_dir='~/repos'):
+def checkup_git_repos(repos, base_dir='~/repos',
+                      verbose=False, prefix='', postfix=''):
     '''Checkout or update git repos.
 
     repos must be a list of dicts each with an url and optional with a name
@@ -280,24 +281,30 @@ def checkup_git_repos(repos, base_dir='~/repos'):
     run(flo('mkdir -p {base_dir}'))
     for repo in repos:
         checkup_git_repo(url=repo['url'], name=repo.get('name', None),
-                         base_dir=base_dir)
+                         base_dir=base_dir, verbose=verbose,
+                         prefix=prefix, postfix=postfix)
 
 
-def checkup_git_repo(url, name=None, base_dir='~/repos'):
+def checkup_git_repo(url, name=None, base_dir='~/repos',
+                     verbose=False, prefix='', postfix=''):
     '''Checkout or update a git repo.'''
     if not name:
 #        name = re.match(r'.*/([^.]+)\.git', url).group(1)
         name = re.match(r'.*/(.+)\.git', url).group(1)
     assert name is not None, flo('Cannot extract repo name from repo: {url}')
     assert name != '', flo('Cannot extract repo name from repo: {url} (empty)')
+    if verbose:
+        name_blue = blue(name)
+        print_msg(flo('{prefix}Checkout or update {name_blue}{postfix}'))
     if not exists(flo('{base_dir}/{name}/.git')):
         run(flo('  &&  '.join([
                 'cd {base_dir}',
                 'git clone  {url}  {name}'
         ])), msg='clone repo')
     else:
-        run(flo('cd {base_dir}/{name}  &&  git pull'), msg='Update: '
-                                                           'pull from origin')
+        if verbose:
+            print_msg('update: pull from origin')
+        run(flo('cd {base_dir}/{name}  &&  git pull'))
     return name
 
 
