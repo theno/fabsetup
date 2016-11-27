@@ -469,7 +469,9 @@ def _fetch_os_release_infos():
     lines = []
     with fabric.api.hide('output'):
         lines = run('cat /etc/os-release', capture=True).split('\n')
-    os_release_dict = dict([_line_2_pair(line.strip('\r')) for line in lines])
+    os_release_dict = dict([_line_2_pair(line.strip('\r'))
+                            for line in lines
+                            if line.strip() != ''])
     return os_release_dict
 
 
@@ -499,3 +501,6 @@ def is_ubuntu(version_id=None):
 
 def is_raspbian(version_id=None):
     return is_os(name='Raspbian GNU/Linux', version_id=version_id)
+
+def is_osmc(version_id=None):
+    return is_os(name='OSMC', version_id=version_id)
