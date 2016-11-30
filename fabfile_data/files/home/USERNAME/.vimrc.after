@@ -47,3 +47,7 @@ let g:pymode_folding=0
 
 " show leader key stroke: http://stackoverflow.com/a/8160809
 set showcmd
+
+" enable modeline support (cf. http://stackoverflow.com/a/18513581 and
+" 'help modeline')
+set modeline
