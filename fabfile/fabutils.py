@@ -303,8 +303,9 @@ def checkup_git_repo(url, name=None, base_dir='~/repos',
                      verbose=False, prefix='', postfix=''):
     '''Checkout or update a git repo.'''
     if not name:
-#        name = re.match(r'.*/([^.]+)\.git', url).group(1)
-        name = re.match(r'.*/(.+)\.git', url).group(1)
+        match = re.match(r'.*/(.+)\.git', url)
+        assert match, flo("Unable to extract repo name from '{url}'")
+        name = match.group(1)
     assert name is not None, flo('Cannot extract repo name from repo: {url}')
     assert name != '', flo('Cannot extract repo name from repo: {url} (empty)')
     if verbose:
