@@ -444,7 +444,7 @@ def powerline_shell():
 
     question = 'Use normal question mark (u003F) for untracked files instead '\
         'of fancy "black question mark ornament" (u2753, which may not work)?'
-    if query_yes_no(question, default='no'):
+    if query_yes_no(question, default='yes'):
         filename = '~/repos/powerline-shell/powerline-shell.py'
         update_or_append_line(filename, keep_backup=False,
                               prefix="        'untracked': u'\u2753',",
