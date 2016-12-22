@@ -49,6 +49,13 @@ def custom_vim_addons():
     checkup_git_repos(vim_janus_additional_addons, base_dir='~/.janus',
                       verbose=True, prefix='\n')
 
+    print_msg('enable *.html files for plugin xmledit:')
+    ftplugin_dir = '~/.janus/xmledit/ftplugin'
+    if exists(ftplugin_dir):
+        # enable html file support (cf. http://stackoverflow.com/a/28603924):
+        run(flo('cp -n {ftplugin_dir}/html.vim {ftplugin_dir}/html.vim.orig'))
+        run(flo('ln -snf xml.vim {ftplugin_dir}/html.vim'))
+
 
 @subsubtask
 def vimrc_customizations():

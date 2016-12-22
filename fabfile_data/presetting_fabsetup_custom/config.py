@@ -66,4 +66,10 @@ vim_janus_additional_addons = [
     {
         'url': 'https://github.com/klen/python-mode.git',
     },
+    {
+        'url': 'https://github.com/posva/vim-vue.git',
+    },
+    {
+        'url': 'https://github.com/sukima/xmledit.git',
+    },
 ]

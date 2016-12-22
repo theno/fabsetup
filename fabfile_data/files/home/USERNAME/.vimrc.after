@@ -33,6 +33,8 @@ let g:tagbar_autofocus=1
 let g:tagbar_sort=0
 nmap <F9> :TagbarToggle<CR>
 
+" plugin xmledit (cf. https://github.com/sukima/xmledit)
+let xml_use_xhtml = 1
 
 "for vim-addon pythonmode
 au FileType python setlocal formatprg=autopep8\ -
