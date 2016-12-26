@@ -206,6 +206,7 @@ def vnc_raspi_osmc():
     print(blue('Build vnc server for raspberry pi using dispmanx '
                '(dispmanx_vnc)'))
     checkup_git_repo(url='https://github.com/patrikolausson/dispmanx_vnc.git')
+    run('mkdir -p ~/repos')
     run('cd ~/repos/dispmanx_vnc  &&  make')
 
     print(blue('set up dispmanx_vnc as a service'))
