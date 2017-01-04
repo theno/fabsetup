@@ -29,7 +29,7 @@ def vim_janus(uninstall=None):
         else:
             update_janus()
         customize_janus()
-    show_files_used_by_vim()
+    show_files_used_by_vim_and_janus()
 
 
 @subtask
@@ -72,9 +72,10 @@ def customize_janus():
 
 
 @subtask
-def show_files_used_by_vim():
-    run('tree -L 1 ~/.vim ~/.janus', msg='.vim dir')
-    run('ls -hal ~/.vimrc*', msg='\n.vimrc files')
+def show_files_used_by_vim_and_janus():
+    run('tree -L 1 ~/.vim', msg='.vim dir')
+    run('tree -L 1 ~/.janus', msg='\n.janus dir')
+    run('ls -hal ~/.{,g}vimrc*', msg='\n.vimrc files')
 
 
 @subtask
