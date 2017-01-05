@@ -25,7 +25,7 @@ On a local shell, go to the fabsetup dir and run the task
   ([ppa](https://wiki.ubuntuusers.de/Launchpad/PPA/)) of the
   [guardianproject](https://guardianproject.info/)
 * Create a f-droid repo
-* Set up the f-droid repo as a https website served by the nginx service  
+* Set up the f-droid repo as a https website served by the nginx service
 
   ```sh
   cd  ~/repos/fabsetup
