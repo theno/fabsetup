@@ -53,3 +53,7 @@ set showcmd
 " enable modeline support (cf. http://stackoverflow.com/a/18513581 and
 " 'help modeline')
 set modeline
+
+"Manually trigger markdown preview via the command :InstantMarkdownPreview
+"(cf. https://github.com/suan/vim-instant-markdown#ginstant_markdown_autostart)
+let g:instant_markdown_autostart = 0

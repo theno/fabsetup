@@ -25,11 +25,13 @@ def vim_janus(uninstall=None):
         uninstall_janus()
     else:
         if not exists('~/.vim/janus'):
+            print_msg('not installed => install')
             install_janus()
         else:
+            print_msg('already installed => update')
             update_janus()
         customize_janus()
-    show_files_used_by_vim_and_janus()
+        show_files_used_by_vim_and_janus()
 
 
 @subtask
@@ -43,18 +45,30 @@ def update_janus():
     run('cd ~/.vim  &&  rake')
 
 
-@subsubtask
-def custom_vim_addons():
-    from config import vim_janus_additional_addons
-    checkup_git_repos(vim_janus_additional_addons, base_dir='~/.janus',
-                      verbose=True, prefix='\n')
-
-    print_msg('enable *.html files for plugin xmledit:')
+def set_up_vim_addon_xmledit():
+    print_msg('\nenable *.html files for vim addon xmledit:')
     ftplugin_dir = '~/.janus/xmledit/ftplugin'
     if exists(ftplugin_dir):
         # enable html file support (cf. http://stackoverflow.com/a/28603924):
         run(flo('cp -n {ftplugin_dir}/html.vim {ftplugin_dir}/html.vim.orig'))
         run(flo('ln -snf xml.vim {ftplugin_dir}/html.vim'))
+
+
+def set_up_vim_addon_vim_instant_markdown():
+    print_msg('\ninstall instant-markdown-d with npm (node.js) '
+              'for vim addon vim-instant-markdown')
+    install_cmd = 'npm install -g instant-markdown-d'
+    with warn_only():
+        run(install_cmd)
+
+
+@subsubtask
+def custom_vim_addons():
+    from config import vim_janus_additional_addons
+    checkup_git_repos(vim_janus_additional_addons, base_dir='~/.janus',
+                      verbose=True, prefix='\n')
+    set_up_vim_addon_xmledit()
+    set_up_vim_addon_vim_instant_markdown()
 
 
 @subsubtask
@@ -75,7 +89,8 @@ def customize_janus():
 def show_files_used_by_vim_and_janus():
     run('tree -L 1 ~/.vim', msg='.vim dir')
     run('tree -L 1 ~/.janus', msg='\n.janus dir')
-    run('ls -hal ~/.{,g}vimrc*', msg='\n.vimrc files')
+    run('ls -hal ~/.gvimrc*', msg='\n.gvimrc files')
+    run('ls -hal ~/.vimrc*', msg='\n.vimrc files')
 
 
 @subtask
@@ -86,11 +101,16 @@ def uninstall_janus():
         run('rm -rf ~/.vim', msg='delete janus repo dir')
         with warn_only():
             run('rm -rf ~/.janus', msg='delete ~/.janus dir')
-            run('rm ~/.{,g}vimrc.{before,after}',
-                msg='delete ~/.vimrc.before, ~/.vimrc.after, '
-                    '~/.gvimrc.before and ~/.gvimrc.after')
-            run('mv ~/.vim.old  ~/.vim', msg='restore ~/.vim dir')
-            run('mv ~/.vimrc.old  ~/.vimrc', msg='restore ~/.vimrc')
+            run('bash -c "rm ~/.{,g}vimrc{,.before,.after}"',
+                msg='delete ~/.vimrc, ~/.vimrc.before, ~/.vimrc.after, '
+                    '~/.gvimrc, ~/.gvimrc.before and ~/.gvimrc.after')
+            if exists('~/.vim.old'):
+                run('mv ~/.vim.old  ~/.vim', msg='restore ~/.vim dir')
+            for fname in ['~/.vimrc', '~/.gvimrc']:
+                if exists(flo('{fname}.old')):
+                    run(flo('mv {fname}.old  {fname}'),
+                        msg=flo('restore {fname}'))
+        run('ls -hal ~/.*vim*', msg='\nvim config restored:')
     else:
         print_msg('janus is not installed; nothing to do (abort)')
         exit(1)
