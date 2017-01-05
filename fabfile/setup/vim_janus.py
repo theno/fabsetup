@@ -1,10 +1,10 @@
-from fabric.api import warn_only
+from fabric.api import warn_only, execute
 
 from fabfile.fabutils import custom_task as task  # here, every task is custom
 from fabfile.fabutils import suggest_localhost, needs_packages, exists, subtask
 from fabfile.fabutils import run, print_msg, subsubtask, install_file
 from fabfile.fabutils import checkup_git_repos, needs_repo_fabsetup_custom
-from fabfile.utils import flo
+from fabfile.utils import flo, query_yes_no
 
 
 @task
@@ -59,7 +59,18 @@ def set_up_vim_addon_vim_instant_markdown():
               'for vim addon vim-instant-markdown')
     install_cmd = 'npm install -g instant-markdown-d'
     with warn_only():
-        run(install_cmd)
+        res = run(install_cmd)
+        if res.return_code != 0:
+            print_msg('npm is not installed')
+            query = "Run fabric task 'setup.nvm' in order to install npm?"
+            if query_yes_no(query, default='yes'):
+                from nvm import nvm
+                execute(nvm)
+                run('bash -c "source ~/.bashrc_nvm && nvm install node"',
+                    msg='\ninstall latest version of npm')
+                run(flo('bash -c "source ~/.bashrc_nvm && {install_cmd}"'),
+                    msg="\nfabric task 'setup.nvm' finished\n\n"
+                        '----\ninstall instant-markdown-d')
 
 
 @subsubtask
