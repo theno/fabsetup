@@ -7,10 +7,14 @@ from fabfile.fabutils import checkup_git_repos, needs_repo_fabsetup_custom
 from fabfile.utils import flo, query_yes_no
 
 
+REQUIRED_PACKAGES = ['vim', 'curl', 'tree', 'ruby-dev', 'rake',
+                     'exuberant-ctags', 'ack-grep']
+
+
 @task
 @suggest_localhost
 @needs_repo_fabsetup_custom
-@needs_packages('vim', 'curl', 'tree', 'ruby-dev', 'rake', 'exuberant-ctags', 'ack-grep')
+@needs_packages(*REQUIRED_PACKAGES)
 def vim_janus(uninstall=None):
     '''Install or update Janus, a distribution of addons and mappings for vim.
 

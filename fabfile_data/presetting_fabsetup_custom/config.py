@@ -72,4 +72,7 @@ vim_janus_additional_addons = [
     {
         'url': 'https://github.com/sukima/xmledit.git',
     },
+    {
+        'url': 'https://github.com/suan/vim-instant-markdown.git',
+    },
 ]
