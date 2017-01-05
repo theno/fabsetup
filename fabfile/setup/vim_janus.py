@@ -10,7 +10,7 @@ from fabfile.utils import flo
 @task
 @suggest_localhost
 @needs_repo_fabsetup_custom
-@needs_packages('ruby-dev', 'rake', 'exuberant-ctags', 'ack-grep')
+@needs_packages('vim', 'ruby-dev', 'rake', 'exuberant-ctags', 'ack-grep')
 def vim_janus(uninstall=None):
     '''Install or update Janus, a distribution of addons and mappings for vim.
 
