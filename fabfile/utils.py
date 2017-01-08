@@ -1,3 +1,4 @@
+import collections
 import inspect
 import os.path
 import shutil
@@ -355,6 +356,34 @@ def uncomment_or_update_or_append_line(filename, prefix, new_line, comment='#',
                               keep_backup=keep_backup, append=True)
 
 
+# namedtuple with defaults
+def namedtuple(typename, field_names, **kwargs):
+    if isinstance(field_names, str):
+        field_names = field_names.replace(',', ' ').split()
+    field_names = list(map(str, field_names))
+    field_names_without_defaults = []
+    defaults = []
+    for name in field_names:
+        list_ = name.split('=', 1)
+        if len(list_) > 1:
+            name, default = list_
+            defaults.append(eval(default))
+        elif len(defaults) != 0:
+            raise ValueError('non-keyword arg after keyword arg')
+        field_names_without_defaults.append(name)
+    result = collections.namedtuple(typename, field_names_without_defaults,
+                                    **kwargs)
+    result.__new__.__defaults__ = tuple(defaults)
+    return result
+
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
+#    Repo = namedtuple('Repo', "url, name=None, basedir='~/repos'")
+    Repo = namedtuple('Repo', "url, name=None, basedir='~/repos'")
+    assert Repo.__new__.__defaults__ == (None, '~/repos')
+    r = Repo(url='https://github.com/theno/fabsetup.git')
+    assert r.__repr__() == 'Repo(' \
+                           'url=\'https://github.com/theno/fabsetup.git\', ' \
+                           'name=None, basedir=\'~/repos\')'
