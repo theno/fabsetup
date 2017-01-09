@@ -75,4 +75,7 @@ vim_janus_additional_addons = [
     {
         'url': 'https://github.com/suan/vim-instant-markdown.git',
     },
+    {
+        'url': 'https://github.com/editorconfig/editorconfig-vim.git',
+    },
 ]
