@@ -294,8 +294,9 @@ def checkup_git_repos(repos, base_dir='~/repos',
     '''
     run(flo('mkdir -p {base_dir}'))
     for repo in repos:
+        cur_base_dir = repo.get('base_dir', base_dir)
         checkup_git_repo(url=repo['url'], name=repo.get('name', None),
-                         base_dir=base_dir, verbose=verbose,
+                         base_dir=cur_base_dir, verbose=verbose,
                          prefix=prefix, postfix=postfix)
 
 
@@ -311,6 +312,8 @@ def checkup_git_repo(url, name=None, base_dir='~/repos',
     if verbose:
         name_blue = blue(name)
         print_msg(flo('{prefix}Checkout or update {name_blue}{postfix}'))
+    if not exists(base_dir):
+        run(flo('mkdir -p {base_dir}'))
     if not exists(flo('{base_dir}/{name}/.git')):
         run(flo('  &&  '.join([
                 'cd {base_dir}',
