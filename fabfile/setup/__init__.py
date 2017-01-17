@@ -13,6 +13,7 @@ from ..utils import filled_out_template, update_or_append_line
 from ..utils import uncomment_or_update_or_append_line
 
 # "activate" tasks
+import ct
 import service
 from calibre import calibre
 from vim_janus import vim_janus
