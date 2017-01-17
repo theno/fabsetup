@@ -57,3 +57,10 @@ set modeline
 "Manually trigger markdown preview via the command :InstantMarkdownPreview
 "(cf. https://github.com/suan/vim-instant-markdown#ginstant_markdown_autostart)
 let g:instant_markdown_autostart = 0
+
+"Sane navigation mappings
+"(cf. https://teamgaslight.com/blog/vim-plus-tmux-a-perfect-match)
+"nnoremap <c-j> <c-w>j
+"nnoremap <c-k> <c-w>k
+"nnoremap <c-h> <c-w>h
+"nnoremap <c-l> <c-w>l
