@@ -207,6 +207,7 @@ def pyenv():
     ])
     if exists('~/.pyenv'):
         run('cd ~/.pyenv  &&  git pull')
+        run('~/.pyenv/bin/pyenv update')
     else:
         run('curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash')
 
