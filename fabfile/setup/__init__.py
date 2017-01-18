@@ -13,12 +13,14 @@ from ..utils import filled_out_template, update_or_append_line
 from ..utils import uncomment_or_update_or_append_line
 
 # "activate" tasks
+import ct
 import service
 from calibre import calibre
 from vim_janus import vim_janus
 from powerline import powerline
 from nvm import nvm
 from revealjs import decktape, revealjs, revealjs_template
+from tmux import tmux
 
 
 @task
@@ -148,36 +150,6 @@ def vim():
 
 
 @task
-@suggest_localhost
-def tmux():
-    '''Customize tmux for solarized colors and other things.
-
-    Tweaks for:
-     * enable 256 colors
-     * correct highlighting within man pages,
-       cf. http://stackoverflow.com/a/10563271
-    '''
-    install_file('~/.tmux.conf')
-
-    # create a terminfo file with modified sgr, smso, rmso, sitm and ritm
-    # entries
-    # Infos:
-    # * http://stackoverflow.com/a/10563271
-    # * http://tmux.svn.sourceforge.net/viewvc/tmux/trunk/FAQ
-    cmds = r'''
-mkdir -p  $HOME/.terminfo/
-screen_terminfo="screen"
-infocmp "$screen_terminfo" | sed \
-  -e 's/^screen[^|]*|[^,]*,/screen-it|screen with italics support,/' \
-  -e 's/%?%p1%t;3%/%?%p1%t;7%/' \
-  -e 's/smso=[^,]*,/smso=\\E[7m,/' \
-  -e 's/rmso=[^,]*,/rmso=\\E[27m,/' \
-  -e '$s/$/ sitm=\\E[3m, ritm=\\E[23m,/' > /tmp/screen.terminfo
-tic /tmp/screen.terminfo'''
-    run(cmds)
-
-
-@task
 @needs_packages('git')
 def pyenv():
     '''Install or update the pyenv python environment.
@@ -209,7 +181,8 @@ def pyenv():
         run('cd ~/.pyenv  &&  git pull')
         run('~/.pyenv/bin/pyenv update')
     else:
-        run('curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/master/bin/pyenv-installer | bash')
+        run('curl -L https://raw.githubusercontent.com/yyuu/pyenv-installer/'
+            'master/bin/pyenv-installer | bash')
 
     # add pyenv to $PATH and set up pyenv init
     bash_snippet = '~/.bashrc_pyenv'
@@ -219,7 +192,7 @@ def pyenv():
     if env.host == 'localhost':
         # FIXME: next function currently only works for localhost
         uncomment_or_update_or_append_line(filename='~/.bashrc', prefix=prefix,
-                                       new_line=enabler)
+                                           new_line=enabler)
     else:
         print(cyan('\nappend to ~/.bashrc:\n\n    ') + enabler)
 

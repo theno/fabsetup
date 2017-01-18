@@ -78,4 +78,7 @@ vim_janus_additional_addons = [
     {
         'url': 'https://github.com/editorconfig/editorconfig-vim.git',
     },
+    {
+        'url': 'https://github.com/christoomey/vim-tmux-navigator.git',
+    },
 ]
