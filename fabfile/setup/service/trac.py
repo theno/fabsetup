@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 import re
 import tempfile
 
@@ -27,6 +28,48 @@ def trac():
     The connection is https-only and secured by a letsencrypt certificate.  This
     certificate must be created separately with task setup.server_letsencrypt.
 
+    Important files and dirs:
+    ```
+    ~/sites/<sitename>         # example: sitename = trac.example.com
+    ├── backup.sh              # create a local backup (deletes ./backup)
+    ├── backup                                     |    before it runs)
+    │   └── <sitename>_tracenv_hotcopy.tar.gz  <--´
+    ├── run
+    │   └── trac.sock          # file-socket for binding to nginx
+    ├── scripts
+    │   └── tracwsgi.py
+    ├── tracenv
+    │   ├── conf
+    │   │   ├── trac.htpasswd  # trac user password hashes
+    │   │   └── trac.ini       # trac config file
+    │   ├── db
+    │   │   └── trac.db        # sqlite database
+    │   ├── files
+    │   ├── git
+    │   ├── htdocs
+    │   ├── log
+    │   ├── plugins
+    │   ├── README
+    │   ├── templates
+    │   └── VERSION
+    └── virtualenv
+        ├── bin
+        ├── include
+        ├── lib
+        ├── local
+        └── pip-selfcheck.json
+    ```
+
+    Create a backup tarball
+    `~/sites/<sitename>/backup/tracenv_hotcopy_<yyyy-mm-dd>.tar.gz`:
+    ```
+    cd ~/sites/<sitename>  &&  rm -rf ./backup
+    ./virtualenv/bin/trac-admin ./tracenv  hotcopy ./backup/tracenv_hotcopy
+    mkdir -p ./backup  &&  cd ./backup
+    tar czf <sitename>_tracenv_hotcopy_$(date +%F).tar.gz  tracenv_hotcopy/
+    rm -rf tracenv_hotcopy; ls -hl
+    ```
+
     More infos:
       https://trac.edgewall.org/wiki/TracInstall
       https://trac.edgewall.org/wiki/TracFastCgi#NginxConfiguration
@@ -35,6 +78,7 @@ def trac():
       http://www.obeythetestinggoat.com/book/chapter_08.html#_getting_to_a_production_ready_deployment
       Setting REMOTE_USER for Trac in Gunicorn behind Nginx:
         http://serverfault.com/a/392096
+      https://trac.edgewall.org/wiki/TracBackup
     '''
     hostname = re.sub(r'^[^@]+@', '', env.host)  # without username if any
     sitename = query_input(
@@ -46,7 +90,7 @@ def trac():
     bin_dir = flo('{site_dir}/virtualenv/bin')
 
     # provisioning steps
-    install_or_upgrade_virtualenv()
+    install_or_upgrade_virtualenv_pip_package()
     create_directory_structure(site_dir)
     update_virtualenv(site_dir, sitename)
     set_up_gunicorn(site_dir, sitename)
@@ -70,7 +114,8 @@ def tracenv_exists(site_dir):
 
 
 @subtask
-def install_or_upgrade_virtualenv():
+def install_or_upgrade_virtualenv_pip_package():
+    '''Install or upgrade the globally installed pip package virtualenv.'''
     run('sudo pip install --upgrade virtualenv')
 
 
@@ -115,19 +160,17 @@ def restore_tracenv_from_backup_tarball(site_dir, bin_dir):
     filename = query_input('tarball path?')
     run(flo('mkdir -p {site_dir}/tmp'))
     run(flo('tar xf {filename}  --directory={site_dir}/tmp'))
-#    run(flo('[ -d {site_dir}/tracenv ] && '
-#            'mv {site_dir}/tracenv  {site_dir}/tracenv.before_$(date +%F).bak'
-#            ' || true'))
+    # save tracenv if it exists
     run(flo('mv {site_dir}/tracenv  {site_dir}/tracenv.before_$(date +%F).bak'
             ' || true'))
     run(flo('mv {site_dir}/tmp/tracenv_hotcopy  {site_dir}/tracenv'))
-#    run(flo('mv {site_dir}/tmp/tracenv_jsh_hotcopy  {site_dir}/tracenv')) # TODO DEVEL
     run(flo('rmdir {site_dir}/tmp'))
     upgrade_tracenv(site_dir, bin_dir)
 
 
 @subsubtask
 def trac_admin(site_dir, username):
+    '''Make user `username` becomes a trac admin.'''
     run(flo('{site_dir}/virtualenv/bin/trac-admin {site_dir}/tracenv '
             'permission add {username} TRAC_ADMIN'))
     run(flo('htpasswd -c {site_dir}/tracenv/conf/trac.htpasswd  {username}'))
