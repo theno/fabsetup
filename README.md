@@ -1,7 +1,8 @@
 # fabsetup
 
-Fabric tasks in order to set up and maintain things on a local or remote
-(Ubuntu) linux system.
+Fabric tasks in order to set up and maintain configurations, software
+installations and other things on a local or remote linux system
+(most functionality for Debian/Ubuntu).
 
 ## Installation
 
@@ -21,11 +22,14 @@ script, so every command starts with a __`fab`__:
   cd ~/repos/fabsetup
 
 
-  # list all tasks: '-l'
+  # task infos
+
+  ## list all tasks: '-l'
   fab -l
 
-  # show details: '-d'
+  ## show details: '-d'
   fab -d setup.vim
+
 
   # run tasks
 
