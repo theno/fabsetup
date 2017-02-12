@@ -17,7 +17,7 @@ with open(path.join(this_dir, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='fabsetup',
-    version='0.4.0',
+    version='0.4.1',
     description='fabric setup scripts and fabric utils library',
     long_description=long_description,
     url='https://github.com/theno/fabsetup',
