@@ -18,7 +18,7 @@ with open(path.join(this_dir, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='fabsetup',
-    version=__version__,
+    version='0.4.0',
     description='fabric setup scripts and fabric utils library',
     long_description=long_description,
     url='https://github.com/theno/fabsetup',
@@ -36,5 +36,6 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
     keywords='python development utilities library',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(exclude=['contrib', 'docs', 'tests',
+                                    'fabsetup_custom']),
 )
