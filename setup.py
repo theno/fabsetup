@@ -8,7 +8,6 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-from _version import __version__
 
 this_dir = path.abspath(path.dirname(__file__))
 
