@@ -4,21 +4,31 @@
 * https://pypi.python.org/pypi/fabsetup
 """
 
+import glob
+import os
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-
-this_dir = path.abspath(path.dirname(__file__))
-
+description = 'fabric setup scripts and fabric utils library'
 long_description = ''
-with open(path.join(this_dir, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+this_dir = path.abspath(path.dirname(__file__))
+try:
+    import pypandoc
+    long_description = pypandoc.convert(path.join(this_dir, 'README.md'), 'rst')
+except(IOError, ImportError):
+    with open(path.join(this_dir, 'README.md'), encoding='utf-8') as f:
+        long_description = f.read()
+
+data_files = []
+for directory, _, _ in os.walk('fabfile_data'):
+    files = glob.glob(directory+'/*')
+    data_files.append((directory, files))
 
 setup(
     name='fabsetup',
-    version='0.4.1',
-    description='fabric setup scripts and fabric utils library',
+    version='0.4.2',
+    description=description,
     long_description=long_description,
     url='https://github.com/theno/fabsetup',
     author='Theodor Nolte',
@@ -37,4 +47,7 @@ setup(
     keywords='python development utilities library',
     packages=find_packages(exclude=['contrib', 'docs', 'tests',
                                     'fabsetup_custom']),
+    data_files=data_files+[
+        ('', ['README.md', 'fabfile_data/*']),
+    ],
 )
