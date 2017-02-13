@@ -4,7 +4,6 @@
 * https://pypi.python.org/pypi/fabsetup
 """
 
-import glob
 import os
 from setuptools import setup, find_packages
 from codecs import open
@@ -21,9 +20,10 @@ except(IOError, ImportError):
         long_description = f.read()
 
 data_files = []
-for directory, _, _ in os.walk('fabfile_data'):
-    files = glob.glob(directory+'/*')
-    data_files.append((directory, files))
+for directory, _, files in os.walk('fabfile_data'):
+    files = [path.join(directory, file_) for file_ in files]
+    if files:
+        data_files.append((directory, files))
 
 setup(
     name='fabsetup',
@@ -46,8 +46,8 @@ setup(
     ],
     keywords='python development utilities library',
     packages=find_packages(exclude=['contrib', 'docs', 'tests',
-                                    'fabsetup_custom']),
+                                    'fabfile_data', 'fabsetup_custom']),
     data_files=data_files+[
-        ('', ['README.md', 'fabfile_data/*']),
+        ('', ['README.md']),
     ],
 )
