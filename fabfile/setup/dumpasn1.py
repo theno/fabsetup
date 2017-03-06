@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import filecmp
-from os.path import isfile, dirname, realpath, expanduser, exists
+from os.path import isfile, expanduser
 
 from fabsetup.fabutils import run, subtask, task, suggest_localhost, print_msg
 from fabsetup.utils import flo
