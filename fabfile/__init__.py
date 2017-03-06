@@ -5,9 +5,7 @@ from fabric.api import env, execute, sudo, warn_only
 
 import sys
 from os.path import join, dirname, isdir, realpath
-print(sys.path)
 sys.path.append(dirname(dirname(realpath(__file__))))
-print(sys.path)
 
 from fabsetup.fabutils import checkup_git_repo, install_package
 from fabsetup.fabutils import install_packages, run

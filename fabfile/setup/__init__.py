@@ -17,6 +17,7 @@ from fabsetup.utils import uncomment_or_update_or_append_line
 import ct
 import service
 from calibre import calibre
+from dumpasn1 import dumpasn1
 from vim_janus import vim_janus
 from powerline import powerline
 from nvm import nvm
