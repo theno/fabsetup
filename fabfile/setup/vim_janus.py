@@ -1,10 +1,10 @@
 from fabric.api import warn_only, execute
 
-from fabfile.fabutils import custom_task as task  # here, every task is custom
-from fabfile.fabutils import suggest_localhost, needs_packages, exists, subtask
-from fabfile.fabutils import run, print_msg, subsubtask, install_file
-from fabfile.fabutils import checkup_git_repos, needs_repo_fabsetup_custom
-from fabfile.utils import flo, query_yes_no
+from fabsetup.fabutils import custom_task as task  # here, every task is custom
+from fabsetup.fabutils import suggest_localhost, needs_packages, exists, subtask
+from fabsetup.fabutils import run, print_msg, subsubtask, install_file
+from fabsetup.fabutils import checkup_git_repos, needs_repo_fabsetup_custom
+from fabsetup.utils import flo, query_yes_no
 
 
 REQUIRED_PACKAGES = ['vim', 'curl', 'tree', 'ruby-dev', 'rake',

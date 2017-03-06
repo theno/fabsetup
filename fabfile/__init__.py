@@ -3,15 +3,19 @@
 import fabric.operations
 from fabric.api import env, execute, sudo, warn_only
 
-from fabutils import checkup_git_repo, install_package, install_packages, run
-from fabutils import task, needs_packages, needs_repo_fabsetup_custom
-from fabutils import suggest_localhost
-from fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
-from utils import doc1, print_doc1, flo, print_full_name, query_yes_no
-from utils import black, red, green, yellow, blue, magenta, cyan, white
-
 import sys
-from os.path import join, dirname, isdir
+from os.path import join, dirname, isdir, realpath
+print(sys.path)
+sys.path.append(dirname(dirname(realpath(__file__))))
+print(sys.path)
+
+from fabsetup.fabutils import checkup_git_repo, install_package
+from fabsetup.fabutils import install_packages, run
+from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
+from fabsetup.fabutils import suggest_localhost
+from fabsetup.fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
+from fabsetup.utils import doc1, print_doc1, flo, print_full_name, query_yes_no
+from fabsetup.utils import black, red, green, yellow, blue, magenta, cyan, white
 
 import setup  # load tasks from module setup
 

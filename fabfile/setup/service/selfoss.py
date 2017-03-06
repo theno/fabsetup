@@ -4,12 +4,12 @@ import tempfile
 
 from fabric.api import env
 
-from fabfile.fabutils import checkup_git_repo, exists, needs_packages, put, run
-from fabfile.fabutils import custom_task as task, subtask, subsubtask
-from fabfile.fabutils import comment_out_line, print_msg, install_file
-from fabfile.fabutils import update_or_append_line
-from fabfile.fabutils import uncomment_or_update_or_append_line
-from fabfile.utils import flo, query_input, filled_out_template
+from fabsetup.fabutils import checkup_git_repo, exists, needs_packages, put, run
+from fabsetup.fabutils import custom_task as task, subtask, subsubtask
+from fabsetup.fabutils import comment_out_line, print_msg, install_file
+from fabsetup.fabutils import update_or_append_line
+from fabsetup.fabutils import uncomment_or_update_or_append_line
+from fabsetup.utils import flo, query_input, filled_out_template
 
 
 @task

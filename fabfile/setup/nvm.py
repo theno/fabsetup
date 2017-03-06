@@ -1,8 +1,8 @@
 from fabric.api import env
 
-from ..fabutils import exists, install_file, needs_packages, run, subtask
-from ..fabutils import suggest_localhost, task
-from ..utils import cyan, flo, uncomment_or_update_or_append_line
+from fabsetup.fabutils import exists, install_file, needs_packages, run, subtask
+from fabsetup.fabutils import suggest_localhost, task
+from fabsetup.utils import cyan, flo, uncomment_or_update_or_append_line
 
 
 @task

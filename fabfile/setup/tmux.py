@@ -1,5 +1,6 @@
-from ..fabutils import install_file, run, suggest_localhost, subtask, task
-from ..fabutils import checkup_git_repo
+from fabsetup.fabutils import install_file, run, suggest_localhost, subtask
+from fabsetup.fabutils import task
+from fabsetup.fabutils import checkup_git_repo
 
 
 @task

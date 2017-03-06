@@ -2,17 +2,16 @@
 
 '''Fabric tasks for the setup of some services.'''
 
-import os.path
 import re
 import tempfile
 
-from fabric.api import cd, env, hide, local, sudo, warn_only
+from fabric.api import env, hide, sudo, warn_only
 from fabric.contrib.files import exists
 
-from ...fabutils import checkup_git_repo, install_package, install_packages
-from ...fabutils import needs_packages, task, run, suggest_localhost, put
-from ...utils import flo, print_doc1, print_full_name, query_yes_no
-from ...utils import query_input, blue, cyan, magenta, filled_out_template
+from fabsetup.fabutils import checkup_git_repo, install_packages
+from fabsetup.fabutils import needs_packages, task, run, suggest_localhost, put
+from fabsetup.utils import flo, query_yes_no
+from fabsetup.utils import query_input, blue, cyan, magenta, filled_out_template
 
 from selfoss import selfoss
 from trac import trac

@@ -1,8 +1,8 @@
 import os.path
 
-from fabfile.fabutils import custom_task as task  # here, every task is custom
-from fabfile.fabutils import subtask, run
-from fabfile.utils import flo
+from fabsetup.fabutils import custom_task as task  # here, every task is custom
+from fabsetup.fabutils import subtask, run
+from fabsetup.utils import flo
 
 
 @task

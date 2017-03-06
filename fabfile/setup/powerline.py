@@ -2,11 +2,11 @@ import os.path
 
 from fabric.api import env
 
-from ..fabutils import checkup_git_repo, needs_packages
-from ..fabutils import needs_repo_fabsetup_custom, suggest_localhost
-from ..fabutils import install_file, run, subtask, subsubtask, task
-from ..utils import flo, update_or_append_line, comment_out_line
-from ..utils import uncomment_or_update_or_append_line, query_yes_no
+from fabsetup.fabutils import checkup_git_repo, needs_packages
+from fabsetup.fabutils import needs_repo_fabsetup_custom, suggest_localhost
+from fabsetup.fabutils import install_file, run, subtask, subsubtask, task
+from fabsetup.utils import flo, update_or_append_line, comment_out_line
+from fabsetup.utils import uncomment_or_update_or_append_line, query_yes_no
 
 
 @task

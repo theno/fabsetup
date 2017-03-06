@@ -1,9 +1,9 @@
 import os.path
 
-from fabfile.fabutils import checkup_git_repos, install_packages, run
-from fabfile.fabutils import custom_task as task, subtask
-from fabfile.fabutils import query_yes_no, print_msg
-from fabfile.utils import flo, yellow
+from fabsetup.fabutils import checkup_git_repos, install_packages, run
+from fabsetup.fabutils import custom_task as task, subtask
+from fabsetup.fabutils import query_yes_no, print_msg
+from fabsetup.utils import flo, yellow
 
 
 @task

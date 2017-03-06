@@ -3,14 +3,15 @@ import os.path
 from fabric.api import env, local, sudo, warn_only
 from fabric.contrib.files import append
 
-from ..fabutils import exists, install_packages, install_package
-from ..fabutils import install_file, install_user_command, needs_packages
-from ..fabutils import needs_repo_fabsetup_custom, run, suggest_localhost
-from ..fabutils import checkup_git_repo, checkup_git_repos, task, print_msg
-from ..utils import doc1, print_doc1, flo, print_full_name, query_yes_no
-from ..utils import black, red, green, yellow, blue, magenta, cyan, white
-from ..utils import filled_out_template, update_or_append_line
-from ..utils import uncomment_or_update_or_append_line
+from fabsetup.fabutils import exists, install_packages, install_package
+from fabsetup.fabutils import install_file, install_user_command, needs_packages
+from fabsetup.fabutils import needs_repo_fabsetup_custom, run, suggest_localhost
+from fabsetup.fabutils import checkup_git_repo, checkup_git_repos, task
+from fabsetup.fabutils import print_msg
+from fabsetup.utils import flo, query_yes_no
+from fabsetup.utils import magenta, cyan
+from fabsetup.utils import update_or_append_line
+from fabsetup.utils import uncomment_or_update_or_append_line
 
 # "activate" tasks
 import ct

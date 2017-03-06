@@ -3,10 +3,11 @@ import os
 from fabric.context_managers import quiet
 from fabric.api import execute
 
-from ..fabutils import exists, run, task, print_msg, suggest_localhost
-from ..fabutils import checkup_git_repo, subtask, subsubtask, install_file
-from ..fabutils import update_or_append_line, needs_repo_fabsetup_custom
-from ..utils import flo, query_input, query_yes_no
+from fabsetup.fabutils import exists, run, task, print_msg, suggest_localhost
+from fabsetup.fabutils import checkup_git_repo, subtask, subsubtask
+from fabsetup.fabutils import install_file
+from fabsetup.fabutils import update_or_append_line, needs_repo_fabsetup_custom
+from fabsetup.utils import flo, query_input, query_yes_no
 
 
 _lazy_dict = {}

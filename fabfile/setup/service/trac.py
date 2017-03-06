@@ -2,13 +2,14 @@
 import re
 import tempfile
 
-from fabric.api import env, hide
+from fabric.api import env
 from fabric.context_managers import warn_only
 
-from ...fabutils import install_file, needs_packages, run, subtask, subsubtask
-from ...fabutils import task, put, exists
-from ...utils import cyan, flo, print_full_name, query_input, query_yes_no
-from ...utils import filled_out_template
+from fabsetup.fabutils import install_file, needs_packages, run, subtask
+from fabsetup.fabutils import subsubtask
+from fabsetup.fabutils import task, put, exists
+from fabsetup.utils import flo, query_input, query_yes_no
+from fabsetup.utils import filled_out_template
 
 
 # FIXME test-run as comment: "usefull commands for debugging: ..."

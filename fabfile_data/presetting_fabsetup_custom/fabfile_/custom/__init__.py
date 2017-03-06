@@ -1,7 +1,7 @@
-from fabfile.fabutils import checkup_git_repo, checkup_git_repos, flo
-from fabfile.fabutils import install_package, install_packages
-from fabfile.fabutils import install_user_command, run, suggest_localhost
-from fabfile.fabutils import custom_task as task  # here, every task is custom
+from fabsetup.fabutils import checkup_git_repo, checkup_git_repos, flo
+from fabsetup.fabutils import install_package, install_packages
+from fabsetup.fabutils import install_user_command, run, suggest_localhost
+from fabsetup.fabutils import custom_task as task  # here, every task is custom
 
 import config
 
