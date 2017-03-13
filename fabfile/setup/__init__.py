@@ -18,11 +18,12 @@ import ct
 import service
 from calibre import calibre
 from dumpasn1 import dumpasn1
-from vim_janus import vim_janus
-from powerline import powerline
 from nvm import nvm
+from openssl import openssl
+from powerline import powerline
 from revealjs import decktape, revealjs, revealjs_template
 from tmux import tmux
+from vim_janus import vim_janus
 
 
 @task
