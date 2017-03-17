@@ -104,7 +104,7 @@ def trac():
     configure_nginx(username, sitename, hostname)
 
     if query_yes_no('\nRestore trac environment from backup tarball?',
-                    default=None):
+                    default='no'):
         restore_tracenv_from_backup_tarball(site_dir, bin_dir)
     elif not tracenv_exists(site_dir):
         init_tracenv(site_dir, bin_dir, username)
