@@ -1,13 +1,16 @@
 # -*- coding:utf-8 -*-
+
 import re
 import tempfile
+from collections import namedtuple
 
 from fabric.api import env
 from fabric.context_managers import warn_only
 
 from fabsetup.fabutils import install_file, needs_packages, run, subtask
-from fabsetup.fabutils import subsubtask
-from fabsetup.fabutils import task, put, exists
+from fabsetup.fabutils import subsubtask, dn_cn_of_certificate_with_san
+from fabsetup.fabutils import task, put, exists, print_msg
+from fabsetup.fabutils import needs_repo_fabsetup_custom
 from fabsetup.utils import flo, query_input, query_yes_no
 from fabsetup.utils import filled_out_template
 
@@ -19,7 +22,8 @@ from fabsetup.utils import filled_out_template
 
 
 @task
-@needs_packages('nginx', 'python-pip', 'python-pygments', 'git')
+@needs_packages('nginx', 'python-pip', 'python-pygments', 'git', 'subversion')
+@needs_repo_fabsetup_custom  # import of trac_plugins_by_sitename from config.py
 def trac():
     '''Set up or update a trac project.
 
@@ -100,6 +104,7 @@ def trac():
     install_or_upgrade_virtualenv_pip_package()
     create_directory_structure(site_dir)
     update_virtualenv(site_dir, sitename)
+    set_up_trac_plugins(sitename, site_dir, bin_dir)
     set_up_gunicorn(site_dir, sitename)
     configure_nginx(username, sitename, hostname)
 
@@ -153,11 +158,47 @@ def create_virtualenv(site_dir):
 def update_virtualenv(site_dir, sitename):
     stop_gunicorn_daemon(sitename)
     create_virtualenv(site_dir)
-    run(flo('{site_dir}/virtualenv/bin/'
-            'pip install --upgrade  pip genshi trac gunicorn'))
+    run(flo(
+        '{site_dir}/virtualenv/bin/'
+        'pip install --upgrade  pip genshi trac gunicorn '
+        'Markdown'  # required by TracPlugin MarkdownMakro
+    ))
 
 
-@subsubtask
+TracPlugin = namedtuple(
+    typename='TracPlugin',
+    field_names='name, version, homepage',
+)
+
+
+@subtask
+def set_up_trac_plugins(sitename, site_dir, bin_dir):
+    plugins = []
+    try:
+        from config import trac_plugins_by_sitename
+        plugins = trac_plugins_by_sitename.get(sitename, [])
+    except ImportError:
+        pass  # ignore non-existing config entry
+    svn_base_url = 'https://trac-hacks.org/svn'
+    plugin_src_basedir = flo('{site_dir}/trac-plugins')
+    for plugin in plugins:
+        print_msg(flo('### {plugin.name}\n\nInfos: {plugin.homepage}\n'))
+        plugin_src_dir = flo('{plugin_src_basedir}/{plugin.name}')
+        # run(flo('rm -rf {plugin_src_dir}'))
+        if exists(plugin_src_dir):
+            run(flo('cd {plugin_src_dir}  &&  svn up'),
+                msg='update plugin repo:')
+        else:
+            run(flo('mkdir -p {plugin_src_basedir}'),
+                msg='checkout plugin repo:')
+            run(flo('svn checkout  '
+                    '{svn_base_url}/{plugin.name}/{plugin.version}  '
+                    '{plugin_src_dir}'))
+        run(flo('{bin_dir}/pip install --upgrade {plugin_src_dir}'),
+            msg='install plugin:')
+
+
+@subtask
 def upgrade_tracenv(site_dir, bin_dir):
     run(flo('{bin_dir}/trac-admin {site_dir}/tracenv  upgrade'))
     run(flo('{bin_dir}/trac-admin {site_dir}/tracenv  wiki upgrade'))
@@ -212,7 +253,8 @@ def nginx_site_config(username, sitename, hostname):
 #    dn_cn = query_input('Common Name (CN) of the Distinguished Named (DN) '
 #                        'of the webserver certificate?',
 #                        default=flo('haw2icalendar.{hostname}'))
-    dn_cn = flo('{hostname}')
+    # dn_cn = flo('{hostname}')
+    dn_cn = dn_cn_of_certificate_with_san(sitename)
     from_str = filled_out_template(path, username=username, sitename=sitename,
                                    hostname=hostname, dn_cn=dn_cn)
     with tempfile.NamedTemporaryFile(prefix=filename) as tmp_file:
