@@ -21,7 +21,7 @@ from fabsetup.utils import filled_out_template
 @task
 @needs_packages('nginx', 'python-pip', 'python-pygments', 'git')
 def trac():
-    '''Set up a trac project.
+    '''Set up or update a trac project.
 
     This trac installation uses python2, git, sqlite (trac-default), gunicorn,
     and nginx.
@@ -29,14 +29,17 @@ def trac():
     The connection is https-only and secured by a letsencrypt certificate.  This
     certificate must be created separately with task setup.server_letsencrypt.
 
+    This task installes or updates to the latest trac version hosted at
+    https://pypi.python.org/pypi/Trac
+
     Created and modified files and dirs of this task:
 
         ```
         ~/sites/<sitename>      <--- example: sitename = trac.example.com
         │
-        ├── backup.sh           <--- create a local backup (deletes ./backup)
-        ├── backup                                     |    before it runs)
-        │   └── <sitename>_tracenv_hotcopy.tar.gz  <--´
+        ├── backup.sh           <--- create a local backup (deletes dir backup/
+        ├── backup                                     |    before it creates
+        │   └── <sitename>_tracenv_hotcopy.tar.gz  <--´     the tarball)
         ├── run
         │   └── trac.sock       <--- file-socket for binding to nginx
         ├── scripts
@@ -63,7 +66,7 @@ def trac():
             └── pip-selfcheck.json
         ```
 
-    Create a backup tarball
+    How to create a backup tarball "manually":
     `~/sites/<sitename>/backup/tracenv_hotcopy_<yyyy-mm-dd>.tar.gz`:
 
         ```
@@ -105,6 +108,8 @@ def trac():
         restore_tracenv_from_backup_tarball(site_dir, bin_dir)
     elif not tracenv_exists(site_dir):
         init_tracenv(site_dir, bin_dir, username)
+
+    upgrade_tracenv(site_dir, bin_dir)
 
     set_up_upstart_for_gunicorn(sitename, username, site_dir)
 
@@ -161,15 +166,14 @@ def upgrade_tracenv(site_dir, bin_dir):
 @subtask
 def restore_tracenv_from_backup_tarball(site_dir, bin_dir):
     # FIXME stop trac if it is running already
-    filename = query_input('tarball path?')
+    filename_tarball = query_input('tarball path?')
     run(flo('mkdir -p {site_dir}/tmp'))
-    run(flo('tar xf {filename}  --directory={site_dir}/tmp'))
+    run(flo('tar xf {filename_tarball}  --directory={site_dir}/tmp'))
     # save tracenv if it exists
     run(flo('mv {site_dir}/tracenv  {site_dir}/tracenv.before_$(date +%F).bak'
             ' || true'))
     run(flo('mv {site_dir}/tmp/tracenv_hotcopy  {site_dir}/tracenv'))
     run(flo('rmdir {site_dir}/tmp'))
-    upgrade_tracenv(site_dir, bin_dir)
 
 
 @subsubtask
