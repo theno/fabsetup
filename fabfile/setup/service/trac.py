@@ -29,47 +29,50 @@ def trac():
     The connection is https-only and secured by a letsencrypt certificate.  This
     certificate must be created separately with task setup.server_letsencrypt.
 
-    Important files and dirs:
-    ```
-    ~/sites/<sitename>         # example: sitename = trac.example.com
-    ├── backup.sh              # create a local backup (deletes ./backup)
-    ├── backup                                     |    before it runs)
-    │   └── <sitename>_tracenv_hotcopy.tar.gz  <--´
-    ├── run
-    │   └── trac.sock          # file-socket for binding to nginx
-    ├── scripts
-    │   └── tracwsgi.py
-    ├── tracenv
-    │   ├── conf
-    │   │   ├── trac.htpasswd  # trac user password hashes
-    │   │   └── trac.ini       # trac config file
-    │   ├── db
-    │   │   └── trac.db        # sqlite database
-    │   ├── files
-    │   ├── git
-    │   ├── htdocs
-    │   ├── log
-    │   ├── plugins
-    │   ├── README
-    │   ├── templates
-    │   └── VERSION
-    └── virtualenv
-        ├── bin
-        ├── include
-        ├── lib
-        ├── local
-        └── pip-selfcheck.json
-    ```
+    Created and modified files and dirs of this task:
+
+        ```
+        ~/sites/<sitename>      <--- example: sitename = trac.example.com
+        │
+        ├── backup.sh           <--- create a local backup (deletes ./backup)
+        ├── backup                                     |    before it runs)
+        │   └── <sitename>_tracenv_hotcopy.tar.gz  <--´
+        ├── run
+        │   └── trac.sock       <--- file-socket for binding to nginx
+        ├── scripts
+        │   └── tracwsgi.py
+        ├── tracenv
+        │   ├── conf
+        │   │   ├── trac.htpasswd   <--- trac user password hashes
+        │   │   └── trac.ini        <--- trac config file
+        │   ├── db
+        │   │   └── trac.db         <--- sqlite database
+        │   ├── files
+        │   ├── git
+        │   ├── htdocs
+        │   ├── log
+        │   ├── plugins
+        │   ├── README
+        │   ├── templates
+        │   └── VERSION
+        └── virtualenv
+            ├── bin
+            ├── include
+            ├── lib
+            ├── local
+            └── pip-selfcheck.json
+        ```
 
     Create a backup tarball
     `~/sites/<sitename>/backup/tracenv_hotcopy_<yyyy-mm-dd>.tar.gz`:
-    ```
-    cd ~/sites/<sitename>  &&  rm -rf ./backup
-    ./virtualenv/bin/trac-admin ./tracenv  hotcopy ./backup/tracenv_hotcopy
-    mkdir -p ./backup  &&  cd ./backup
-    tar czf <sitename>_tracenv_hotcopy_$(date +%F).tar.gz  tracenv_hotcopy/
-    rm -rf tracenv_hotcopy; ls -hl
-    ```
+
+        ```
+        cd ~/sites/<sitename>  &&  rm -rf ./backup
+        ./virtualenv/bin/trac-admin ./tracenv  hotcopy ./backup/tracenv_hotcopy
+        mkdir -p ./backup  &&  cd ./backup
+        tar czf <sitename>_tracenv_hotcopy_$(date +%F).tar.gz  tracenv_hotcopy/
+        rm -rf tracenv_hotcopy; ls -hl
+        ```
 
     More infos:
       https://trac.edgewall.org/wiki/TracInstall
