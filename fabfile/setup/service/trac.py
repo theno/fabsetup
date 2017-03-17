@@ -181,21 +181,25 @@ def set_up_trac_plugins(sitename, site_dir, bin_dir):
         pass  # ignore non-existing config entry
     svn_base_url = 'https://trac-hacks.org/svn'
     plugin_src_basedir = flo('{site_dir}/trac-plugins')
-    for plugin in plugins:
-        print_msg(flo('### {plugin.name}\n\nInfos: {plugin.homepage}\n'))
-        plugin_src_dir = flo('{plugin_src_basedir}/{plugin.name}')
-        # run(flo('rm -rf {plugin_src_dir}'))
-        if exists(plugin_src_dir):
-            run(flo('cd {plugin_src_dir}  &&  svn up'),
-                msg='update plugin repo:')
-        else:
-            run(flo('mkdir -p {plugin_src_basedir}'),
-                msg='checkout plugin repo:')
-            run(flo('svn checkout  '
-                    '{svn_base_url}/{plugin.name}/{plugin.version}  '
-                    '{plugin_src_dir}'))
-        run(flo('{bin_dir}/pip install --upgrade {plugin_src_dir}'),
-            msg='install plugin:')
+    if plugins:
+        for plugin in plugins:
+            print_msg(flo('### {plugin.name}\n\nInfos: {plugin.homepage}\n'))
+            plugin_src_dir = flo('{plugin_src_basedir}/{plugin.name}')
+            # run(flo('rm -rf {plugin_src_dir}'))
+            if exists(plugin_src_dir):
+                run(flo('cd {plugin_src_dir}  &&  svn up'),
+                    msg='update plugin repo:')
+            else:
+                run(flo('mkdir -p {plugin_src_basedir}'),
+                    msg='checkout plugin repo:')
+                run(flo('svn checkout  '
+                        '{svn_base_url}/{plugin.name}/{plugin.version}  '
+                        '{plugin_src_dir}'))
+            run(flo('{bin_dir}/pip install --upgrade {plugin_src_dir}'),
+                msg='install plugin:')
+    else:
+        print_msg('plugins not configured in fabsetup_custom/setup.py:  '
+                  'nothing to do')
 
 
 @subtask
