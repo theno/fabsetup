@@ -506,5 +506,30 @@ def is_ubuntu(version_id=None):
 def is_raspbian(version_id=None):
     return is_os(name='Raspbian GNU/Linux', version_id=version_id)
 
+
 def is_osmc(version_id=None):
     return is_os(name='OSMC', version_id=version_id)
+
+
+def dn_cn_of_certificate_with_san(domain):
+    '''Return the Common Name (cn) from the Distinguished Name (dn) of the
+    certificate which contains the `domain` in its Subject Alternativ Name (san)
+    list.
+
+    Needs repo fabsetup_custom.
+
+    Return None if no certificate is configured with `domain` in SAN.
+    '''
+    cn_dn = None
+    from config import domain_groups
+    cns = [domains[0]
+           for domains
+           in domain_groups
+           if domain in domains]
+    if cns:
+        if len(cns) > 1:
+            print_msg(yellow(flo('Several certificates are configured to '
+                                 'contain {domain} '
+                                 '(You should clean-up your config.py)\n')))
+        cn_dn = cns[0]
+    return cn_dn
