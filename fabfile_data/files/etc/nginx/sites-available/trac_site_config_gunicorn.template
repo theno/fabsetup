@@ -29,6 +29,8 @@ server {
 #    access_log      /var/log/nginx/{{sitename}}_gunicorn.access.log;
 #    error_log       /var/log/nginx/{{sitename}}_gunicorn.error.log info;
 
+    client_max_body_size 50M;  # https://cnedelcu.blogspot.de/2013/09/nginx-error-413-request-entity-too-large.html
+
 
 #    include         "/etc/nginx/acl.conf";
 
