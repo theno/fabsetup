@@ -1,19 +1,14 @@
 '''Set up and maintain a local or remote (Ubuntu) linux system.'''
 
 import fabric.operations
-from fabric.api import env, execute, sudo, warn_only
-
 import sys
-from os.path import join, dirname, isdir, realpath
+from os.path import dirname, isdir, realpath
 sys.path.append(dirname(dirname(realpath(__file__))))
-
-from fabsetup.fabutils import checkup_git_repo, install_package
-from fabsetup.fabutils import install_packages, run
 from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
-from fabsetup.fabutils import suggest_localhost
+from fabsetup.fabutils import run, suggest_localhost
 from fabsetup.fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
-from fabsetup.utils import doc1, print_doc1, flo, print_full_name, query_yes_no
-from fabsetup.utils import black, red, green, yellow, blue, magenta, cyan, white
+from fabsetup.utils import flo
+from fabsetup.utils import green, blue, magenta
 
 import setup  # load tasks from module setup
 
