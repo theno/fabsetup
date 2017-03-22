@@ -22,7 +22,6 @@ if not isdir(FABSETUP_CUSTOM_DIR):
 
     from fabric.api import task
 
-
     @task(default=True)
     @needs_repo_fabsetup_custom
     def INIT():
@@ -33,7 +32,6 @@ if not isdir(FABSETUP_CUSTOM_DIR):
         print('Show details of a task: `fab -d <task>`, eg.: ' +
               blue('fab -d setup_webserver'))
 
-
     @task
     @needs_repo_fabsetup_custom
     def setup_desktop():
@@ -43,7 +41,6 @@ if not isdir(FABSETUP_CUSTOM_DIR):
         # Next time, the task setup_desktop from
         # fabsetup_custom/fabfile_/__init__.py will be executed
         # instead
-
 
     @task
     @needs_repo_fabsetup_custom
@@ -61,7 +58,7 @@ else:
 
 @task
 @suggest_localhost
-@needs_packages('debian-goodies') # for command 'checkrestart'
+@needs_packages('debian-goodies')  # for command 'checkrestart'
 def up():
     '''Update and upgrade all packages of the Debian or Ubuntu OS.'''
     run('sudo apt-get update')
@@ -83,7 +80,7 @@ def check_reboot():
         'fi',
     ]))
     if res:
-        fabric.operations.local(flo('echo "{res}"')) # interpolate res
+        fabric.operations.local(flo('echo "{res}"'))  # interpolate res
 
 
 @task
@@ -98,20 +95,3 @@ def dfh():
     '''Print used disc space.'''
     run('sudo  df -ih')
     run('sudo  df -h')
-
-
-@task
-def backup_create():
-    '''Create a simple backup out of tarballs. Needs to be copied elsewhere.
-
-    This backup is stored on the same server.  You need to copy it to a save
-    location!
-    '''
-    sudo('/root/bin/run_backup')
-    print(magenta('TODO: copy backup to another location'))
-
-
-@task
-def backup_restore():
-    '''Restore from last local backup.'''
-    print(magenta('TODO'))
