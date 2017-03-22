@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os.path
 
 from fabric.api import env, local, sudo, warn_only
@@ -12,6 +14,7 @@ from fabsetup.utils import flo, query_yes_no
 from fabsetup.utils import magenta, cyan
 from fabsetup.utils import update_or_append_line
 from fabsetup.utils import uncomment_or_update_or_append_line
+
 
 # "activate" tasks
 import ct
@@ -50,6 +53,18 @@ def regex_repl():
     More infos:
      * https://github.com/theno/RegexREPL
      * REPL: https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop
+
+    Files created by this task:
+
+        > tree ~
+        ├── bin
+        │   ├── find_regex_repl.pl -> ~/repos/RegexREPL/find_regex_repl.pl
+        │   └── match_regex_repl.pl -> ~/repos/RegexREPL/match_regex_repl.pl
+        └── repos
+            └── RegexREPL
+                ├── find_regex_repl.pl
+                ├── match_regex_repl.pl
+                └── README.md
     '''
     install_package('libterm-readline-gnu-perl')
     checkup_git_repo(url='https://github.com/theno/RegexREPL.git')
