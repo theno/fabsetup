@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os.path
 
 from fabsetup.fabutils import task
@@ -13,9 +15,38 @@ def calibre():
       https://calibre-ebook.com/
       https://calibre-ebook.com/download_linux
       https://github.com/kovidgoyal/calibre
+
+    Files and dirs created by this task:
+
+        > tree  ~/bin
+        ├── calibre -> calibre-bin/calibre
+        └── calibre-bin
+            ├── bin
+            ├── calibre
+            ├── calibre-complete
+            ├── calibre-customize
+            ├── calibredb
+            ├── calibre-debug
+            ├── calibre-parallel
+            ├── calibre_postinstall
+            ├── calibre-server
+            ├── calibre-smtp
+            ├── ebook-convert
+            ├── ebook-device
+            ├── ebook-edit
+            ├── ebook-meta
+            ├── ebook-polish
+            ├── ebook-viewer
+            ├── fetch-ebook-metadata
+            ├── lib
+            ├── lrf2lrs
+            ├── lrfviewer
+            ├── lrs2lrf
+            ├── markdown-calibre
+            ├── resources
+            └── web2disk
     '''
-    instdir = '~/bin/calibre-bin'
-    install_calibre(instdir)
+    install_calibre(instdir='~/bin/calibre-bin')
 
 
 @subtask
