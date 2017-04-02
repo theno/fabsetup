@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import os.path
+from os.path import dirname, join
 
 from fabsetup.fabutils import task
-from fabsetup.fabutils import subtask, run
+from fabsetup.fabutils import subtask, run, print_msg
 from fabsetup.utils import flo
 
 
@@ -20,7 +20,9 @@ def calibre():
 
         > tree  ~/bin
         ├── calibre -> calibre-bin/calibre
-        └── calibre-bin
+        │
+        ├── calibre-tmp   <--- temporary dir for (re-) install
+        └── calibre-bin   <--- installation dir of calibre
             ├── bin
             ├── calibre
             ├── calibre-complete
@@ -51,17 +53,25 @@ def calibre():
 
 @subtask
 def install_calibre(instdir):
-    inst_parent = os.path.dirname(instdir)
-    run(flo('mkdir -p {inst_parent}'))
+    inst_parent = dirname(instdir)
+    inst_tmp = join(inst_parent, 'calibre-tmp')
+
+    run(flo('mkdir -p {inst_tmp}'),
+        msg='### assure, inst base-dir exists\n')
+
     run(flo('wget -nv -O- '
             'https://raw.githubusercontent.com/kovidgoyal/calibre/master/setup/'
             'linux-installer.py | '
             'python -c "import sys; '
             'main=lambda x,y:sys.stderr.write(\'Download failed\\n\'); '
-            'exec(sys.stdin.read()); main(\'{inst_parent}\', True)"'))
+            'exec(sys.stdin.read()); main(\'{inst_tmp}\', True)"'),
+        msg='\n### download and run calibre installer script\n')
 
-    # calibre-installer installs into {inst_parent}/calibre/; needs to be moved
+    # calibre-installer installs into {inst_tmp}/calibre/; needs to be moved
+    print_msg('\n### replace old install (if exists) by new installation\n')
     run(flo('rm -rf  {instdir}'))
-    run(flo('mv  {inst_parent}/calibre  {instdir}'))
+    run(flo('mv  {inst_tmp}/calibre  {instdir}'))
+    run(flo('rmdir  {inst_tmp}'))
 
-    run(flo('ln -snf  {instdir}/calibre  ~/bin/calibre'))
+    run(flo('ln -snf  {instdir}/calibre  ~/bin/calibre'),
+        msg='\n### link calibre command to dir `~/bin` (should be in PATH)\n')
