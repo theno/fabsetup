@@ -22,7 +22,6 @@ def openssl(version='master', ignore_test_fail=False):
                           Default: False
 
     Example:
-
         > fab setup.openssl:version=OpenSSL_1_1_0-stable
 
     Created files and dirs:
@@ -37,17 +36,17 @@ def openssl(version='master', ignore_test_fail=False):
         │
         └── openssl-inst
             ├── active -> OpenSSL_1_1_0-stable     <--- here 1.1.0 is "active"
-            ├── master                             <-- installed via:
-            │   ├── bin                                `fab setup.openssl`
+            ├── master                             <--- installed via:
+            │   ├── bin                                 `fab setup.openssl`
             │   ├── include
             │   ├── lib
-            │   ├── openssldir   <-- openssl configs and default cert/key store
+            │   ├── openssldir   <--- openssl configs and default cert/key store
             │   └── share
-            └── OpenSSL_1_1_0-stable               <---.
-                ├── bin                installed via: -´
+            └── OpenSSL_1_1_0-stable              <---.
+                ├── bin               installed via: -´
                 ├── include     `fab setup.openssl:version=OpenSSL_1_1_0-stable`
                 ├── lib
-                ├── openssldir   <-- openssl configs and default cert/key store
+                ├── openssldir   <--- openssl configs and default cert/key store
                 └── share
     '''
     src_base = '~/repos'
