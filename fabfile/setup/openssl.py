@@ -22,13 +22,18 @@ def openssl(version='master', ignore_test_fail=False):
                           Default: False
 
     Example:
+
         > fab setup.openssl:version=OpenSSL_1_1_0-stable
 
     Created files and dirs:
+
+        > tree ~/repos
+        └── openssl          <--- checked out git repository with openssl source
+
         > tree ~/bin
-        │            # command links
-        ├── c_rehash -> openssl-inst/active/bin/c_rehash
-        ├── openssl  -> openssl-inst/active/bin/openssl
+        │
+        ├── c_rehash -> openssl-inst/active/bin/c_rehash  \__ command links
+        ├── openssl  -> openssl-inst/active/bin/openssl   /
         │
         └── openssl-inst
             ├── active -> OpenSSL_1_1_0-stable     <--- here 1.1.0 is "active"
