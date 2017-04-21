@@ -58,8 +58,17 @@ def checkout_latest_release_of_selfoss():
         checkup_git_repo('https://github.com/SSilence/selfoss.git')
     else:
         run('cd ~/repos/selfoss && git fetch')
-    latest_tag = 'git describe --abbrev=0 --tags --match "[0-9.]*" origin'
-    run(flo('cd ~/repos/selfoss && git checkout $({latest_tag})'))
+
+    # TODO since selfoss-2.17 Composer is required which needs to be set up
+    #      on ubuntu 14.04:
+    #      * https://www.digitalocean.com/community/tutorials/how-to-install-and-use-composer-on-ubuntu-14-04
+    #      * https://getcomposer.org/
+    # latest_tag = 'git describe --abbrev=0 --tags --match "[0-9.]*" origin'
+    # run(flo('cd ~/repos/selfoss && git checkout $({latest_tag})'))
+    latest_working_tag = '2.16'
+    run(flo('cd ~/repos/selfoss && git checkout {latest_working_tag}'))
+
+    run(flo('cd ~/repos/selfoss && git status'))  # show latest version
 
 
 @subsubtask
@@ -172,7 +181,7 @@ def setup_selfoss_user(username, sitename, site_dir):
 @subtask
 def enable_php5_socket_file():
     filename = '/etc/php5/fpm/pool.d/www.conf'
-    print_msg('comment out "listen = 127.0.01:9000"')
+    print_msg('comment out "listen = 127.0.0.1:9000"')
     comment_out_line(filename, comment=';', line='listen = 127.0.0.1:9000')
     line = 'listen = /var/run/php5-fpm.sock'
     print_msg(flo('\nuncomment "{line}"'))
