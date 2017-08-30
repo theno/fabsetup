@@ -139,37 +139,102 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+    # These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym odiaeresis resize grow width 10 px or 10 ppt
+    # resize
 
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+    bindsym h resize shrink width  10 px or 10 ppt
+    bindsym j resize grow height   10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width    10 px or 10 ppt
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
+    bindsym Left  resize shrink width  10 px or 10 ppt
+    bindsym Down  resize grow height   10 px or 10 ppt
+    bindsym Up    resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width    10 px or 10 ppt
+
+    # move fast
+
+    bindsym Shift+h move left  20 px
+    bindsym Shift+j move down  20 px
+    bindsym Shift+k move up    20 px
+    bindsym Shift+l move right 20 px
+
+    bindsym Shift+Left  move left  20 px
+    bindsym Shift+Down  move down  20 px
+    bindsym Shift+Up    move up    20 px
+    bindsym Shift+Right move right 20 px
+
+    # move slow
+
+    bindsym Ctrl+h move left  1 px
+    bindsym Ctrl+j move down  1 px
+    bindsym Ctrl+k move up    1 px
+    bindsym Ctrl+l move right 1 px
+
+    bindsym Ctrl+Up    move up    1px
+    bindsym Ctrl+Left  move left  1px
+    bindsym Ctrl+Down  move down  1px
+    bindsym Ctrl+Right move right 1px
+
+    # back to normal
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym Mod4+r mode "default"
 }
-
 bindsym $mod+r mode "resize"
+
+# https://faq.i3wm.org/question/2787/move-floating-window-with-arrows/
+mode "moveit" {
+
+    # move normal
+
+    bindsym h move left  10 px
+    bindsym j move down  10 px
+    bindsym k move up    10 px
+    bindsym l move right 10 px
+
+    bindsym Left  move left  10 px
+    bindsym Down  move down  10 px
+    bindsym Up    move up    10 px
+    bindsym Right move right 10 px
+
+    # move fast
+
+    bindsym Shift+h move left  20 px
+    bindsym Shift+j move down  20 px
+    bindsym Shift+k move up    20 px
+    bindsym Shift+l move right 20 px
+
+    bindsym Shift+Left  move left  20 px
+    bindsym Shift+Down  move down  20 px
+    bindsym Shift+Up    move up    20 px
+    bindsym Shift+Right move right 20 px
+
+    # move slow
+
+    bindsym Ctrl+h move left  1 px
+    bindsym Ctrl+j move down  1 px
+    bindsym Ctrl+k move up    1 px
+    bindsym Ctrl+l move right 1 px
+
+    bindsym Ctrl+Up    move up    1px
+    bindsym Ctrl+Left  move left  1px
+    bindsym Ctrl+Down  move down  1px
+    bindsym Ctrl+Right move right 1px
+
+    # back to normal
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+    bindsym Mod4+m mode "default"
+}
+bindsym Mod4+m focus floating; mode "moveit"
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
         status_command i3status
 }
-
-
 
 ### taken from my foreign (gentoo) config
 
