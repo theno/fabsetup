@@ -2,7 +2,6 @@
 
 import re
 import tempfile
-from collections import namedtuple
 
 from fabric.api import env
 from fabric.context_managers import warn_only
@@ -13,6 +12,7 @@ from fabsetup.fabutils import task, put, exists, print_msg
 from fabsetup.fabutils import needs_repo_fabsetup_custom
 from fabsetup.utils import flo, query_input, query_yes_no
 from fabsetup.utils import filled_out_template
+from fabsetup.utils import namedtuple
 
 
 # FIXME test-run as comment: "usefull commands for debugging: ..."
@@ -160,14 +160,18 @@ def update_virtualenv(site_dir, sitename):
     create_virtualenv(site_dir)
     run(flo(
         '{site_dir}/virtualenv/bin/'
-        'pip install --upgrade  pip genshi trac gunicorn '
-        'Markdown'  # required by TracPlugin MarkdownMakro
+        'pip install --upgrade  '
+        'pip genshi trac gunicorn '
+
+        # https://trac-hacks.org/wiki/MarkdownMacro
+        'Markdown '  # required by TracPlugin MarkdownMakro
     ))
 
 
 TracPlugin = namedtuple(
     typename='TracPlugin',
-    field_names='name, version, homepage',
+    field_names='name, homepage, svn_version=None, '
+                'git_repo_url=None, git_instead_of_svn=False',
 )
 
 
@@ -180,21 +184,32 @@ def set_up_trac_plugins(sitename, site_dir, bin_dir):
     except ImportError:
         pass  # ignore non-existing config entry
     svn_base_url = 'https://trac-hacks.org/svn'
-    plugin_src_basedir = flo('{site_dir}/trac-plugins')
+    plugin_src_basedir = flo('{site_dir}/trac-plugin-src')
     if plugins:
         for plugin in plugins:
             print_msg(flo('### {plugin.name}\n\nInfos: {plugin.homepage}\n'))
             plugin_src_dir = flo('{plugin_src_basedir}/{plugin.name}')
-            # run(flo('rm -rf {plugin_src_dir}'))
-            if exists(plugin_src_dir):
-                run(flo('cd {plugin_src_dir}  &&  svn up'),
-                    msg='update plugin repo:')
+            # FIXME: simplify: All Plugins provide a zip src-file
+            # no differing handling between git and svn required here
+            if plugin.git_instead_of_svn:
+                # git-repo
+                if not exists(flo('{plugin_src_dir}/.git')):
+                    run(flo('cd {plugin_src_basedir}  &&  '
+                            'git clone {plugin.git_repo_url}  {plugin.name}'))
+                else:
+                    run(flo('cd {plugin_src_dir}  &&  git pull'))
+
             else:
-                run(flo('mkdir -p {plugin_src_basedir}'),
-                    msg='checkout plugin repo:')
-                run(flo('svn checkout  '
-                        '{svn_base_url}/{plugin.name}/{plugin.version}  '
-                        '{plugin_src_dir}'))
+                # svn-repo
+                if exists(plugin_src_dir):
+                    run(flo('cd {plugin_src_dir}  &&  svn up'),
+                        msg='update plugin repo:')
+                else:
+                    run(flo('mkdir -p {plugin_src_basedir}'),
+                        msg='checkout plugin repo:')
+                    run(flo('svn checkout  '
+                            '{svn_base_url}/{plugin.name}/{plugin.svn_version} '
+                            ' {plugin_src_dir}'))
             run(flo('{bin_dir}/pip install --upgrade {plugin_src_dir}'),
                 msg='install plugin:')
     else:
