@@ -47,7 +47,5 @@ setup(
     keywords='python development utilities library',
     packages=find_packages(exclude=['contrib', 'docs', 'tests',
                                     'fabfile_data', 'fabsetup_custom']),
-    data_files=data_files+[
-        ('', ['README.md']),
-    ],
+    include_package_data=True,
 )
