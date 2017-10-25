@@ -14,7 +14,8 @@ long_description = ''
 this_dir = path.abspath(path.dirname(__file__))
 try:
     import pypandoc
-    long_description = pypandoc.convert(path.join(this_dir, 'README.md'), 'rst')
+    long_description = pypandoc.convert(path.join(this_dir, 'README.md'),
+                                        'rst', format='md')
 except(IOError, ImportError):
     with open(path.join(this_dir, 'README.md'), encoding='utf-8') as f:
         long_description = f.read()
