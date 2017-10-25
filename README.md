@@ -6,41 +6,41 @@ installations and other things on a local or remote linux system
 
 ## Installation
 
-  ```sh
-  sudo apt-get install  git  fabric
-  mkdir ~/repos && cd ~/repos
-  git clone  https://github.com/theno/fabsetup.git
-  ```
+```sh
+sudo apt-get install  git  fabric
+mkdir ~/repos && cd ~/repos
+git clone  https://github.com/theno/fabsetup.git
+```
 
 ## How to use fabsetup
 
 __fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__
 script, so every command starts with a __`fab`__:
 
-  ```sh
-  # go to the fabsetup repository
-  cd ~/repos/fabsetup
+```sh
+# go to the fabsetup repository
+cd ~/repos/fabsetup
 
 
-  # task infos
+# task infos
 
-  ## list all tasks: '-l'
-  fab -l
+## list all tasks: '-l'
+fab -l
 
-  ## show details: '-d'
-  fab -d setup.vim
+## show details: '-d'
+fab -d setup.vim
 
 
-  # run tasks
+# run tasks
 
-  fab setup.regex_repl
+fab setup.regex_repl
 
-  ## on your local host:
-  fab setup.pencil_v3 -H localhost
+## on your local host:
+fab setup.pencil_v3 -H localhost
 
-  ## remote host:
-  fab up -H example.com
-  ```
+## remote host:
+fab up -H example.com
+```
 
 __[Setup-Howtos](./howtos "cookbook")__:
 

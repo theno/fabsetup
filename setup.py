@@ -1,24 +1,47 @@
-"""Yet another setup script for linux software, configurations and services.
+"""fabric setup scripts and fabric utils library
 
 * https://github.com/theno/fabsetup
 * https://pypi.python.org/pypi/fabsetup
 """
 
 import os
+import shutil
 from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-description = 'fabric setup scripts and fabric utils library'
-long_description = ''
-this_dir = path.abspath(path.dirname(__file__))
-try:
-    import pypandoc
-    long_description = pypandoc.convert(path.join(this_dir, 'README.md'),
-                                        'rst', format='md')
-except(IOError, ImportError):
-    with open(path.join(this_dir, 'README.md'), encoding='utf-8') as f:
-        long_description = f.read()
+
+def create_readme_with_long_description():
+    this_dir = os.path.abspath(os.path.dirname(__file__))
+    readme_md = os.path.join(this_dir, 'README.md')
+    readme = os.path.join(this_dir, 'README')
+    if os.path.isfile(readme_md):
+        if os.path.islink(readme):
+            os.remove(readme)
+        shutil.copy(readme_md, readme)
+    try:
+        import pypandoc
+        long_description = pypandoc.convert(readme_md, 'rst', format='md')
+        if os.path.islink(readme):
+            os.remove(readme)
+        with open(readme, 'w') as out:
+            out.write(long_description)
+    except(IOError, ImportError, RuntimeError):
+        if os.path.isfile(readme_md):
+            os.remove(readme)
+            os.symlink(readme_md, readme)
+        with open(readme, encoding='utf-8') as in_:
+            long_description = in_.read()
+    return long_description
+
+
+this_dir = os.path.abspath(os.path.dirname(__file__))
+filename = os.path.join(this_dir, 'fabsetup', '_version.py')
+with open(filename, 'rt') as fh:
+    version = fh.read().split('"')[1]
+
+description = __doc__.split('\n')[0]
+long_description = create_readme_with_long_description()
 
 data_files = []
 for directory, _, files in os.walk('fabfile_data'):
@@ -28,7 +51,7 @@ for directory, _, files in os.walk('fabfile_data'):
 
 setup(
     name='fabsetup',
-    version='0.5.2',
+    version=version,
     description=description,
     long_description=long_description,
     url='https://github.com/theno/fabsetup',
@@ -48,5 +71,4 @@ setup(
     keywords='python development utilities library',
     packages=find_packages(exclude=['contrib', 'docs', 'tests',
                                     'fabfile_data', 'fabsetup_custom']),
-    include_package_data=True,
 )
