@@ -27,7 +27,7 @@ for directory, _, files in os.walk('fabfile_data'):
 
 setup(
     name='fabsetup',
-    version='0.5.0',
+    version='0.5.1',
     description=description,
     long_description=long_description,
     url='https://github.com/theno/fabsetup',
