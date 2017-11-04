@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# Convert a compressed *.epgz pencil-3 image file into an pencil-2 *.ep file.
+# The *.ep file will be stored in the current directory.
+#
+# Usage:
+#     epgz2ep /abspath/or/relative/path/to/pencil-image.epgz
+#
+# If the egpz contains more than one page, each page will be converted to an ep
+# file with an indexed name, e.g.: image-1.ep, image-2.ep, ...
+#
+# More info:
+# * https://github.com/evolus/pencil/issues/140
+# * https://github.com/prikhi/pencil/issues/730
+
+
+page2ep () {
+  local filename_from=$1
+  local filename_to=$2
+
+  echo '<?xml version="1.0"?>' > $filename_to
+  echo '<Document xmlns="http://www.evolus.vn/Namespace/Pencil"><Properties/><Pages>' >> $filename_to
+  echo '' >> $filename_to
+  cat $filename_from >> $filename_to
+  echo -e "\n" >> $filename_to
+  echo '</Pages></Document>' >> $filename_to
+}
+
+
+main () {
+  local abspath="$1"   # e.g. '/path/to/image.epgz'
+  local basename="$2"  # e.g. 'image'
+  local curdir="$3"    # e.g. '/where/i/am/now'
+
+  local scriptname="$(basename $0)"
+  local tempdir="$(mktemp -d -t $scriptname-XXXXX)"
+
+  cd $tempdir && tar xf $abspath --wildcards 'page_*.xml'
+
+  files=($tempdir/*)
+  for ((i=1; i<=${#files[@]}; i++)); do
+
+    local count_postfix="-$i"
+    if [[ ${#files[@]} -eq 1 ]]; then
+      local count_postfix=''  # disable count_postfix when only one page
+    fi
+
+    local filename_to="${curdir}/${basename}${count_postfix}.ep"
+
+    page2ep "${files[$i-1]}" $filename_to
+
+    echo "$scriptname created:  $filename_to"
+  done
+
+  rm -rf $tempdir
+}
+
+
+ABSPATH=$(readlink -f ${1})
+BASENAME=${1##*/}
+BASENAME=${BASENAME%.*}  # basename without file extension
+CURDIR=$(pwd)
+
+main  $ABSPATH  $BASENAME  $CURDIR

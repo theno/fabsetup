@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for file in *.epgz
+do
+  epgz2ep $file
+done

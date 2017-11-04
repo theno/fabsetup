@@ -24,9 +24,11 @@ def users_bin_dir():
     commands = [
         'alldia2pdf',
         'allep2svg',
+        'allepgz2ep',
         'allsvg2pdf',
         'dia2pdf',
         'ep2svg',
+        'epgz2ep',
         'svg2pdf'
     ]
     for command in commands:
