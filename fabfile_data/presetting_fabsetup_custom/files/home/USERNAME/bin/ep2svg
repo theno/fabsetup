@@ -1,6 +1,12 @@
 #!/bin/bash
 
 INFILE=${1}
+
+# basename without file extension
 BASENAME=${1:0:${#1}-3}
 
-xsltproc ~/repos/pencil2/app/content/pencil/exporter/Pencil2SVG.xslt ${INFILE} > ${BASENAME}.svg
+# use pencil version 2
+# xsltproc ~/repos/pencil2/app/content/pencil/exporter/Pencil2SVG.xslt "${INFILE}" > "${BASENAME}.svg"
+
+# use pencil version 3
+xsltproc ~/repos/pencil3/app/pencil-core/exporter/Pencil2SVG.xslt "${INFILE}" > "${BASENAME}.svg"
