@@ -29,6 +29,7 @@ def users_bin_dir():
         'dia2pdf',
         'ep2svg',
         'epgz2ep',
+        'greypdf',
         'svg2pdf'
     ]
     for command in commands:

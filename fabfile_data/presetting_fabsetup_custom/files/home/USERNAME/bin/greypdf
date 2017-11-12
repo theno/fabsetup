@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Create a grayscale PDF from a given PDF file.
+
+# usage example:
+#     greypdf  document.pdf  document_grey.pdf
+
+# https://superuser.com/questions/104656/convert-a-pdf-to-greyscale-on-the-command-line-in-floss
+
+INFILE=$1
+OUTFILE=$2
+
+gs \
+ -sOutputFile=$OUTFILE \
+ -sDEVICE=pdfwrite \
+ -sColorConversionStrategy=Gray \
+ -dProcessColorModel=/DeviceGray \
+ -dCompatibilityLevel=1.4 \
+ -dAutoRotatePages=/None \
+ -dNOPAUSE \
+ -dBATCH \
+ $INFILE
