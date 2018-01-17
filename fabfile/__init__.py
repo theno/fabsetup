@@ -1,16 +1,20 @@
+# ~*~ coding: utf-8 ~*~
 '''Set up and maintain a local or remote (Ubuntu) linux system.'''
 
+
 import fabric.operations
+import os.path
 import sys
 
 from os.path import dirname, isdir, realpath
 sys.path.append(dirname(dirname(realpath(__file__))))
 
 from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
-from fabsetup.fabutils import run, suggest_localhost
+from fabsetup.fabutils import run, suggest_localhost, subtask
 from fabsetup.fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
 from fabsetup.utils import flo
-from fabsetup.utils import green, blue, magenta
+from fabsetup.utils import green, blue, magenta, red
+from fabsetup.utils import query_input
 from fabsetup.addons import load_pip_addons, load_repo_addons
 
 import setup  # load tasks from module setup
@@ -93,6 +97,117 @@ def dfh():
     '''Print used disc space.'''
     run('sudo  df -ih')
     run('sudo  df -h')
+
+
+@subtask
+def create_files(addon_dir, username, taskname,
+                 headline, description, touched_files):
+    loc = fabric.operations.local
+    module_name = flo('fabsetup_{username}_{taskname}')
+    loc(flo('mkdir -p {addon_dir}/{module_name}'))
+    loc(flo('cd {addon_dir} && touch fabfile.py'))
+    loc(flo('cd {addon_dir} && touch fabfile-dev.py'))
+    loc(flo('cd {addon_dir} && touch README.md'))
+    loc(flo('cd {addon_dir} && touch requirements.txt'))
+    loc(flo('cd {addon_dir} && touch setup.py'))
+    loc(flo('cd {addon_dir}/{module_name} && touch __init__.py'))
+    loc(flo('cd {addon_dir}/{module_name} && touch _version.py'))
+    print('')
+    loc(flo('tree {addon_dir}'))
+
+
+@subtask
+def init_git_repo(basedir):
+    basedir_abs = os.path.expanduser(basedir)
+    if os.path.isdir(flo('{basedir_abs}/.git')):
+        print('git repo already initialized (skip)')
+    else:
+        loc = fabric.operations.local
+        # if not exists('{basedir_abs}/.gitignore'):
+        #     install_file(path=flo('{basedir_abs}/.gitignore'),
+        #                  from_path='~/repos/my_presi/.gitignore')
+        loc(flo('cd {basedir} && git init'))
+        loc(flo('cd {basedir} && git add .'))
+        loc(flo('cd {basedir} && git commit -am "Initial commit"'))
+    # TODO: ask to push to github
+
+
+@subtask
+def summary(addon_dir, username, taskname):
+    print('run your task:')
+    print('')
+    print('    # with fabsetup as an addon')
+    print('    cd .fabsetup')
+    print(flo('    fab -d {username}.{taskname}'))
+    print(flo('    fab {username}.{taskname}'))
+    print('')
+    print('    # standalone')
+    print(flo('    cd {addon_dir}'))
+    print(flo('    pip install -r requirements.txt'))
+    print(flo('    fab {username}.{taskname}'))
+    print('')
+    print('addon development:')
+    print('')
+    print(flo('    cd {addon_dir}'))
+    print('    fab -f fabfile-dev.py -l')
+    print('    fab -f fabfile-dev.py test')
+    print("    git commit -am 'my commit message'")
+    print('    git push origin master  # publish at github')
+    print('    fab -f fabfile-dev.py pypi  # publish pip package at pypi')
+    print('')
+    print('The task code is defined in')
+    print(flo('  {addon_dir}/fabsetup_{username}_{taskname}/__init__.py'))
+    print('Your task output should be in markdown style.')
+
+
+@task
+def new_addon():
+    '''Create a repository for a new fabsetup-task addon.
+
+    The repo will contain the fabsetup addon boilerplate.
+
+    Running this task you have to enter:
+    * Your github user account (your pypi account should be the same or similar)
+    * Addon / (main) task name
+    * Headline and short description for the task docstring and the README.md
+
+    Created files and dirs:
+
+        ~/.fabsetup-repos/fabsetup-{user}-{task}
+                          ├── fabfile.py
+                          ├── fabfile-dev.py
+                          ├── fabsetup_{user}_{task}
+                          │   ├── __init__.py  <----- task definition
+                          │   └── _version.py
+                          ├── README.md
+                          ├── requirements.txt
+                          └── setup.py
+    '''
+    username = query_input('github username:')
+    taskname = query_input('addon / (main) task name:', default='termdown')
+    taskname = taskname.replace('-', '_').replace(' ', '_')  # underscores only
+
+    addon_dir = os.path.expanduser(flo(
+        '~/.fabsetup-repos/fabsetup-{username}-{taskname}'))
+
+    if os.path.exists(addon_dir):
+        print(red(flo('\n{addon_dir} already exists. abort')))
+    else:
+        headline = query_input(
+            'short task headline:',
+            default='Install or update termdown.')
+        description = query_input(
+            'describing infos:',
+            default='Command `termdown 25m` is practical '
+                    'to time pomodoro sessions.')
+        touched_files = query_input(
+            'Affected files and dirs:',
+            default='~/bin/termdown')
+
+        create_files(addon_dir, username, taskname,
+                     headline, description, touched_files)
+        init_git_repo(addon_dir)
+        summary(addon_dir, username, taskname)
 
 
 load_pip_addons(globals())
