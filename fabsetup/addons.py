@@ -11,6 +11,7 @@ from fabsetup.utils import flo
 known_pip_addons = [
     'fabsetup-theno-termdown',
 ]
+
 addon_modules = {}
 
 
@@ -127,11 +128,13 @@ def load_repo_addons(_globals):
 
     Return: None
     '''
-    basedir, repos, _ = next(os.walk(os.path.expanduser('~/.fabsetup-repos')))
-    for repo_dir in [os.path.join(basedir, repo)
-                     for repo in repos
-                     # omit dot dirs like '.rope' or 'foo.disabled'
-                     if '.' not in repo]:
-        sys.path.append(repo_dir)
-        package_name, username = package_username(repo_dir.split('/')[-1])
-        load_addon(username, package_name, _globals)
+    repos_dir = os.path.expanduser('~/.fabsetup-repos')
+    if os.path.isdir(repos_dir):
+        basedir, repos, _ = next(os.walk(repos_dir))
+        for repo_dir in [os.path.join(basedir, repo)
+                         for repo in repos
+                         # omit dot dirs like '.rope' or 'foo.disabled'
+                         if '.' not in repo]:
+            sys.path.append(repo_dir)
+            package_name, username = package_username(repo_dir.split('/')[-1])
+            load_addon(username, package_name, _globals)
