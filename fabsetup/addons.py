@@ -133,7 +133,8 @@ def load_repo_addons(_globals):
         basedir, repos, _ = next(os.walk(repos_dir))
         for repo_dir in [os.path.join(basedir, repo)
                          for repo in repos
-                         # omit dot dirs like '.rope' or 'foo.disabled'
+                         # omit dot dirs like '.rope'
+                         # or 'fabsetup-theno-termdown.disabled'
                          if '.' not in repo]:
             sys.path.append(repo_dir)
             package_name, username = package_username(repo_dir.split('/')[-1])
