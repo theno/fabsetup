@@ -5,13 +5,29 @@ from fabsetup_{{username}}_{{taskname}}._version import __version__
 
 @subtask
 def install_pip_package():
-    '''juhuu'''
-    run('pip install termdown')
+    run('pip install --user termdown')
 
 
 @subtask
 def install_user_command():
-    print_msg('blahhh')
+    run('mkdir -p ~/bin')
+    run('cat > ~/bin/termdown <<EOF\n'
+        '#!/bin/bash\n'
+        '\n'
+        'python -m termdown -T timer -t finished -q 0 --no-seconds "\\$@" && '
+        'notify-send "TIMER FINISHED"\n'
+        '\n'
+        '# configure notify popup: \\`xfce4-notifyd-config\\`\n'
+        'EOF\n')
+    run('chmod 755 ~/bin/termdown')
+
+
+@subtask
+def show_termdown_usage():
+    print('termdown is now installed\n')
+    print_msg('    python -m termdown --help\n')
+    print('for example: time a pomodoro session\n')
+    print_msg('    termdown 25m')
 
 
 @task
@@ -25,7 +41,6 @@ def {{taskname}}():
 
         {{touched_files}}
     '''
-    run('echo hihi')
-    print('YOUR TASK CODE')
     install_pip_package()
     install_user_command()
+    show_termdown_usage()

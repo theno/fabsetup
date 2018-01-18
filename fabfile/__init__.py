@@ -198,7 +198,7 @@ def new_addon():
     '''
     username = query_input('github username:')
 
-    addonname = query_input('task name:', default='termdown')
+    addonname = query_input('addon name:', default='termdown')
     addonname = addonname.replace('_', '-').replace(' ', '-')  # minus only
 
     taskname = query_input('task name:', default=addonname.replace('-', '_'))
