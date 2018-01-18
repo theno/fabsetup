@@ -103,7 +103,7 @@ def dfh():
 
 
 @subtask
-def create_files(addon_dir, username, taskname,
+def create_files(addon_dir, username, addonname, taskname,
                  headline, description, touched_files):
     filenames = [
         '.gitignore',
@@ -118,27 +118,14 @@ def create_files(addon_dir, username, taskname,
     ]
     for filename in filenames:
         install_file(
-            path=flo('~/.fabsetup-repos/fabsetup-USER-TASK/{filename}'),
+            path=flo('~/.fabsetup-repos/fabsetup-USER-ADDON/{filename}'),
             username=username, taskname=taskname,
             headline=headline, description=description,
             touched_files=touched_files,
             full_username=username,  # TODO
-            USER=username, TASK=taskname)
-
-
-    loc = fabric.operations.local
-    # module_name = flo('fabsetup_{username}_{taskname}')
-    # loc(flo('mkdir -p {addon_dir}/{module_name}'))
-    # loc(flo('cd {addon_dir} && touch fabfile-dev.py'))
-    # loc(flo('cd {addon_dir} && touch fabfile.py'))
-    # loc(flo('cd {addon_dir} && touch LICENSE.md'))
-    # loc(flo('cd {addon_dir} && touch README.md'))
-    # loc(flo('cd {addon_dir} && touch requirements.txt'))
-    # loc(flo('cd {addon_dir} && touch setup.py'))
-    # loc(flo('cd {addon_dir}/{module_name} && touch __init__.py'))
-    # loc(flo('cd {addon_dir}/{module_name} && touch _version.py'))
+            USER=username, ADDON=addonname, TASK=taskname)
     print('')
-    loc(flo('tree {addon_dir}'))
+    fabric.operations.local(flo('tree {addon_dir}'))
 
 
 @subtask
@@ -147,13 +134,13 @@ def init_git_repo(basedir):
     if os.path.isdir(flo('{basedir_abs}/.git')):
         print('git repo already initialized (skip)')
     else:
-        loc = fabric.operations.local
         if not exists('{basedir_abs}/.gitignore'):
             install_file(path=flo('{basedir_abs}/.gitignore'),
                          from_path='~/repos/my_presi/.gitignore')
-        loc(flo('cd {basedir} && git init'))
-        loc(flo('cd {basedir} && git add .'))
-        loc(flo('cd {basedir} && git commit -am "Initial commit"'))
+        fabric.operations.local(flo('cd {basedir} && git init'))
+        fabric.operations.local(flo('cd {basedir} && git add .'))
+        fabric.operations.local(
+            flo('cd {basedir} && git commit -am "Initial commit"'))
     # TODO: ask to push to github
 
 
@@ -210,11 +197,15 @@ def new_addon():
                           └── setup.py
     '''
     username = query_input('github username:')
-    taskname = query_input('addon / (main) task name:', default='termdown')
+
+    addonname = query_input('task name:', default='termdown')
+    addonname = addonname.replace('_', '-').replace(' ', '-')  # minus only
+
+    taskname = query_input('task name:', default=addonname.replace('-', '_'))
     taskname = taskname.replace('-', '_').replace(' ', '_')  # underscores only
 
     addon_dir = os.path.expanduser(flo(
-        '~/.fabsetup-repos/fabsetup-{username}-{taskname}'))
+        '~/.fabsetup-repos/fabsetup-{username}-{addonname}'))
 
     if os.path.exists(addon_dir):
         print(red(flo('\n{addon_dir} already exists. abort')))
@@ -230,7 +221,7 @@ def new_addon():
             'Affected files and dirs:',
             default='~/bin/termdown')
 
-        create_files(addon_dir, username, taskname,
+        create_files(addon_dir, username, addonname, taskname,
                      headline, description, touched_files)
         init_git_repo(addon_dir)
         summary(addon_dir, username, taskname)

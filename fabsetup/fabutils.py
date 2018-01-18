@@ -355,7 +355,7 @@ def install_file(path, sudo=False, from_path=None, **substitutions):
     from_custom = join(from_head, 'fabsetup_custom', from_tail)
 
     # target path 'to_' (path or tempfile)
-    for subst in ['SITENAME', 'USER', 'TASK']:
+    for subst in ['SITENAME', 'USER', 'ADDON', 'TASK']:
         sitename = substitutions.get(subst, False)
         if sitename:
             path = path.replace(subst, sitename)

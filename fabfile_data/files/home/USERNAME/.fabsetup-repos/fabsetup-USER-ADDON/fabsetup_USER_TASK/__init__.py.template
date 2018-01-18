@@ -6,7 +6,7 @@ from fabsetup_{{username}}_{{taskname}}._version import __version__
 @subtask
 def install_pip_package():
     '''juhuu'''
-    print('aye')
+    run('pip install termdown')
 
 
 @subtask
@@ -21,7 +21,9 @@ def {{taskname}}():
 
     {{description}}
 
-    {{touched_files}}
+    Touched files and dirs:
+
+        {{touched_files}}
     '''
     run('echo hihi')
     print('YOUR TASK CODE')
