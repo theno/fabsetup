@@ -1,0 +1,29 @@
+from fabsetup.fabutils import print_msg, run, subtask, suggest_localhost, task
+
+from fabsetup_{{username}}_{{taskname}}._version import __version__
+
+
+@subtask
+def install_pip_package():
+    '''juhuu'''
+    print('aye')
+
+
+@subtask
+def install_user_command():
+    print_msg('blahhh')
+
+
+@task
+@suggest_localhost
+def {{taskname}}():
+    '''{{headline}}
+
+    {{description}}
+
+    {{touched_files}}
+    '''
+    run('echo hihi')
+    print('YOUR TASK CODE')
+    install_pip_package()
+    install_user_command()

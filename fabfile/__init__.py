@@ -9,8 +9,11 @@ import sys
 from os.path import dirname, isdir, realpath
 sys.path.append(dirname(dirname(realpath(__file__))))
 
+from fabric.api import hosts
+
 from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
 from fabsetup.fabutils import run, suggest_localhost, subtask
+from fabsetup.fabutils import install_file, exists
 from fabsetup.fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
 from fabsetup.utils import flo
 from fabsetup.utils import green, blue, magenta, red
@@ -102,16 +105,38 @@ def dfh():
 @subtask
 def create_files(addon_dir, username, taskname,
                  headline, description, touched_files):
+    filenames = [
+        '.gitignore',
+        'fabfile-dev.py',
+        'fabfile.py',
+        'LICENSE',
+        'README.md',
+        'requirements.txt',
+        'setup.py',
+        'fabsetup_USER_TASK/__init__.py',
+        'fabsetup_USER_TASK/_version.py',
+    ]
+    for filename in filenames:
+        install_file(
+            path=flo('~/.fabsetup-repos/fabsetup-USER-TASK/{filename}'),
+            username=username, taskname=taskname,
+            headline=headline, description=description,
+            touched_files=touched_files,
+            full_username=username,  # TODO
+            USER=username, TASK=taskname)
+
+
     loc = fabric.operations.local
-    module_name = flo('fabsetup_{username}_{taskname}')
-    loc(flo('mkdir -p {addon_dir}/{module_name}'))
-    loc(flo('cd {addon_dir} && touch fabfile.py'))
-    loc(flo('cd {addon_dir} && touch fabfile-dev.py'))
-    loc(flo('cd {addon_dir} && touch README.md'))
-    loc(flo('cd {addon_dir} && touch requirements.txt'))
-    loc(flo('cd {addon_dir} && touch setup.py'))
-    loc(flo('cd {addon_dir}/{module_name} && touch __init__.py'))
-    loc(flo('cd {addon_dir}/{module_name} && touch _version.py'))
+    # module_name = flo('fabsetup_{username}_{taskname}')
+    # loc(flo('mkdir -p {addon_dir}/{module_name}'))
+    # loc(flo('cd {addon_dir} && touch fabfile-dev.py'))
+    # loc(flo('cd {addon_dir} && touch fabfile.py'))
+    # loc(flo('cd {addon_dir} && touch LICENSE.md'))
+    # loc(flo('cd {addon_dir} && touch README.md'))
+    # loc(flo('cd {addon_dir} && touch requirements.txt'))
+    # loc(flo('cd {addon_dir} && touch setup.py'))
+    # loc(flo('cd {addon_dir}/{module_name} && touch __init__.py'))
+    # loc(flo('cd {addon_dir}/{module_name} && touch _version.py'))
     print('')
     loc(flo('tree {addon_dir}'))
 
@@ -123,9 +148,9 @@ def init_git_repo(basedir):
         print('git repo already initialized (skip)')
     else:
         loc = fabric.operations.local
-        # if not exists('{basedir_abs}/.gitignore'):
-        #     install_file(path=flo('{basedir_abs}/.gitignore'),
-        #                  from_path='~/repos/my_presi/.gitignore')
+        if not exists('{basedir_abs}/.gitignore'):
+            install_file(path=flo('{basedir_abs}/.gitignore'),
+                         from_path='~/repos/my_presi/.gitignore')
         loc(flo('cd {basedir} && git init'))
         loc(flo('cd {basedir} && git add .'))
         loc(flo('cd {basedir} && git commit -am "Initial commit"'))
@@ -161,6 +186,7 @@ def summary(addon_dir, username, taskname):
 
 
 @task
+@hosts('localhost')
 def new_addon():
     '''Create a repository for a new fabsetup-task addon.
 

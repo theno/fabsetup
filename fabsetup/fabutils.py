@@ -355,9 +355,10 @@ def install_file(path, sudo=False, from_path=None, **substitutions):
     from_custom = join(from_head, 'fabsetup_custom', from_tail)
 
     # target path 'to_' (path or tempfile)
-    sitename = substitutions.get('SITENAME', False)
-    if sitename:
-        path = path.replace('SITENAME', sitename)
+    for subst in ['SITENAME', 'USER', 'TASK']:
+        sitename = substitutions.get(subst, False)
+        if sitename:
+            path = path.replace(subst, sitename)
     to_ = path
     if sudo:
         to_ = join(os.sep, 'tmp', 'fabsetup_' + os.path.basename(path))
