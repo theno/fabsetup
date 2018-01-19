@@ -16,8 +16,8 @@ from fabsetup.fabutils import run, suggest_localhost, subtask
 from fabsetup.fabutils import install_file, exists
 from fabsetup.fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
 from fabsetup.utils import flo
-from fabsetup.utils import green, blue, magenta, red
-from fabsetup.utils import query_input
+from fabsetup.utils import cyan, blue, green, magenta, red
+from fabsetup.utils import query_input, query_yes_no
 from fabsetup.addons import load_pip_addons, load_repo_addons
 
 import setup  # load tasks from module setup
@@ -134,14 +134,10 @@ def init_git_repo(basedir):
     if os.path.isdir(flo('{basedir_abs}/.git')):
         print('git repo already initialized (skip)')
     else:
-        if not exists('{basedir_abs}/.gitignore'):
-            install_file(path=flo('{basedir_abs}/.gitignore'),
-                         from_path='~/repos/my_presi/.gitignore')
         fabric.operations.local(flo('cd {basedir} && git init'))
         fabric.operations.local(flo('cd {basedir} && git add .'))
         fabric.operations.local(
             flo('cd {basedir} && git commit -am "Initial commit"'))
-    # TODO: ask to push to github
 
 
 @subtask
@@ -168,7 +164,7 @@ def summary(addon_dir, username, taskname):
     print('    fab -f fabfile-dev.py pypi  # publish pip package at pypi')
     print('')
     print('The task code is defined in')
-    print(flo('  {addon_dir}/fabsetup_{username}_{taskname}/__init__.py'))
+    print(cyan(flo('  {addon_dir}/fabsetup_{username}_{taskname}/__init__.py')))
     print('Your task output should be in markdown style.')
 
 
@@ -180,35 +176,47 @@ def new_addon():
     The repo will contain the fabsetup addon boilerplate.
 
     Running this task you have to enter:
-    * Your github user account (your pypi account should be the same or similar)
-    * Addon / (main) task name
-    * Headline and short description for the task docstring and the README.md
+    * your github user account (your pypi account should be the same or similar)
+    * addon name
+    * task name
+    * headline, short description, and touched (and created) files and dirs
+      for the task docstring and the README.md
 
     Created files and dirs:
 
-        ~/.fabsetup-repos/fabsetup-{user}-{task}
-                          ├── fabfile.py
+        ~/.fabsetup-repos/fabsetup-{user}-{addon}
                           ├── fabfile-dev.py
+                          ├── fabfile.py
                           ├── fabsetup_{user}_{task}
                           │   ├── __init__.py  <----- task definition
                           │   └── _version.py
+                          ├── .git
+                          │   ├── ...
+                          │   ├── config
+                          │   └── ...
+                          ├── .gitignore
                           ├── README.md
                           ├── requirements.txt
                           └── setup.py
     '''
     username = query_input('github username:')
 
-    addonname = query_input('addon name:', default='termdown')
+    addonname = query_input('\naddon name:', default='termdown')
     addonname = addonname.replace('_', '-').replace(' ', '-')  # minus only
+    print('└─> full addon name: {0}'.format(
+        cyan(flo('fabsetup-{username}-{addonname}\n'))))
 
     taskname = query_input('task name:', default=addonname.replace('-', '_'))
     taskname = taskname.replace('-', '_').replace(' ', '_')  # underscores only
+    print('└─> full task name: {0}'.format(
+        cyan(flo('{username}.{taskname}\n'))))
 
     addon_dir = os.path.expanduser(flo(
         '~/.fabsetup-repos/fabsetup-{username}-{addonname}'))
 
     if os.path.exists(addon_dir):
-        print(red(flo('\n{addon_dir} already exists. abort')))
+        print(red(flo('\n{addon_dir} already exists.')))
+        print('abort')
     else:
         headline = query_input(
             'short task headline:',
@@ -218,13 +226,17 @@ def new_addon():
             default='Command `termdown 25m` is practical '
                     'to time pomodoro sessions.')
         touched_files = query_input(
-            'Affected files and dirs:',
+            'affected files and dirs:',
             default='~/bin/termdown')
 
-        create_files(addon_dir, username, addonname, taskname,
-                     headline, description, touched_files)
-        init_git_repo(addon_dir)
-        summary(addon_dir, username, taskname)
+        print('\naddon git-repository dir: {0}'.format(cyan(addon_dir)))
+        if not query_yes_no('create new addon?', default='yes'):
+            print('abort')
+        else:
+            create_files(addon_dir, username, addonname, taskname,
+                         headline, description, touched_files)
+            init_git_repo(addon_dir)
+            summary(addon_dir, username, taskname)
 
 
 load_pip_addons(globals())
