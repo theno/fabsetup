@@ -102,9 +102,55 @@ def dfh():
     run('sudo  df -h')
 
 
+import ConfigParser
+import StringIO
+
+
+def git_name_and_email():
+    config = ConfigParser.ConfigParser()
+    filename = os.path.expanduser('~/.gitconfig')
+    try:
+        with open(filename) as fh:
+            gitconfig = fh.readlines()
+    except IOError:
+        print(red('~/.gitconfig does not exist') + ', run:\n')
+        print('    git config --global user.name "Your Name"')
+        print('    git config --global user.email "your.email@example.com"')
+        sys.exit()
+
+    config.readfp(StringIO.StringIO(''.join([line.lstrip()
+                                             for line
+                                             in gitconfig])))
+
+    name = None
+    email = None
+    try:
+        name = config.get('user', 'name')
+    except ConfigParser.NoOptionError:
+        print(red('missing user.name in ~/.gitconfig') + ', run:\n')
+        print('    git config --global user.name "Your Name"')
+        sys.exit()
+    try:
+        email = config.get('user', 'email')
+    except ConfigParser.NoOptionError:
+        print(red('missing user.email in ~/.gitconfig') + ', run:\n')
+        print('    git config --global user.email "your.email@example.com"')
+        sys.exit()
+
+    return name, email
+
+
 @subtask
-def create_files(addon_dir, username, addonname, taskname,
-                 headline, description, touched_files):
+def create_files(
+        addon_dir,  # '/home/theno/.fabsetup-repos/fabsetup-theno-termdown'
+        username,   # 'theno'
+        addonname,  # 'termdown'
+        taskname,   # 'termdown'
+        author,
+        author_email,
+        headline='',
+        description='',
+        touched_files=''):
     filenames = [
         '.gitignore',
         'fabfile-dev.py',
@@ -119,11 +165,17 @@ def create_files(addon_dir, username, addonname, taskname,
     for filename in filenames:
         install_file(
             path=flo('~/.fabsetup-repos/fabsetup-USER-ADDON/{filename}'),
-            username=username, taskname=taskname,
-            headline=headline, description=description,
+            username=username,
+            addonname=addonname,
+            taskname=taskname,
+            headline=headline,
+            description=description,
             touched_files=touched_files,
-            full_username=username,  # TODO
-            USER=username, ADDON=addonname, TASK=taskname)
+            author=author,
+            author_email=author_email,
+            USER=username,
+            ADDON=addonname,
+            TASK=taskname)
     print('')
     fabric.operations.local(flo('tree {addon_dir}'))
 
@@ -138,6 +190,22 @@ def init_git_repo(basedir):
         fabric.operations.local(flo('cd {basedir} && git add .'))
         fabric.operations.local(
             flo('cd {basedir} && git commit -am "Initial commit"'))
+
+
+@subtask
+def create_github_remote_repo(basedir, github_user, github_repo):
+    if query_yes_no('Create remote repo at github.com?', default='yes'):
+        run(flo("cd {basedir}  &&  "
+                "curl -u '{github_user}' https://api.github.com/user/repos "
+                "-d '") + '{"name":"' + flo('{github_repo}"') + "}'")
+        run(flo('cd {basedir}  &&  '
+                'git remote add origin '
+                'git@github.com:{github_user}/{github_repo}.git'))
+        run(flo('cd {basedir}  &&  git push origin master'))
+    else:
+        print('please, do it yourself:\n'
+              '  https://help.github.com/articles/'
+              'adding-an-existing-project-to-github-using-the-command-line/')
 
 
 @subtask
@@ -199,12 +267,21 @@ def new_addon():
                           ├── requirements.txt
                           └── setup.py
     '''
+    try:
+        author, author_email = git_name_and_email()
+    except IOError:
+        print(red('~/.gitconfig does not exist') + ', run:\n')
+        print('    git config --global user.name "Your Name"')
+        print('    git config --global user.email "your.email@example.com"')
+        sys.exit()
+
     username = query_input('github username:')
 
     addonname = query_input('\naddon name:', default='termdown')
     addonname = addonname.replace('_', '-').replace(' ', '-')  # minus only
-    print('└─> full addon name: {0}'.format(
-        cyan(flo('fabsetup-{username}-{addonname}\n'))))
+    full_addonname = flo('fabsetup-{username}-{addonname}')
+    print('└─> full addon name: {0}\n'.format(
+        cyan(full_addonname)))
 
     taskname = query_input('task name:', default=addonname.replace('-', '_'))
     taskname = taskname.replace('-', '_').replace(' ', '_')  # underscores only
@@ -218,8 +295,12 @@ def new_addon():
         print(red(flo('\n{addon_dir} already exists.')))
         print('abort')
     else:
+        print('~/.gitconfig')
+        print('├─> author: {0}'.format(cyan(author)))
+        print('└─> author email: {0}'.format(cyan(author_email)))
+
         headline = query_input(
-            'short task headline:',
+            '\nshort task headline:',
             default='Install or update termdown.')
         description = query_input(
             'describing infos:',
@@ -234,8 +315,12 @@ def new_addon():
             print('abort')
         else:
             create_files(addon_dir, username, addonname, taskname,
+                         author, author_email,
                          headline, description, touched_files)
             init_git_repo(addon_dir)
+            create_github_remote_repo(basedir=addon_dir,
+                                      github_user=username,
+                                      github_repo=full_addonname)
             summary(addon_dir, username, taskname)
 
 

@@ -42,13 +42,13 @@ description = __doc__.split('\n')[0]
 long_description = create_readme_with_long_description()
 
 setup(
-    name='fabsetup-theno-termdown',
+    name='fabsetup-{{username}}-{{addonname}}',
     version=version,
     description=description,
     long_description=long_description,
-    url='https://github.com/theno/fabsetup-theno-termdown',
-    author='Theodor Nolte',
-    author_email='fabsetup-theno-termdown@theno.eu',
+    url='https://github.com/{{username}}/fabsetup-{{username}}-{{addonname}}',
+    author='{{author}}',
+    author_email='{{author_email}}',
     license='MIT',
     classifiers=[
         'Development Status :: 3 - Alpha',
