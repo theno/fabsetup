@@ -194,7 +194,9 @@ def init_git_repo(basedir):
 
 @subtask
 def create_github_remote_repo(basedir, github_user, github_repo):
-    if query_yes_no('Create remote repo at github.com?', default='yes'):
+    repo_url = cyan(flo('https://github.com/{github_user}/{github_repo}'))
+    question = flo('Create remote repo {repo_url} at github.com?')
+    if query_yes_no(question, default='yes'):
         run(flo("cd {basedir}  &&  "
                 "curl -u '{github_user}' https://api.github.com/user/repos "
                 "-d '") + '{"name":"' + flo('{github_repo}"') + "}'")
@@ -203,7 +205,7 @@ def create_github_remote_repo(basedir, github_user, github_repo):
                 'git@github.com:{github_user}/{github_repo}.git'))
         run(flo('cd {basedir}  &&  git push origin master'))
     else:
-        print('please, do it yourself:\n'
+        print('\nplease, do it yourself:\n'
               '  https://help.github.com/articles/'
               'adding-an-existing-project-to-github-using-the-command-line/')
 
@@ -296,8 +298,8 @@ def new_addon():
         print('abort')
     else:
         print('~/.gitconfig')
-        print('├─> author: {0}'.format(cyan(author)))
-        print('└─> author email: {0}'.format(cyan(author_email)))
+        print('├─> author: {0} ─> LICENSE, setup.py'.format(cyan(author)))
+        print('└─> author email: {0} ─> setup.py'.format(cyan(author_email)))
 
         headline = query_input(
             '\nshort task headline:',
