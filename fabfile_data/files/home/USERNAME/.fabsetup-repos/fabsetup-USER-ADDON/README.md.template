@@ -1,1 +1,59 @@
-TODO
+# fabsetup-{{username}}-{{addonname}}
+
+{{headline}}
+
+This is a fabsetup addon.
+
+## Usage
+
+```bash
+# task info
+fabsetup -d {{username}}.{{taskname}}
+
+# run task
+fabsetup {{username}}.{{taskname}}
+```
+
+## Installation
+
+As a pypi package with command pip (recommended way):
+
+```bash
+pip install  fabsetup-{{username}}-{{addonname}}
+```
+
+Or as a git repository checkout:
+
+```bash
+mkdir -p ~/.fabsetup-repos
+git clone https://github.com/{{username}}/fabsetup-{{username}}-{{addonname}}.git  ~/.fabsetup-repos/fabsetup-{{username}}-{{addonname}}
+
+# now, fabsetup loads the addon
+fabsetup -d {{username}}.{{taskname}}
+
+# you can also run the task directly
+cd ~/.fabsetup-repos/fabsetup-{{username}}-{{addonname}}
+fab -d {{username}}.{{taskname}}
+
+# or from a checked out fabsetup repo
+cd ~/.fabsetup
+fab -d {{username}}.{{taskname}}
+```
+
+## Development
+
+```bash
+# save changes
+git commit -am 'I describe my changes'
+
+# upload to github
+git push origin master
+
+# update version number in fabsetup_{{username}}_{{taskname}}
+
+# create and publish package at pypi
+fab -f fabfile-dev.py  pypi
+
+# clean up
+fab -f fabfile-dev.py  clean
+```
