@@ -1,9 +1,9 @@
 import sys
 from os.path import dirname
 
-from fabric.api import local, task
+from fabric.api import execute, local, task
 
-from utlz import flo
+from utlz import flo, cyan
 
 
 def query_yes_no(question, default="yes"):
@@ -40,12 +40,47 @@ def query_yes_no(question, default="yes"):
 
 
 @task
+def clean():
+    '''Delete temporary files not under version control.'''
+
+    basedir = dirname(__file__)
+
+    print(cyan('delete temp files and dirs for packaging'))
+    local(flo(
+        'rm -rf  '
+        '{basedir}/.eggs/  '
+        '{basedir}/fabsetup_{{username}}_{{taskname}}.egg-info/  '
+        '{basedir}/dist  '
+        '{basedir}/README  '
+        '{basedir}/build/  '
+    ))
+
+    print(cyan('\ndelete temp files and dirs for editing'))
+    local(flo(
+        'rm -rf  '
+        '{basedir}/.cache  '
+        '{basedir}/.ropeproject  '
+    ))
+
+    print(cyan('\ndelete bytecode compiled versions of the python src'))
+    # cf. http://stackoverflow.com/a/30659970
+    local(flo('find  {basedir}/fabsetup_{{username}}_{{taskname}}  '
+              'fabfile*  ') +
+          '\( -name \*pyc -o -name \*.pyo -o -name __pycache__ '
+          '-o -name \*.so -o -name \*.o -o -name \*.c \) '
+          '-prune '
+          '-exec rm -rf {} + || true')
+
+
+@task
 def pypi():
     '''Build package and upload to pypi.'''
-    if query_yes_no('version updated in setup.py?'):
-
-        # print(cyan('\n## clean-up\n'))
-        # execute(clean)
+    if not query_yes_no('version updated in '
+                        '`fabsetup_{{username}}_{{taskname}}/_version.py`?'):
+        print('abort')
+    else:
+        print(cyan('\n## clean-up\n'))
+        execute(clean)
 
         basedir = dirname(__file__)
 
