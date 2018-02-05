@@ -10,6 +10,7 @@ from fabric.contrib.files import exists
 
 from fabsetup.fabutils import checkup_git_repo, install_packages
 from fabsetup.fabutils import needs_packages, task, run, suggest_localhost, put
+from fabsetup.fabutils import FABFILE_DATA_DIR
 from fabsetup.utils import flo, query_yes_no
 from fabsetup.utils import query_input, blue, cyan, magenta, filled_out_template
 
@@ -29,6 +30,8 @@ def owncloud():
                    question='\nEnter site-name of Your Owncloud web service',
                    default=flo('owncloud.{hostname}'), color=cyan)
     username = env.user
+
+    fabfile_data_dir = FABFILE_DATA_DIR
 
     print(magenta(' install owncloud'))
     repository = ''.join([
@@ -56,7 +59,7 @@ def owncloud():
 
     print(magenta(' nginx setup for owncloud'))
     filename = 'owncloud_site_config.template'
-    path = flo('fabfile_data/files/etc/nginx/sites-available/{filename}')
+    path = flo('{fabfile_data_dir}/files/etc/nginx/sites-available/{filename}')
     from_str = filled_out_template(path, username=username, sitename=sitename,
                                    hostname=hostname)
     with tempfile.NamedTemporaryFile(prefix=filename) as tmp_file:
@@ -76,7 +79,7 @@ def owncloud():
 
     template = 'www.conf'
     to = flo('/etc/php5/fpm/pool.d/{template}')
-    from_ = flo('fabfile_data/files{to}')
+    from_ = flo('{fabfile_data_dir}/files{to}')
     put(from_, '/tmp/')
     sudo(flo('mv /tmp/{template} {to}'))
     sudo(flo('chown root.root {to}'))
@@ -84,7 +87,7 @@ def owncloud():
 
     template = 'php.ini'
     to = flo('/etc/php5/fpm/{template}')
-    from_ = flo('fabfile_data/files{to}')
+    from_ = flo('{fabfile_data_dir}/files{to}')
     put(from_, '/tmp/')
     sudo(flo('mv /tmp/{template} {to}'))
     sudo(flo('chown root.root {to}'))
@@ -110,6 +113,8 @@ def fdroid():
                    question='\nEnter site-name of Your F-Droid web service',
                    default=flo('fdroid.{hostname}'))
     username = env.user
+
+    fabfile_data_dir = FABFILE_DATA_DIR
 
     print(magenta(' install fdroidserver'))
     res = run('dpkg --get-selections | '
@@ -163,7 +168,7 @@ def fdroid():
     run(flo('echo -e "User-agent: *\\nDisallow: /" > {fdroid_dir}/robots.txt'))
 
     filename = 'fdroid_site_config.template'
-    path = flo('fabfile_data/files/etc/nginx/sites-available/{filename}')
+    path = flo('{fabfile_data_dir}/files/etc/nginx/sites-available/{filename}')
     from_str = filled_out_template(path, username=username, sitename=sitename,
                                    hostname=hostname)
     with tempfile.NamedTemporaryFile(prefix=filename) as tmp_file:
@@ -215,9 +220,10 @@ def vnc_raspi_osmc():
     builddir = flo('/home/{username}/repos/dispmanx_vnc')
     run(flo('sudo  cp  {builddir}/dispmanx_vncserver  /usr/bin'))
     run('sudo  chmod +x  /usr/bin/dispmanx_vncserver')
-    put('fabfile_data/files/etc/dispmanx_vncserver.conf', '/tmp/')
+    fabfile_data_dir = FABFILE_DATA_DIR
+    put('{fabfile_data_dir}/files/etc/dispmanx_vncserver.conf', '/tmp/')
     run('sudo mv  /tmp/dispmanx_vncserver.conf  /etc/dispmanx_vncserver.conf')
-    put('fabfile_data/files/etc/systemd/system/dispmanx_vncserver.service',
+    put('{fabfile_data_dir}/files/etc/systemd/system/dispmanx_vncserver.service',
         '/tmp/')
     run('sudo mv  /tmp/dispmanx_vncserver.service  '
         '/etc/systemd/system/dispmanx_vncserver.service')

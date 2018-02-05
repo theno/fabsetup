@@ -1,21 +1,21 @@
-# fabsetup_custom
+# fabsetup-custom
 
 For custom tasks, files, templates and configurations you can use the git
-repository `fabsetup_custom`.
+repository `fabsetup-custom`.
 
-Initialize git repository `fabsetup_custom`:
+Initialize git repository `fabsetup-custom`:
   ```sh
   cd  ~/repos/fabsetup
 
   fab INIT
   ```
 
-Structure of git repo `fabsetup_custom`:
+Structure of git repo `fabsetup-custom`:
 
   ```sh
-  tree ~/repos/fabsetup/fabsetup_custom/
+  tree ~/.fabsetup-custom/
 
-  ~/repos/fabsetup/fabsetup_custom/
+  ~/.fabsetup-custom/
   ├── config.py          # <-- configurations are made here
   ├── fabfile_
   │   ├── custom.py      # <--- custom tasks, e.g. for 'fab custom.latex'
@@ -24,10 +24,10 @@ Structure of git repo `fabsetup_custom`:
       └── ...            # <--- custom files and templates
   ```
 
-Every time you change something in your `fabsetup_custom` repo you should
-commit the changes and create a backup.  Note: the `fabsetup_custom` repo
+Every time you change something in your `fabsetup-custom` repo you should
+commit the changes and create a backup.  Note: the `fabsetup-custom` repo
 should not be made public, e.g. on github.
 
-Tasks which use data from the `fabsetup_custom` are decorated by the decorator
-function `needs_repo_fabsetup_custom()` which is defined in
-[`fabutils.py`](../fabfile/fabutils.py).
+Tasks which use data from the `fabsetup-custom` are decorated by the decorator
+function `needs_repo_fabsetup-custom()` which is defined in
+[`fabutils.py`](../fabsetup/fabutils.py).

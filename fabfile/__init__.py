@@ -2,6 +2,7 @@
 '''Set up and maintain a local or remote (Ubuntu) linux system.'''
 
 
+import fabric.main
 import fabric.operations
 import os.path
 import sys
@@ -30,9 +31,11 @@ if not isdir(FABSETUP_CUSTOM_DIR):
     @task(default=True)
     @needs_repo_fabsetup_custom
     def INIT():
-        '''Init repo `fabsetup_custom` with custom tasks and config.'''
+        '''Init repo `~/.fabsetup-custom` with custom tasks and config.'''
         # decorator @needs_repo_fabsetup_custom makes the job
         print(green('Initialization finished\n'))
+        fabsetup_custom_dir = FABSETUP_CUSTOM_DIR
+        fabric.operations.local(flo('tree {fabsetup_custom_dir}'))
         print('List available tasks: ' + blue('fab -l'))
         print('Show details of a task: `fab -d <task>`, eg.: ' +
               blue('fab -d setup_webserver'))
@@ -44,7 +47,7 @@ if not isdir(FABSETUP_CUSTOM_DIR):
         # decorator @needs_repo_fabsetup_custom makes the job
         print('Init completed. Now run this task again.')
         # Next time, the task setup_desktop from
-        # fabsetup_custom/fabfile_/__init__.py will be executed
+        # ~/.fabsetup-custom/fabfile_/__init__.py will be executed
         # instead
 
     @task
@@ -54,10 +57,18 @@ if not isdir(FABSETUP_CUSTOM_DIR):
         # decorator @needs_repo_fabsetup_custom makes the job
         print('Init completed. Now run this task again.')
         # Next time, the task setup_webserver from
-        # fabsetup_custom/fabfile_/__init__.py will be executed
+        # ~/.fabsetup-custom/fabfile_/__init__.py will be executed
         # instead
 
 else:
+    from fabric.api import task
+    _dir = dirname(dirname(__file__))
+
+    @task(default=True)
+    def list_tasks():
+        '''List available tasks.'''
+        fabric.operations.local('cd {_dir} && fab -l'.format(_dir=_dir))
+
     import_fabsetup_custom(globals())
 
 

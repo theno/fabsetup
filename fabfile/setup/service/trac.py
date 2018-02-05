@@ -10,6 +10,7 @@ from fabsetup.fabutils import install_file, needs_packages, run, subtask
 from fabsetup.fabutils import subsubtask, dn_cn_of_certificate_with_san
 from fabsetup.fabutils import task, put, exists, print_msg
 from fabsetup.fabutils import needs_repo_fabsetup_custom
+from fabsetup.fabutils import FABFILE_DATA_DIR
 from fabsetup.utils import flo, query_input, query_yes_no
 from fabsetup.utils import filled_out_template
 from fabsetup.utils import namedtuple
@@ -268,7 +269,8 @@ def nginx_site_config(username, sitename, hostname):
     filename = 'trac_site_config_gunicorn.template'
 #    filename = 'trac_site_config_gunicorn2.template'
 #    filename = 'trac_site_config_wsgi.template'
-    path = flo('fabfile_data/files/etc/nginx/sites-available/{filename}')
+    fabfile_data_dir = FABFILE_DATA_DIR
+    path = flo('{fabfile_data_dir}/files/etc/nginx/sites-available/{filename}')
 #    dn_cn = query_input('Common Name (CN) of the Distinguished Named (DN) '
 #                        'of the webserver certificate?',
 #                        default=flo('haw2icalendar.{hostname}'))
