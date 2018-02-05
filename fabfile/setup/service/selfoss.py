@@ -9,6 +9,7 @@ from fabsetup.fabutils import custom_task as task, subtask, subsubtask
 from fabsetup.fabutils import comment_out_line, print_msg, install_file
 from fabsetup.fabutils import update_or_append_line
 from fabsetup.fabutils import uncomment_or_update_or_append_line
+from fabsetup.fabutils import FABFILE_DATA_DIR
 from fabsetup.utils import flo, query_input, filled_out_template
 
 
@@ -201,7 +202,8 @@ def create_directory_structure(site_dir):
 @subtask
 def nginx_site_config(username, sitename, hostname):
     filename = 'selfoss_site_config.template'
-    path = flo('fabfile_data/files/etc/nginx/sites-available/{filename}')
+    fabfile_data_dir = FABFILE_DATA_DIR
+    path = flo('{fabfile_data_dir}/files/etc/nginx/sites-available/{filename}')
     dn_cn = flo('{hostname}')
     from_str = filled_out_template(path, username=username, sitename=sitename,
                                    hostname=hostname, dn_cn=dn_cn)

@@ -4,11 +4,10 @@
 * https://pypi.python.org/pypi/fabsetup
 """
 
-import os
+import os.path
 import shutil
 from setuptools import setup, find_packages
 from codecs import open
-from os import path
 
 
 def create_readme_with_long_description():
@@ -43,11 +42,8 @@ with open(filename, 'rt') as fh:
 description = __doc__.split('\n')[0]
 long_description = create_readme_with_long_description()
 
-data_files = []
-for directory, _, files in os.walk('fabfile_data'):
-    files = [path.join(directory, file_) for file_ in files]
-    if files:
-        data_files.append((directory, files))
+packages = find_packages(exclude=['contrib', 'docs', 'tests',
+                                  'fabsetup_custom'])
 
 setup(
     name='fabsetup',
@@ -58,7 +54,11 @@ setup(
     author='Theodor Nolte',
     author_email='fabsetup@theno.eu',
     license='MIT',
-
+    entry_points={
+        'console_scripts': [
+            'fabsetup = fabsetup:main',
+        ],
+    },
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
@@ -69,6 +69,6 @@ setup(
         'Programming Language :: Python :: 2.7',
     ],
     keywords='python development utilities library',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests',
-                                    'fabfile_data', 'fabsetup_custom']),
+    packages=packages,
+    include_package_data=True
 )

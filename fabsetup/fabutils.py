@@ -3,7 +3,7 @@ import re
 import sys
 import tempfile
 from functools import wraps
-from os.path import dirname, isdir, isfile, join
+from os.path import dirname, expanduser, isdir, isfile, join
 
 import fabric.api
 import fabric.contrib.files
@@ -19,8 +19,9 @@ from utils import comment_out_line as comment_out_local
 from utils import uncomment_or_update_or_append_line as uua_local
 
 
-FABSETUP_DIR = dirname(dirname(__file__))
-FABSETUP_CUSTOM_DIR = join(dirname(dirname(__file__)), 'fabsetup_custom')
+FABSETUP_DIR = dirname(__file__)
+FABFILE_DATA_DIR = join(FABSETUP_DIR, 'fabfile-data')
+FABSETUP_CUSTOM_DIR = join(expanduser('~'), '.fabsetup-custom')
 
 
 def suggest_localhost(func):
@@ -82,8 +83,7 @@ def put(*args, **kwargs):
 
 
 def import_fabsetup_custom(globals_):
-    # import custom tasks from
-    # ../fabsetup_custom/fabfile_/__init__.py
+    # import custom tasks from ~/.fabsetup-custom/fabfile_/__init__.py
     sys.path = [FABSETUP_CUSTOM_DIR] + sys.path
     import fabfile_ as _
     globals_.update(_.__dict__)
@@ -91,19 +91,18 @@ def import_fabsetup_custom(globals_):
 
 
 def needs_repo_fabsetup_custom(func):
-    '''Decorator, ensures that fabsetup_custom exists and it's a git repo.'''
+    '''Decorator, ensures that fabsetup-custom exists and it's a git repo.'''
     from fabric.api import local
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        custom_dir = join(FABSETUP_DIR, 'fabsetup_custom')
-        presetting_dir = join(FABSETUP_DIR, 'fabfile_data',
-                              'presetting_fabsetup_custom')
+        custom_dir = FABSETUP_CUSTOM_DIR
+        presetting_dir = join(FABFILE_DATA_DIR, 'presetting-fabsetup-custom')
         if not isdir(custom_dir):
             print(yellow('\n** **     Init ') +
-                  yellow('fabsetup_custom', bold=True) +
+                  yellow('~/.fabsetup-custom', bold=True) +
                   yellow('      ** **\n'))
-            print(yellow('** Create files in dir fabsetup_custom **'))
+            print(yellow(flo('** Create files in dir {custom_dir} **')))
             local(flo('mkdir -p {custom_dir}'))
             local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
             import_fabsetup_custom(globals())
@@ -112,13 +111,13 @@ def needs_repo_fabsetup_custom(func):
                 local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
 
         if not isdir(join(custom_dir, '.git')):
-            print(yellow('\n** Git repo fabsetup_custom: init and first commit'
-                         '**'))
+            print(yellow(
+                '\n** Git repo ~/.fabsetup-custom: init and first commit **'))
             local(flo('cd {custom_dir} && git init'))
             local(flo('cd {custom_dir} && git add .'))
             local(flo('cd {custom_dir} && git commit -am "Initial commit"'))
             print(yellow("** Done. Don't forget to create a backup of your "
-                         'fabsetup_custom repo **\n'))
+                         '~/.fabsetup-custom repo **\n'))
             print(yellow("** But do not make it public, it's custom **\n",
                          bold=True))
         else:
@@ -127,7 +126,7 @@ def needs_repo_fabsetup_custom(func):
                 res = local(cmd, capture=True)
                 if res:
                     print(yellow('\n** git repo  ') +
-                          magenta('fabsetup_custom  ') +
+                          magenta('~/.fabsetup-custom  ') +
                           yellow('has uncommitted changes: **'))
                     print(cmd)
                     print(yellow(res, bold=True))
@@ -346,13 +345,14 @@ def install_file(path, sudo=False, from_path=None, **substitutions):
      * common file.template
     '''
     # source paths 'from_custom' and 'from_common'
-    from_head = FABSETUP_DIR
     from_path = from_path or path
+    # remove beginning '/' (if any), eg '/foo/bar' -> 'foo/bar'
     from_tail = join('files', from_path.lstrip(os.sep))
     if from_path.startswith('~/'):
-        from_tail = join('files', 'home', 'USERNAME', from_path[2:])
-    from_common = join(from_head, 'fabfile_data', from_tail)
-    from_custom = join(from_head, 'fabsetup_custom', from_tail)
+        from_tail = join('files', 'home', 'USERNAME',
+                         from_path[2:])  # without beginning '~/'
+    from_common = join(FABFILE_DATA_DIR, from_tail)
+    from_custom = join(FABSETUP_CUSTOM_DIR, from_tail)
 
     # target path 'to_' (path or tempfile)
     for subst in ['SITENAME', 'USER', 'ADDON', 'TASK']:
@@ -517,7 +517,7 @@ def dn_cn_of_certificate_with_san(domain):
     certificate which contains the `domain` in its Subject Alternativ Name (san)
     list.
 
-    Needs repo fabsetup_custom.
+    Needs repo ~/.fabsetup-custom.
 
     Return None if no certificate is configured with `domain` in SAN.
     '''
