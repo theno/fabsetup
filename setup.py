@@ -56,7 +56,7 @@ setup(
     license='MIT',
     entry_points={
         'console_scripts': [
-            'fabsetup = fabsetup:main',
+            'fabsetup = fabsetup.__main__:main',
         ],
     },
     classifiers=[
