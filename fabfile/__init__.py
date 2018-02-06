@@ -1,11 +1,13 @@
 # ~*~ coding: utf-8 ~*~
 '''Set up and maintain a local or remote (Ubuntu) linux system.'''
 
+import ConfigParser
+import os.path
+import StringIO
+import sys
 
 import fabric.main
 import fabric.operations
-import os.path
-import sys
 
 from os.path import dirname, isdir, realpath
 sys.path.append(dirname(dirname(realpath(__file__))))
@@ -113,11 +115,7 @@ def dfh():
     run('sudo  df -h')
 
 
-import ConfigParser
-import StringIO
-
-
-def git_name_and_email():
+def git_name_and_email_or_die():
     config = ConfigParser.ConfigParser()
     filename = os.path.expanduser('~/.gitconfig')
     try:
@@ -280,13 +278,7 @@ def new_addon():
                           ├── requirements.txt
                           └── setup.py
     '''
-    try:
-        author, author_email = git_name_and_email()
-    except IOError:
-        print(red('~/.gitconfig does not exist') + ', run:\n')
-        print('    git config --global user.name "Your Name"')
-        print('    git config --global user.email "your.email@example.com"')
-        sys.exit()
+    author, author_email = git_name_and_email_or_die()
 
     username = query_input('github username:')
 
