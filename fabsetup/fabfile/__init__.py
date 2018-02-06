@@ -38,9 +38,9 @@ if not isdir(FABSETUP_CUSTOM_DIR):
         print(green('Initialization finished\n'))
         fabsetup_custom_dir = FABSETUP_CUSTOM_DIR
         fabric.operations.local(flo('tree {fabsetup_custom_dir}'))
-        print('List available tasks: ' + blue('fab -l'))
-        print('Show details of a task: `fab -d <task>`, eg.: ' +
-              blue('fab -d setup_webserver'))
+        print('\nList available tasks: ' + blue('fabsetup -l'))
+        print('Show details of a task: `fabsetup -d <task>`, eg: ' +
+              blue('fabsetup -d new_addon'))
 
     @task
     @needs_repo_fabsetup_custom
