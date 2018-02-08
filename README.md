@@ -53,3 +53,4 @@ __[Setup-Howtos](./howtos "cookbook")__:
  * [Host a Selfoss Service](./howtos/selfoss.md) (RSS Reader Web Application)
  * [Install latest Node.js via nvm](./howtos/nodejs.md)
  * [Create or update a reveal.js presentation](./howtos/revealjs.md)
+ * __[How to create and write a fabsetup-addon](./howtos/fabsetup-addon.md)__
