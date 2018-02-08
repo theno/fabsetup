@@ -25,8 +25,8 @@ FABSETUP_CUSTOM_DIR = join(expanduser('~'), '.fabsetup-custom')
 
 
 def suggest_localhost(func):
-    '''Prompt user for value of env.host_string with default to 'localhost'
-    when env.host_string is empty.
+    '''Decorator: prompt user for value of env.host_string with default to
+    'localhost' when env.host_string is empty.
 
     Modification of decorator function fabric.network.needs_host
     '''
@@ -42,7 +42,9 @@ def suggest_localhost(func):
                 host_string = 'localhost'
             env.update(to_dict(host_string))
         return func(*args, **kwargs)
+
     host_prompting_wrapper.undecorated = func
+
     return host_prompting_wrapper
 
 
@@ -91,7 +93,7 @@ def import_fabsetup_custom(globals_):
 
 
 def needs_repo_fabsetup_custom(func):
-    '''Decorator, ensures that fabsetup-custom exists and it's a git repo.'''
+    '''Decorator, ensures that fabsetup-custom exists and it is a git repo.'''
     from fabric.api import local
 
     @wraps(func)
@@ -146,8 +148,11 @@ def _non_installed(packages):
 
 
 def needs_packages(*packages):
-    '''Decorator, ensures that packages are installed (local or remote).'''
+    '''Decorator: ensure that packages are installed on host given by fabric
+    argument `-H` (local or remote).
+    '''
     def real_decorator(func):
+
         @wraps(func)
         def wrapper(*args, **kwargs):
             non_installed = _non_installed(packages)
@@ -155,11 +160,13 @@ def needs_packages(*packages):
                 what_for = 'in order to run this task'
                 install_packages(non_installed, what_for=what_for)
             return func(*args, **kwargs)
+
         return wrapper
+
     return real_decorator
 
 
-def task(func):
+def task(func, *args, **kwargs):
     '''Composition of decorator functions for inherent self-documentation on
     task execution.
 
@@ -167,13 +174,18 @@ def task(func):
     '''
     prefix = '\n# '
     tail = '\n'
-    return fabric.api.task(print_full_name(color=magenta, prefix=prefix, tail=tail)(print_doc1(func)))
+    return fabric.api.task(
+        print_full_name(color=magenta,
+                        prefix=prefix,
+                        tail=tail)(print_doc1(func)),
+        *args,
+        **kwargs)
 
 
-def custom_task(func):
+def custom_task(func, *args, **kwargs):
     '''Decorator task() composed with decorator needs_repo_fabsetup_custom().
     '''
-    return task(needs_repo_fabsetup_custom(func))
+    return task(needs_repo_fabsetup_custom(func, *args, **kwargs))
 
 
 def subtask(*args, **kwargs):
@@ -216,7 +228,7 @@ def _is_sudoer(what_for=''):
 
     Should be called non-eager if sudo is wanted only.
     '''
-    if env.get('nosudo', None) == None:
+    if env.get('nosudo', None) is None:
         if what_for:
             print(yellow(what_for))
         with quiet():
@@ -258,17 +270,20 @@ def install_packages(packages,
             if _is_sudoer('Want to install dpkg packages'):
                 do_install = True
             else:
-                do_install = False # cannot install anything
+                do_install is False  # cannot install anything
                 info = yellow(' '.join([
                     'This deb packages are missing to be installed',
-                    flo("{what_for}: "), ', '.join(non_installed_packages),]))
+                    flo("{what_for}: "), ', '.join(non_installed_packages),
+                ]))
                 question = '  Continue anyway?'
                 go_on = query_yes_no(info + hint + question, default='no')
         else:
             # dpkg == False, unable to determine if packages are installed
-            do_install = False # cannot install anything
-            info = yellow(' '.join([flo('Required {what_for}: '),
-                                    ', '.join(non_installed_packages),]))
+            do_install = False  # cannot install anything
+            info = yellow(' '.join([
+                flo('Required {what_for}: '),
+                ', '.join(non_installed_packages),
+            ]))
             go_on = query_yes_no(info + hint + '  Continue?', default='yes')
         if not go_on:
             sys.exit('Abort')
@@ -283,6 +298,7 @@ def install_package(package):
     install_packages([package])
 
 
+# TODO: base_dir must be compliant to addons
 @needs_packages('git')
 def checkup_git_repos(repos, base_dir='~/repos',
                       verbose=False, prefix='', postfix=''):
@@ -299,6 +315,7 @@ def checkup_git_repos(repos, base_dir='~/repos',
                          prefix=prefix, postfix=postfix)
 
 
+# TODO: base_dir must be compliant to addons
 def checkup_git_repo(url, name=None, base_dir='~/repos',
                      verbose=False, prefix='', postfix=''):
     '''Checkout or update a git repo.'''
@@ -316,8 +333,8 @@ def checkup_git_repo(url, name=None, base_dir='~/repos',
     if not exists(flo('{base_dir}/{name}/.git')):
         run(flo('  &&  '.join([
                 'cd {base_dir}',
-                'git clone  {url}  {name}'
-        ])), msg='clone repo')
+                'git clone  {url}  {name}'])),
+            msg='clone repo')
     else:
         if verbose:
             print_msg('update: pull from origin')
@@ -335,6 +352,7 @@ def _install_file_from_template(from_template, to_, **substitutions):
         put(tmp_file.name, to_)
 
 
+# TODO: must be compliant to addons
 def install_file(path, sudo=False, from_path=None, **substitutions):
     '''Install file with path on the host target.
 
@@ -416,7 +434,7 @@ def update_or_append_line(filename, prefix, new_line, keep_backup=True,
                                         keep_backup, append)
     else:
         tmp_dir = tempfile.mkdtemp(suffix='', prefix='fabsetup_')
-#        fabric.api.local(flo('chmod 777 {tmp_dir}'))
+        # fabric.api.local(flo('chmod 777 {tmp_dir}'))
         local_path = os.path.join(tmp_dir, os.path.basename(filename))
         fabric.operations.get(remote_path=filename, local_path=local_path,
                               use_sudo=True, temp_dir='/tmp')
@@ -481,18 +499,29 @@ def _fetch_os_release_infos():
 
 
 def is_os(name, version_id=None):
-    '''
+    '''Return True if OS name in /etc/lsb-release of host given by fabric param
+    `-H` is the same as given by argument, False else.
+
+    If arg version_id is not None only return True if it is the same as in
+    /etc/lsb-release, too.
+
     Args:
         name: 'Debian GNU/Linux', 'Ubuntu'
-        version_id: None, '14.04' (Ubuntu), 16.04' (Ubuntu), '8' (Debian)
+        version_id(None or str): None,
+                                '14.04', (Ubuntu)
+                                '16.04', (Ubuntu)
+                                '8', (Debian)
     '''
     result = False
     os_release_infos = _fetch_os_release_infos()
+
     if name == os_release_infos.get('name', None):
+
         if version_id is None:
             result = True
         elif version_id == os_release_infos.get('version_id', None):
             result = True
+
     return result
 
 
