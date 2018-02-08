@@ -6,7 +6,7 @@ import tempfile
 from fabric.api import env
 from fabric.context_managers import warn_only
 
-from fabsetup.fabutils import install_file, needs_packages, run, subtask
+from fabsetup.fabutils import install_file_legacy, needs_packages, run, subtask
 from fabsetup.fabutils import subsubtask, dn_cn_of_certificate_with_san
 from fabsetup.fabutils import task, put, exists, print_msg
 from fabsetup.fabutils import needs_repo_fabsetup_custom
@@ -259,7 +259,7 @@ def run_tracd(site_dir, bin_dir):
 
 @subtask
 def set_up_gunicorn(site_dir, sitename):
-    install_file('~/sites/SITENAME/scripts/tracwsgi.py',
+    install_file_legacy('~/sites/SITENAME/scripts/tracwsgi.py',
                  SITENAME=sitename, site_dir=site_dir)
 
 
@@ -319,7 +319,7 @@ def run_gunicorn(site_dir):
 def install_gunicorn_upstart_script(sitename, username, site_dir):
     socket = flo('unix://{site_dir}/run/trac.sock')
     num_workers = 2
-    install_file('/etc/init/gunicorn-SITENAME.conf', sudo=True,
+    install_file_legacy('/etc/init/gunicorn-SITENAME.conf', sudo=True,
                  SITENAME=sitename, site_dir=site_dir, username=username,
                  socket=socket, num_workers=num_workers)
 

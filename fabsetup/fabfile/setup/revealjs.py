@@ -5,7 +5,7 @@ from fabric.api import execute
 
 from fabsetup.fabutils import exists, run, task, print_msg, suggest_localhost
 from fabsetup.fabutils import checkup_git_repo, subtask, subsubtask
-from fabsetup.fabutils import install_file
+from fabsetup.fabutils import install_file_legacy
 from fabsetup.fabutils import update_or_append_line, needs_repo_fabsetup_custom
 from fabsetup.utils import flo, query_input, query_yes_no
 
@@ -170,12 +170,12 @@ def custom_index_html(basedir, repo_dir):
                       " * load plugins 'menu', 'solarized', 'toc-progress'\n"
                       " * config for plugins: 'menu', 'math'\n"
                       ""))
-        install_file(path=index_html_path,
+        install_file_legacy(path=index_html_path,
                      from_path='~/repos/my_presi/index.html',
                      presi_title_space=presi_title.replace('_', ' '))
         thanks_img_path = flo('{basedir}/img/thanks.jpg')
         if not exists(thanks_img_path):
-            install_file(path=thanks_img_path,
+            install_file_legacy(path=thanks_img_path,
                          from_path='~/repos/my_presi/img/thanks.jpg')
 
 
@@ -226,7 +226,7 @@ def install_markdown_slides_template(basedir):
         presi_title = _lazy('presi_title', os.path.basename(basedir))
         presi_subtitle = _lazy('presi_subtitle')
         cur_date = run(r'date +%F', capture=True)
-        install_file(path=slides_path,
+        install_file_legacy(path=slides_path,
                      from_path='~/repos/my_presi/slides.md',
                      presi_title_upper=presi_title.replace('_', ' ').upper(),
                      presi_subtitle=presi_subtitle, cur_date=cur_date)
@@ -252,7 +252,7 @@ def install_readme(basedir):
         presi_title = _lazy('presi_title', os.path.basename(basedir))
         presi_subtitle = _lazy('presi_subtitle')
         presi_description = _lazy('presi_description')
-        install_file(path=readme_path, from_path='~/repos/my_presi/README.md',
+        install_file_legacy(path=readme_path, from_path='~/repos/my_presi/README.md',
                      presi_title=presi_title, presi_subtitle=presi_subtitle,
                      presi_description=presi_description, basedir=basedir)
 
@@ -279,7 +279,7 @@ def init_git_repo(basedir):
         print_msg('git repo already initialized (skip)')
     else:
         if not exists('{basedir_abs}/.gitignore'):
-            install_file(path=flo('{basedir_abs}/.gitignore'),
+            install_file_legacy(path=flo('{basedir_abs}/.gitignore'),
                          from_path='~/repos/my_presi/.gitignore')
         run(flo('cd {basedir} && git init'))
         run(flo('cd {basedir} && git add .'))

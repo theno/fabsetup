@@ -4,7 +4,7 @@ from fabric.api import env
 
 from fabsetup.fabutils import checkup_git_repo, needs_packages
 from fabsetup.fabutils import needs_repo_fabsetup_custom, suggest_localhost
-from fabsetup.fabutils import install_file, run, subtask, subsubtask, task
+from fabsetup.fabutils import install_file_legacy, run, subtask, subsubtask, task
 from fabsetup.utils import flo, update_or_append_line, comment_out_line
 from fabsetup.utils import uncomment_or_update_or_append_line, query_yes_no
 
@@ -88,7 +88,7 @@ def set_up_powerline_fonts():
 @subtask
 def set_up_powerline_daemon(scripts_dir):
     bash_snippet = '~/.bashrc_powerline_daemon'
-    install_file(path=bash_snippet, scripts_dir=scripts_dir)
+    install_file_legacy(path=bash_snippet, scripts_dir=scripts_dir)
     prefix = flo('if [ -f {bash_snippet} ]; ')
     enabler = flo('if [ -f {bash_snippet} ]; then source {bash_snippet}; fi')
     update_or_append_line(filename='~/.bashrc', prefix=prefix, new_line=enabler)
@@ -121,7 +121,7 @@ def powerline_for_bash_or_powerline_shell(bindings_dir):
 @subtask
 def powerline_for_bash(bindings_dir):
     bash_snippet = '~/.bashrc_powerline_bash'
-    install_file(path=bash_snippet, bindings_dir=bindings_dir)
+    install_file_legacy(path=bash_snippet, bindings_dir=bindings_dir)
     prefix = flo('if [ -f {bash_snippet} ]; ')
     enabler = flo('if [ -f {bash_snippet} ]; then source {bash_snippet}; fi')
     uncomment_or_update_or_append_line(filename='~/.bashrc', prefix=prefix,

@@ -1,6 +1,6 @@
 from fabric.api import env
 
-from fabsetup.fabutils import exists, install_file, needs_packages, run, subtask
+from fabsetup.fabutils import exists, install_file_legacy, needs_packages, run, subtask
 from fabsetup.fabutils import suggest_localhost, task
 from fabsetup.utils import cyan, flo, uncomment_or_update_or_append_line
 
@@ -37,7 +37,7 @@ export NVM_DIR="$HOME/.nvm" && (
 def enable_nvm():
     '''add to ~/.bashrc:  Export of $NVM env variable and load nvm command.'''
     bash_snippet = '~/.bashrc_nvm'
-    install_file(path=bash_snippet)
+    install_file_legacy(path=bash_snippet)
     prefix = flo('if [ -f {bash_snippet} ]; ')
     enabler = flo('if [ -f {bash_snippet} ]; then source {bash_snippet}; fi')
     if env.host == 'localhost':
