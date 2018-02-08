@@ -22,18 +22,24 @@ def create_readme_with_long_description():
     readme_md = os.path.join(this_dir, 'README.md')
     readme = os.path.join(this_dir, 'README')
 
-    if os.path.exists(readme):
-        os.remove(readme)
+    if os.path.exists(readme_md):
+        # this is the case when running `python setup.py sdist`
+        if os.path.exists(readme):
+            os.remove(readme)
 
-    try:
-        import pypandoc
-        long_description = pypandoc.convert(readme_md, 'rst', format='md')
-    except(ImportError):
-        with open(readme_md, encoding='utf-8') as in_:
+        try:
+            import pypandoc
+            long_description = pypandoc.convert(readme_md, 'rst', format='md')
+        except(ImportError):
+            with open(readme_md, encoding='utf-8') as in_:
+                long_description = in_.read()
+
+        with open(readme, 'w') as out:
+            out.write(long_description)
+    else:
+        # this is in case of `pip install fabsetup-x.y.z.tar.gz`
+        with open(readme, encoding='utf-8') as in_:
             long_description = in_.read()
-
-    with open(readme, 'w') as out:
-        out.write(long_description)
 
     return long_description
 
