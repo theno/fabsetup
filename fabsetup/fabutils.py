@@ -399,7 +399,7 @@ def install_file_legacy(path, sudo=False, from_path=None, **substitutions):
         run(flo('sudo mv --force  {to_}  {path}'))
 
 
-def install_user_command(command, **substitutions):
+def install_user_command_legacy(command, **substitutions):
     '''Install command executable file into users bin dir.
 
     If a custom executable exists it would be installed instead of the "normal"
