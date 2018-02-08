@@ -30,7 +30,7 @@ Assumptions here:
 * addon and task name: termdown
 
 ```sh
-cd /home/theno/.fabsetup-repos/fabsetup-theno-termdown
+cd /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
 
 # show task info
 fab -f fabfile-dev.py -l
@@ -61,7 +61,7 @@ fab -d theno.termdown
 fab theno.termdown
 
 # standalone
-cd /home/theno/.fabsetup-repos/fabsetup-theno-termdown
+cd /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
 pip install -r requirements.txt
 fab theno.termdow
 ```
