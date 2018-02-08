@@ -11,26 +11,30 @@ from codecs import open
 
 
 def create_readme_with_long_description():
+    '''Try to convert content of README.md into rst format using pypandoc,
+    write it into README and return it.
+
+    If pypandoc cannot be imported write content of README.md unchanged into
+    README and return it.
+    '''
     this_dir = os.path.abspath(os.path.dirname(__file__))
+
     readme_md = os.path.join(this_dir, 'README.md')
     readme = os.path.join(this_dir, 'README')
-    if os.path.isfile(readme_md):
-        if os.path.islink(readme):
-            os.remove(readme)
-        shutil.copy(readme_md, readme)
+
+    if os.path.exists(readme):
+        os.remove(readme)
+
     try:
         import pypandoc
         long_description = pypandoc.convert(readme_md, 'rst', format='md')
-        if os.path.islink(readme):
-            os.remove(readme)
-        with open(readme, 'w') as out:
-            out.write(long_description)
-    except(IOError, ImportError, RuntimeError):
-        if os.path.isfile(readme_md):
-            os.remove(readme)
-            os.symlink(readme_md, readme)
-        with open(readme, encoding='utf-8') as in_:
+    except(ImportError):
+        with open(readme_md, encoding='utf-8') as in_:
             long_description = in_.read()
+
+    with open(readme, 'w') as out:
+        out.write(long_description)
+
     return long_description
 
 
