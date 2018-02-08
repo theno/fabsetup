@@ -70,5 +70,8 @@ setup(
     ],
     keywords='python development utilities library',
     packages=packages,
-    include_package_data=True
+    include_package_data=True,
+    install_requires=[
+        'fabric'
+    ],
 )
