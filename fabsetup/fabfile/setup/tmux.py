@@ -1,4 +1,4 @@
-from fabsetup.fabutils import install_file, run, suggest_localhost, subtask
+from fabsetup.fabutils import install_file_legacy, run, suggest_localhost, subtask
 from fabsetup.fabutils import task
 from fabsetup.fabutils import checkup_git_repo
 
@@ -13,7 +13,7 @@ def tmux():
      * correct highlighting within man pages,
        cf. http://stackoverflow.com/a/10563271
     '''
-    install_file('~/.tmux.conf')
+    install_file_legacy('~/.tmux.conf')
     set_up_terminfo()
     tmux_plugin_manager()
 

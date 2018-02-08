@@ -17,7 +17,7 @@ from fabric.api import hosts
 import fabsetup
 from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
 from fabsetup.fabutils import run, suggest_localhost, subtask
-from fabsetup.fabutils import install_file, exists
+from fabsetup.fabutils import install_file_legacy, exists
 from fabsetup.fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
 from fabsetup.utils import flo
 from fabsetup.utils import cyan, blue, green, magenta, red
@@ -175,7 +175,7 @@ def create_files(
         'fabsetup_USER_TASK/_version.py',
     ]
     for filename in filenames:
-        install_file(
+        install_file_legacy(
             path=flo('~/.fabsetup-addon-repos/fabsetup-USER-ADDON/{filename}'),
             username=username,
             addonname=addonname,

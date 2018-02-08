@@ -27,7 +27,10 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
 
 Assumptions here:
 * github username: theno
-* addon and task name: termdown
+* addon name: termdown
+  * full addon name: fabsetup-theno-termdown
+* task name: termdown
+  * full task name: theno.termdown
 
 ```sh
 cd /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown

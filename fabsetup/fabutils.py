@@ -353,7 +353,7 @@ def _install_file_from_template(from_template, to_, **substitutions):
 
 
 # TODO: must be compliant to addons
-def install_file(path, sudo=False, from_path=None, **substitutions):
+def install_file_legacy(path, sudo=False, from_path=None, **substitutions):
     '''Install file with path on the host target.
 
     The from file is the first of this list which exists:
@@ -387,13 +387,13 @@ def install_file(path, sudo=False, from_path=None, **substitutions):
         run(flo('mkdir -p  {path_dir}'))
         put(from_custom, to_)
     elif isfile(from_custom + '.template'):
-        _install_file_from_template(from_custom + '.template', to_=to_,
+        _install_file_legacy(from_custom + '.template', to_=to_,
                                     **substitutions)
     elif isfile(from_common):
         run(flo('mkdir -p  {path_dir}'))
         put(from_common, to_)
     else:
-        _install_file_from_template(from_common + '.template', to_=to_,
+        _install_file_legacy(from_common + '.template', to_=to_,
                                     **substitutions)
     if sudo:
         run(flo('sudo mv --force  {to_}  {path}'))
@@ -406,7 +406,7 @@ def install_user_command(command, **substitutions):
     one.  The executable also could exist as a <command>.template file.
     '''
     path = flo('~/bin/{command}')
-    install_file(path, **substitutions)
+    install_file_legacy(path, **substitutions)
     run(flo('chmod 755 {path}'))
 
 

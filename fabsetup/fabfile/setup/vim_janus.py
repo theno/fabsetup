@@ -2,7 +2,7 @@ from fabric.api import warn_only, execute
 
 from fabsetup.fabutils import custom_task as task  # here, every task is custom
 from fabsetup.fabutils import suggest_localhost, needs_packages, exists, subtask
-from fabsetup.fabutils import run, print_msg, subsubtask, install_file
+from fabsetup.fabutils import run, print_msg, subsubtask, install_file_legacy
 from fabsetup.fabutils import checkup_git_repos, needs_repo_fabsetup_custom
 from fabsetup.utils import flo, query_yes_no
 
@@ -88,10 +88,10 @@ def custom_vim_addons():
 
 @subsubtask
 def vimrc_customizations():
-    install_file('~/.vimrc.before')
-    install_file('~/.vimrc.after')
-    install_file('~/.gvimrc.before')
-    install_file('~/.gvimrc.after')
+    install_file_legacy('~/.vimrc.before')
+    install_file_legacy('~/.vimrc.after')
+    install_file_legacy('~/.gvimrc.before')
+    install_file_legacy('~/.gvimrc.after')
 
 
 @subtask

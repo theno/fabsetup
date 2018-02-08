@@ -6,7 +6,7 @@ from fabric.api import env, local, sudo, warn_only
 from fabric.contrib.files import append
 
 from fabsetup.fabutils import exists, install_packages, install_package
-from fabsetup.fabutils import install_file, install_user_command, needs_packages
+from fabsetup.fabutils import install_file_legacy, install_user_command, needs_packages
 from fabsetup.fabutils import needs_repo_fabsetup_custom, run, suggest_localhost
 from fabsetup.fabutils import checkup_git_repo, checkup_git_repos, task
 from fabsetup.fabutils import print_msg
@@ -38,10 +38,10 @@ def ripping_of_cds():
     '''
     # install and configure ripit
     install_package('ripit')
-    install_file(path='~/.ripit/config', username=env.user)
+    install_file_legacy(path='~/.ripit/config', username=env.user)
     # install burnit
     run('mkdir -p  ~/bin')
-    install_file('~/bin/burnit')
+    install_file_legacy('~/bin/burnit')
     run('chmod 755 ~/bin/burnit')
 
 
@@ -78,7 +78,7 @@ def regex_repl():
 def i3():
     '''Install and customize the tiling window manager i3.'''
     install_package('i3')
-    install_file(path='~/.i3/config', username=env.user, repos_dir='repos')
+    install_file_legacy(path='~/.i3/config', username=env.user, repos_dir='repos')
 
     # setup: hide the mouse if not in use
     # in ~/.i3/config: 'exec /home/<USERNAME>/repos/hhpc/hhpc -i 10 &'
@@ -106,13 +106,13 @@ def solarized():
       http://unix.stackexchange.com/a/118903
     '''
     install_packages(['rxvt-unicode', 'tmux', 'vim'])
-    install_file('~/.Xresources')
+    install_file_legacy('~/.Xresources')
     if env.host_string == 'localhost':
         run('xrdb  ~/.Xresources')
 
     # install and call term_colors
     run('mkdir -p  ~/bin')
-    install_file('~/bin/term_colors')
+    install_file_legacy('~/bin/term_colors')
     run('chmod 755 ~/bin/term_colors')
     run('~/bin/term_colors')
 
@@ -136,7 +136,7 @@ def vim():
     install_package('vim')
 
     print_msg('## install ~/.vimrc\n')
-    install_file('~/.vimrc')
+    install_file_legacy('~/.vimrc')
 
     print_msg('\n## set up pathogen\n')
     run('mkdir -p  ~/.vim/autoload  ~/.vim/bundle')
@@ -204,7 +204,7 @@ def pyenv():
 
     # add pyenv to $PATH and set up pyenv init
     bash_snippet = '~/.bashrc_pyenv'
-    install_file(path=bash_snippet)
+    install_file_legacy(path=bash_snippet)
     prefix = flo('if [ -f {bash_snippet} ]; ')
     enabler = flo('if [ -f {bash_snippet} ]; then source {bash_snippet}; fi')
     if env.host == 'localhost':
@@ -332,7 +332,7 @@ def server_prepare_root_bin_dir():
     '''Install custom commands for user root at '/root/bin/'.'''
     commands = ['run_backup']
     for command in commands:
-        install_file(flo('/root/bin/{command}'), sudo=True)
+        install_file_legacy(flo('/root/bin/{command}'), sudo=True)
         sudo(flo('chmod 755 /root/bin/{command}'))
         if command == 'run_backup':
             sudo('ln -snf /root/bin/run_backup /etc/cron.daily/run_backup')
@@ -366,7 +366,7 @@ def irssi():
      * https://wiki.archlinux.org/index.php/Irssi
     '''
     install_packages(['irssi'])
-    install_file('~/.irssi/config')
+    install_file_legacy('~/.irssi/config')
     run(os.path.expanduser('chmod 600 ~/.irssi/config'))
     # TODO autostart irssi within of a tmux session "as a service"
 
@@ -431,7 +431,7 @@ def powerline_shell():
 
     checkup_git_repo('https://github.com/banga/powerline-shell.git')
 #    checkup_git_repo('https://github.com/ohnonot/powerline-shell.git')
-    install_file(path='~/repos/powerline-shell/config.py')
+    install_file_legacy(path='~/repos/powerline-shell/config.py')
     run('cd ~/repos/powerline-shell && ./install.py')
 
     question = 'Use normal question mark (u003F) for untracked files instead '\
@@ -444,7 +444,7 @@ def powerline_shell():
         run(flo('chmod u+x  {filename}'))
 
     bash_snippet = '~/.bashrc_powerline_shell'
-    install_file(path=bash_snippet)
+    install_file_legacy(path=bash_snippet)
     prefix = flo('if [ -f {bash_snippet} ]; ')
     enabler = flo('if [ -f {bash_snippet} ]; then source {bash_snippet}; fi')
     uncomment_or_update_or_append_line(filename='~/.bashrc', prefix=prefix,

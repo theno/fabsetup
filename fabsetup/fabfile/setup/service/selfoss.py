@@ -6,7 +6,7 @@ from fabric.api import env
 
 from fabsetup.fabutils import checkup_git_repo, exists, needs_packages, put, run
 from fabsetup.fabutils import custom_task as task, subtask, subsubtask
-from fabsetup.fabutils import comment_out_line, print_msg, install_file
+from fabsetup.fabutils import comment_out_line, print_msg, install_file_legacy
 from fabsetup.fabutils import update_or_append_line
 from fabsetup.fabutils import uncomment_or_update_or_append_line
 from fabsetup.fabutils import FABFILE_DATA_DIR
@@ -122,7 +122,7 @@ def restore_settings_and_data(site_dir):
 
 @subsubtask
 def install_spout_fulltextrssGoogleBot(sitename):
-    install_file('~/sites/SITENAME/selfoss/spouts/rss/fulltextrssGoogleBot.php',
+    install_file_legacy('~/sites/SITENAME/selfoss/spouts/rss/fulltextrssGoogleBot.php',
                  SITENAME=sitename)
 
 
@@ -169,7 +169,7 @@ def setup_selfoss_user(username, sitename, site_dir):
     if not exists(flo('{site_dir}/selfoss/config.ini')):
         chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
         salt = ''.join(random.SystemRandom().choice(chars) for _ in range(150))
-        install_file('~/sites/SITENAME/selfoss/config.ini',
+        install_file_legacy('~/sites/SITENAME/selfoss/config.ini',
                      SITENAME=sitename, salt=salt)
 
     run('sudo service nginx reload')
