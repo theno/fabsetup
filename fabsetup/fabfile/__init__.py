@@ -14,6 +14,7 @@ sys.path.append(dirname(dirname(realpath(__file__))))
 
 from fabric.api import hosts
 
+import fabsetup
 from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
 from fabsetup.fabutils import run, suggest_localhost, subtask
 from fabsetup.fabutils import install_file, exists
@@ -64,12 +65,13 @@ if not isdir(FABSETUP_CUSTOM_DIR):
 
 else:
     from fabric.api import task
-    _dir = dirname(dirname(__file__))
+    _dir = dirname(dirname(__file__)).rsplit('/fabsetup')[0]
 
     @task(default=True)
     def list_tasks():
         '''List available tasks.'''
         fabric.operations.local('cd {_dir} && fab -l'.format(_dir=_dir))
+        print('\nfabsetup-%s' % fabsetup.__version__)
 
     import_fabsetup_custom(globals())
 
