@@ -120,15 +120,15 @@ def package_username(repo):
 
 
 def load_repo_addons(_globals):
-    '''Load all fabsetup addons which are stored under ~/.fabsetup-repos as
-    git repositories.
+    '''Load all fabsetup addons which are stored under ~/.fabsetup-addon-repos
+    as git repositories.
 
     Args:
         _globals(dict): the globals() namespace of the fabric script.
 
     Return: None
     '''
-    repos_dir = os.path.expanduser('~/.fabsetup-repos')
+    repos_dir = os.path.expanduser('~/.fabsetup-addon-repos')
     if os.path.isdir(repos_dir):
         basedir, repos, _ = next(os.walk(repos_dir))
         for repo_dir in [os.path.join(basedir, repo)

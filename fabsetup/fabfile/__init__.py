@@ -151,7 +151,8 @@ def git_name_and_email_or_die():
 
 @subtask
 def create_files(
-        addon_dir,  # '/home/theno/.fabsetup-repos/fabsetup-theno-termdown'
+        # '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown'
+        addon_dir,
         username,   # 'theno'
         addonname,  # 'termdown'
         taskname,   # 'termdown'
@@ -173,7 +174,7 @@ def create_files(
     ]
     for filename in filenames:
         install_file(
-            path=flo('~/.fabsetup-repos/fabsetup-USER-ADDON/{filename}'),
+            path=flo('~/.fabsetup-addon-repos/fabsetup-USER-ADDON/{filename}'),
             username=username,
             addonname=addonname,
             taskname=taskname,
@@ -244,7 +245,10 @@ def summary(addon_dir, username, taskname):
     print('')
     print('The task code is defined in')
     print(cyan(flo('  {addon_dir}/fabsetup_{username}_{taskname}/__init__.py')))
-    print('Your task output should be in markdown style.')
+    print('Your task output should be in markdown style.\n')
+    print('More infos: '
+          'https://github.com/theno/fabsetup/blob/master/howtos/'
+          'fabsetup-addon.md')
 
 
 @task
@@ -263,20 +267,20 @@ def new_addon():
 
     Created files and dirs:
 
-        ~/.fabsetup-repos/fabsetup-{user}-{addon}
-                          ├── fabfile-dev.py
-                          ├── fabfile.py
-                          ├── fabsetup_{user}_{task}
-                          │   ├── __init__.py  <----- task definition
-                          │   └── _version.py
-                          ├── .git
-                          │   ├── ...
-                          │   ├── config
-                          │   └── ...
-                          ├── .gitignore
-                          ├── README.md
-                          ├── requirements.txt
-                          └── setup.py
+        ~/.fabsetup-addon-repos/fabsetup-{user}-{addon}
+                                ├── fabfile-dev.py
+                                ├── fabfile.py
+                                ├── fabsetup_{user}_{task}
+                                │   ├── __init__.py  <----- task definition
+                                │   └── _version.py
+                                ├── .git
+                                │   ├── ...
+                                │   ├── config
+                                │   └── ...
+                                ├── .gitignore
+                                ├── README.md
+                                ├── requirements.txt
+                                └── setup.py
     '''
     author, author_email = git_name_and_email_or_die()
 
@@ -294,7 +298,7 @@ def new_addon():
         cyan(flo('{username}.{taskname}\n'))))
 
     addon_dir = os.path.expanduser(flo(
-        '~/.fabsetup-repos/fabsetup-{username}-{addonname}'))
+        '~/.fabsetup-addon-repos/fabsetup-{username}-{addonname}'))
 
     if os.path.exists(addon_dir):
         print(red(flo('\n{addon_dir} already exists.')))
