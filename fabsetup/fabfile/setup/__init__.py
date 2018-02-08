@@ -6,7 +6,7 @@ from fabric.api import env, local, sudo, warn_only
 from fabric.contrib.files import append
 
 from fabsetup.fabutils import exists, install_packages, install_package
-from fabsetup.fabutils import install_file_legacy, install_user_command, needs_packages
+from fabsetup.fabutils import install_file_legacy, install_user_command_legacy, needs_packages
 from fabsetup.fabutils import needs_repo_fabsetup_custom, run, suggest_localhost
 from fabsetup.fabutils import checkup_git_repo, checkup_git_repos, task
 from fabsetup.fabutils import print_msg
@@ -299,7 +299,7 @@ def pencil2():
 
     run(flo('cd {repo_dir}/build && ./build.sh  linux'),
         msg='\n## build pencil\n')
-    install_user_command('pencil2', pencil2_repodir=repo_dir)
+    install_user_command_legacy('pencil2', pencil2_repodir=repo_dir)
     print_msg('\nNow You can start pencil version 2 with this command:\n\n'
               '    pencil2')
 
@@ -322,7 +322,7 @@ def pencil3():
     print_msg('## fetch latest pencil\n')
     checkup_git_repo(url='https://github.com/evolus/pencil.git', name=repo_name)
     run(flo('cd {repo_dir} && npm install'), msg='\n## install npms\n')
-    install_user_command('pencil3', pencil3_repodir=repo_dir)
+    install_user_command_legacy('pencil3', pencil3_repodir=repo_dir)
     print_msg('\nNow You can start pencil version 3 with this command:\n\n'
               '    pencil3')
 

@@ -1,6 +1,6 @@
 from fabsetup.fabutils import checkup_git_repo, checkup_git_repos, flo
 from fabsetup.fabutils import install_package, install_packages
-from fabsetup.fabutils import install_user_command, run, suggest_localhost
+from fabsetup.fabutils import install_user_command_legacy, run, suggest_localhost
 from fabsetup.fabutils import custom_task as task  # here, every task is custom
 
 import config
@@ -33,7 +33,7 @@ def users_bin_dir():
         'svg2pdf'
     ]
     for command in commands:
-        install_user_command(command)
+        install_user_command_legacy(command)
 
 
 @task
