@@ -130,6 +130,6 @@ If your fabsetup-addon is in the `known_pip_addons` list, you only need to
 install the addon via pip to be able to execute the task:
 
 ```sh
-pip install fabsetup-addon-theno
+pip install fabsetup-theno-termdown
 fabsetup theno.termdown
 ```
