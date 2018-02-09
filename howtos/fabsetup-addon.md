@@ -35,7 +35,7 @@ Example: [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termd
 
 * github username: `theno`
   * addon name: `termdown`  
-    └─> full addon name / package name: `fabsetup-theno-termdown`  
+    └─> full addon name / package name / repository name: `fabsetup-theno-termdown`  
     └─> module name: `fabsetup_theno_termdown`
   * task name: `termdown`  
     └─> full task name: `theno.termdown`
