@@ -4,6 +4,8 @@ Fabric tasks in order to set up and maintain configurations, software
 installations and other things on a local or remote linux system
 (most functionality for Debian/Ubuntu).
 
+> _"dotfiles on steroids"_
+
 ## Installation
 
 As a [pypi package](https://pypi.python.org/pypi/fabsetup)
@@ -36,28 +38,24 @@ __fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__
 script, so every command starts with a __`fab`__:
 
 ```sh
-# go to the fabsetup repository
-cd ~/repos/fabsetup
-
-
 # task infos
 
 ## list all tasks: '-l'
-fab -l
+fabsetup -l
 
 ## show details: '-d'
-fab -d setup.vim
+fabsetup -d setup.vim_janus
 
 
 # run tasks
 
-fab setup.regex_repl
+fabsetup setup.regex_repl
 
 ## on your local host:
-fab setup.pencil3 -H localhost
+fabsetup setup.pencil3 -H localhost
 
 ## remote host:
-fab up -H example.com
+fabsetup up -H example.com
 ```
 
 __[Setup-Howtos](./howtos "cookbook")__:
