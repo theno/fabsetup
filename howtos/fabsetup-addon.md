@@ -139,7 +139,7 @@ defined in
 [fabsetup/addons.py](https://github.com/theno/fabsetup/blob/master/fabsetup/addons.py#L11).
 
 If your fabsetup-addon is in the `known_pip_addons` list, you only need to
-install the addon via pip to be able to execute the task:
+install the addon via pip to be able to execute the task.  For example:
 
 ```sh
 pip install fabsetup-theno-termdown
