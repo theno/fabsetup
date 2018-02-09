@@ -69,6 +69,14 @@ Example: https://github.com/theno/fabsetup-theno-termdown
                            └── USERNAME
                                └── bin
                                    └── termdown  <--- custom version (optional)
+
+# when running checkup_git_repo()
+~/.fabsetup-downloads/fabsetup-theno-termdown
+                      ├── git-repository-1
+                      │   └── ...
+                      ├── git-repository-2
+                      │   └── ...
+                      └── ...
 ```
 
 ## fabsetup-addon Development
