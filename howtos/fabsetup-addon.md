@@ -1,4 +1,4 @@
-# How to create and write a fabsetup-addon
+# How to Create and Write a fabsetup-addon
 
 ## Prerequisites
 
