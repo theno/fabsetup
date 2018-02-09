@@ -20,8 +20,8 @@ fabsetup new_addon
 This is a working fabsetup-addon which setups termdown.  Now, edit the
 task to apply for your setup goals.
 
-If you did not create a github remote repo, you can do it later:
-https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line
+If you did not create a github remote repo, you can
+[do it later](https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line]).
 
 ## Boilerplate / fabsetup-addon structure
 
