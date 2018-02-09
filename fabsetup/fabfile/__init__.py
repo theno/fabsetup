@@ -67,6 +67,8 @@ if not isdir(FABSETUP_CUSTOM_DIR):
 else:
     from fabric.api import task
     _dir = dirname(dirname(__file__)).rsplit('/fabsetup')[0]
+    if _dir.endswith('site-packages'):
+        _dir = os.path.join(_dir, 'fabsetup')
 
     @task(default=True)
     def list_tasks():
