@@ -19,6 +19,7 @@ from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
 from fabsetup.fabutils import run, suggest_localhost, subtask
 from fabsetup.fabutils import install_file_legacy, exists
 from fabsetup.fabutils import FABSETUP_CUSTOM_DIR, import_fabsetup_custom
+from fabsetup.fabutils import FABFILE_DATA_DIR
 from fabsetup.utils import flo
 from fabsetup.utils import cyan, blue, green, magenta, red
 from fabsetup.utils import query_input, query_yes_no
@@ -171,6 +172,7 @@ def create_files(
         'README.md',
         'requirements.txt',
         'setup.py',
+        'fabsetup_USER_TASK/fabutils.py',
         'fabsetup_USER_TASK/__init__.py',
         'fabsetup_USER_TASK/_version.py',
     ]
@@ -187,7 +189,20 @@ def create_files(
             author_email=author_email,
             USER=username,
             ADDON=addonname,
-            TASK=taskname)
+            TASK=taskname,
+        )
+
+    # avoid substitution of USERNAME in path
+    install_file_legacy(
+        path='~/.fabsetup-addon-repos/fabsetup-{USER}-{ADDON}/'
+             'fabsetup_{USER}_{TASK}/files/home/USERNAME/bin/'
+             'termdown.template'.format(USER=username,
+                                        ADDON=addonname,
+                                        TASK=taskname),
+        from_path='~/.fabsetup-addon-repos/fabsetup-USER-ADDON/'
+                  'fabsetup_USER_TASK/files/home/USERNAME/bin/'
+                  'termdown.template')
+
     print('')
     fabric.operations.local(flo('tree {addon_dir}'))
 
@@ -273,8 +288,13 @@ def new_addon():
                                 ├── fabfile-dev.py
                                 ├── fabfile.py
                                 ├── fabsetup_{user}_{task}
-                                │   ├── __init__.py  <----- task definition
-                                │   └── _version.py
+                                │   ├── files
+                                │   │   └── home
+                                │   │       └── USERNAME
+                                │   │           └── bin
+                                │   │               └── termdown.template
+                                │   ├── __init__.py  <--.
+                                │   └── _version.py      `- task definition
                                 ├── .git
                                 │   ├── ...
                                 │   ├── config

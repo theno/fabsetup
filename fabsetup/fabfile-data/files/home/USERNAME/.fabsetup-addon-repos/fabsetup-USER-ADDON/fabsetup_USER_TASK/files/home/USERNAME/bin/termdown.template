@@ -1,0 +1,5 @@
+#!/bin/bash
+
+python -m termdown -T timer -t finished -q 0 --no-seconds "$@" && notify-send "{{TIMER_FINISHED_MESSAGE}}"
+
+# configure notify popup: `xfce4-notifyd-config`

@@ -552,6 +552,7 @@ def install_file_wrapper(addon_package):
             from_str = filled_out_template(from_path, **substitutions)
             with tempfile.NamedTemporaryFile(
                     prefix=addon_package.package_name) as tmp_file:
+                print(flo('template: {from_path}'))
                 print(flo('filled out template: {tmp_file.name}'))
                 with open(tmp_file.name, 'w') as fp:
                     fp.write(from_str)
@@ -563,6 +564,7 @@ def install_file_wrapper(addon_package):
 
 
 def install_user_command_wrapper(addon_package):
+
     def install_user_command(command, **substitutions):
         '''Install command executable file into users bin dir ('~/bin/').
 
@@ -574,6 +576,7 @@ def install_user_command_wrapper(addon_package):
         install_file = install_file_wrapper(addon_package)
         install_file(path, **substitutions)
         run(flo('chmod 755 {path}'))
+
     return install_user_command
 
 

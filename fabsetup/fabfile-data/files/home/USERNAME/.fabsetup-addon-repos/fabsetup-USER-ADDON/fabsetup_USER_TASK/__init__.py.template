@@ -1,5 +1,7 @@
 from fabsetup.fabutils import print_msg, run, subtask, suggest_localhost, task
 
+from fabsetup_{{username}}_{{taskname}}.fabutils import install_file
+from fabsetup_{{username}}_{{taskname}}.fabutils import install_user_command
 from fabsetup_{{username}}_{{taskname}}._version import __version__
 
 
@@ -9,17 +11,9 @@ def install_pip_package():
 
 
 @subtask
-def install_user_command():
-    run('mkdir -p ~/bin')
-    run('cat > ~/bin/termdown <<EOF\n'
-        '#!/bin/bash\n'
-        '\n'
-        'python -m termdown -T timer -t finished -q 0 --no-seconds "\\$@" && '
-        'notify-send "TIMER FINISHED"\n'
-        '\n'
-        '# configure notify popup: \\`xfce4-notifyd-config\\`\n'
-        'EOF\n')
-    run('chmod 755 ~/bin/termdown')
+def install_command():
+    install_user_command('termdown',
+                         TIMER_FINISHED_MESSAGE='TIMER FINISHED')
 
 
 @subtask
@@ -42,5 +36,5 @@ def {{taskname}}():
         {{touched_files}}
     '''
     install_pip_package()
-    install_user_command()
+    install_command()
     show_termdown_usage()
