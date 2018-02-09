@@ -6,8 +6,8 @@ installations and other things on a local or remote linux system
 
 ## Installation
 
-As a [pypi](https://pypi.python.org/pypi/fabsetup)
-package with command `pip` (recommended way):
+As a [pypi package](https://pypi.python.org/pypi/fabsetup)
+with command `pip` (recommended way):
 
 ```sh
 pip install fabsetup
@@ -16,7 +16,7 @@ pip install fabsetup
 pip install --user fabsetup
 ```
 
-Or clone the github repository:
+Or clone the [github repository](https://github.com/theno/fabsetup):
 
 ```sh
 # install requirements
