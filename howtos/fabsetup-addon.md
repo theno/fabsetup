@@ -123,14 +123,14 @@ fab theno.termdow
 A good task informs the user what it does and behaves as expected.
 Therefore:
 
-* A task must list in its docstring all changed or created files.
+* A good task lists in its docstring all changed or created files.
 
-* A task must be able to be executed again and again
+* A good task can be executed again and again
   * First run does the initial setup
   * Next runs update the setup
     * When there is nothing to update, nothing changes
 
-* Later: The unit tests which test the setup taken by the task must pass.
+* Later: The unit tests pass which test the setup taken by the good task.
 
 ## Known fabsetup-addons
 
