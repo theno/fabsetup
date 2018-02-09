@@ -25,7 +25,7 @@ https://help.github.com/articles/adding-an-existing-project-to-github-using-the-
 
 ## Boilerplate / fabsetup-addon structure
 
-Example: https://gihtub.com/theno/fabsetup-theno-termdown
+Example: https://github.com/theno/fabsetup-theno-termdown
 
 * github username: `theno`
 * addon name: `termdown`
