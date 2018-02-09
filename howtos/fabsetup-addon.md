@@ -147,7 +147,7 @@ fab theno.termdown
 # standalone
 cd /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
 pip install -r requirements.txt
-fab theno.termdow
+fab theno.termdown
 ```
 
 ## Good Tasks
