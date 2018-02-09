@@ -118,7 +118,7 @@ pip install -r requirements.txt
 fab theno.termdow
 ```
 
-## Task Rules
+## Good Tasks
 
 A good task informs the user what it does and behaves as expected.
 Therefore:
@@ -132,12 +132,11 @@ Therefore:
 
 * Later: The unit tests which test the setup taken by the task must pass.
 
-Only when this rules are met by all tasks of a fabsetup-addon, the
-fabsetup-addon will be taken into the list of `known_pip_addons`
-defined in
-[fabsetup/addons.py](https://github.com/theno/fabsetup/blob/master/fabsetup/addons.py#L11).  The unit tests which test the setup taken by the task must pass.
-  
 ## Known fabsetup-addons
+
+A fabsetup-addon with good tasks can be taken into the list of `known_pip_addons`
+defined in
+[fabsetup/addons.py](https://github.com/theno/fabsetup/blob/master/fabsetup/addons.py#L11).
 
 If your fabsetup-addon is in the `known_pip_addons` list, you only need to
 install the addon via pip to be able to execute the task:
