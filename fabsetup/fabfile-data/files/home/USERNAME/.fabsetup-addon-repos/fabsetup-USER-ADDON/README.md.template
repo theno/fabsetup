@@ -2,7 +2,7 @@
 
 {{headline}}
 
-This is a fabsetup addon.
+This is a [fabsetup](https://github.com/fabsetup) addon.
 
 ## Usage
 
@@ -16,31 +16,18 @@ fabsetup {{username}}.{{taskname}}
 
 ## Installation
 
-As a pypi package with command pip (recommended way):
+As a [pypi package](https://pypi.python.org/pypi/fabsetup-{{username}}-{{addonname}})
+with command `pip` (recommended way):
 
 ```bash
 pip install  fabsetup-{{username}}-{{addonname}}
 ```
 
-Or as a git repository checkout:
-
-```bash
-mkdir -p ~/.fabsetup-addon-repos
-git clone https://github.com/{{username}}/fabsetup-{{username}}-{{addonname}}.git  ~/.fabsetup-addon-repos/fabsetup-{{username}}-{{addonname}}
-
-# now, fabsetup loads the addon
-fabsetup -d {{username}}.{{taskname}}
-
-# you can also run the task directly
-cd ~/.fabsetup-addon-repos/fabsetup-{{username}}-{{addonname}}
-fab -d {{username}}.{{taskname}}
-
-# or from a checked out fabsetup repo
-cd ~/.fabsetup
-fab -d {{username}}.{{taskname}}
-```
-
 ## Development
+
+https://github.com/theno/fabsetup/blob/master/howtos/fabsetup-addon.md
+
+Devel commands:
 
 ```bash
 # save changes
@@ -56,4 +43,30 @@ fab -f fabfile-dev.py  pypi
 
 # clean up
 fab -f fabfile-dev.py  clean
+```
+
+Clone the [github repository](https://github.com/theno/fabsetup):
+
+```bash
+mkdir -p ~/.fabsetup-addon-repos
+git clone https://github.com/{{username}}/fabsetup-{{username}}-{{addonname}}.git  ~/.fabsetup-addon-repos/fabsetup-{{username}}-{{addonname}}
+
+# install fabsetup if not done already
+pip install fabsetup
+
+# fabsetup now finds the addon bcause it is located at ~/.fabsetup-addon-repos
+fabsetup -d {{username}}.{{taskname}}
+```
+
+More ways to run the task:
+
+```bash
+# you also can run the task directly
+cd ~/.fabsetup-addon-repos/fabsetup-{{username}}-{{addonname}}
+fab -d {{username}}.{{taskname}}
+
+# or from a cloned fabsetup repository
+git clone https://github.com/theno/fabsetup.git ~/.fabsetup
+cd ~/.fabsetup
+fab -d {{username}}.{{taskname}}
 ```
