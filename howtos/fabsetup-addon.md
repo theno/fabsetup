@@ -11,14 +11,16 @@
 
 ## Create fabsetup-addon
 
-Scaffold fabsetup-addon boilerplate; follow instructions:
+Scaffold fabsetup-addon boilerplate, run:
 
 ```sh
 fabsetup new_addon
 ```
 
-This is a working fabsetup-addon which setups termdown.  Now, edit the
-task to apply for your setup goals.
+and follow the instructions.
+
+You will get a working fabsetup-addon which setups termdown.  Now, edit the
+task to apply for your own setup goals.
 
 If you did not create a github remote repo, you can
 [do it later](https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line]).
@@ -59,15 +61,7 @@ Example: https://github.com/theno/fabsetup-theno-termdown
 
 ## fabsetup-addon development
 
-Edit your task in [fabsetup_theno_termdown/__init__.py](https://github.com/theno/fabsetup-theno-termdown/blob/master/fabsetup_theno_termdown/__init__.py). Take a look in the code, it uses this useful functions and decorators:
-
-* [install_file()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L507)
-* [install_user_command()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L568)
-* execute a shell command: [run()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L65)
-* decorators
-  * [@task](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L171)
-  * [@subtask](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L193)
-  * [@suggest_localhost](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L29)
+Devel commands:
 
 ```sh
 cd /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
@@ -87,6 +81,16 @@ git push origin master
 # publish pip package at pypi
 fab -f fabfile-dev.py pypi
 ```
+
+Edit your task in [`fabsetup_theno_termdown/__init__.py`](https://github.com/theno/fabsetup-theno-termdown/blob/master/fabsetup_theno_termdown/__init__.py). Take a look in the code, it uses this useful functions and decorators:
+
+* [install_file()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L507)
+* [install_user_command()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L568)
+* execute a shell command: [run()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L65)
+* decorators
+  * [@task](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L171)
+  * [@subtask](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L193)
+  * [@suggest_localhost](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L29)
 
 ## Execute your task
 
