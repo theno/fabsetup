@@ -57,6 +57,14 @@ Example: https://github.com/theno/fabsetup-theno-termdown
                         ├── README.md
                         ├── requirements.txt
                         └── setup.py
+                        
+~/.fabsetup-custom/fabsetup-theno-termdown
+                        ├── config.py        <-- (non-public) configurations
+                        └── files
+                            └── home
+                                └── USERNAME
+                                    └── bin
+                                        └── termdown  <-- custom version (optional)
 ```
 
 ## fabsetup-addon development
