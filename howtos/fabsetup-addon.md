@@ -59,12 +59,12 @@ Example: https://github.com/theno/fabsetup-theno-termdown
                         └── setup.py
                         
 ~/.fabsetup-custom/fabsetup-theno-termdown
-                        ├── config.py        <-- (non-public) configurations
-                        └── files
-                            └── home
-                                └── USERNAME
-                                    └── bin
-                                        └── termdown  <-- custom version (optional)
+                   ├── config.py     <--- (non-public) configurations
+                   └── files
+                       └── home
+                           └── USERNAME
+                               └── bin
+                                   └── termdown  <--- custom version (optional)
 ```
 
 ## fabsetup-addon development
