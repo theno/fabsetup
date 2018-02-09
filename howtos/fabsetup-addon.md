@@ -46,7 +46,7 @@ Example: https://github.com/theno/fabsetup-theno-termdown
                         │   │           └── bin
                         │   │               └── termdown.template
                         │   ├── __init__.py  <--.
-                        │   └── _version.py      `- task definition
+                        │   └── _version.py      `- task definition                                      `
                         ├── .git
                         │   ├── ...
                         │   ├── config
