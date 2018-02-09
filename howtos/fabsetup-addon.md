@@ -132,7 +132,8 @@ fab theno.termdow
 
 * Only when this rules are met by all task of a fabsetup-addon, the
   fabsetup-addon will be taken into the list of `known_pip_addons`
-  defined in fabsetup/addons.py.
+  defined in
+  [fabsetup/addons.py](https://github.com/theno/fabsetup/blob/master/fabsetup/addons.py#L11).
   
 If your fabsetup-addon is in the `known_pip_addons` list, you only need to
 install the addon via pip to be able to execute the task:
@@ -141,3 +142,8 @@ install the addon via pip to be able to execute the task:
 pip install fabsetup-theno-termdown
 fabsetup theno.termdown
 ```
+
+Please contribute: Create your own fabsetup-addon and make a
+[pull request](https://github.com/theno/fabsetup/pulls)
+which adds your fabsetup-addon to the `known_pip_addons`
+and to the `README.md`.
