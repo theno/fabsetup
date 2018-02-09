@@ -6,36 +6,10 @@ installations and other things on a local or remote linux system
 
 > _"dotfiles on steroids"_
 
-## Installation
-
-As a [pypi package](https://pypi.python.org/pypi/fabsetup)
-with command `pip` (recommended way):
-
-```sh
-pip install fabsetup
-
-# without superuser privileges
-pip install --user fabsetup
-```
-
-Or clone the [github repository](https://github.com/theno/fabsetup):
-
-```sh
-# install requirements
-sudo apt-get install  git  fabric
-pip install --user utlz
-
-git clone  https://github.com/theno/fabsetup.git  ~/.fabsetup
-
-# from ~/.fabsetup dir use `fab` instead of `fabsetup`
-cd ~/.fabsetup
-fab -l
-```
-
-## How to use fabsetup
+## Usage
 
 __fabsetup__ is a __[fabric](http://www.fabfile.org/ "www.fabfile.org")__
-script, so every command starts with a __`fab`__:
+script.
 
 ```sh
 # task infos
@@ -74,3 +48,34 @@ __[Setup-Howtos](./howtos "cookbook")__:
 ## Known fabsetup-addons
 
 * [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termdown)
+
+## Installation
+
+As a [pypi package](https://pypi.python.org/pypi/fabsetup)
+with command `pip` (recommended way):
+
+```sh
+pip install fabsetup
+
+# without superuser privileges
+pip install --user fabsetup
+```
+
+When installed with `--user` pip installes the command `fabsetup` at
+`~/.local/bin`.  [Assure](https://stackoverflow.com/a/14638025) that
+`~/.local/bin` is set in your `$PATH` environment variable.
+
+You also can clone the [github repository](https://github.com/theno/fabsetup)
+instead of using `pip`:
+
+```sh
+# install requirements
+sudo apt-get install  git  fabric
+pip install --user utlz
+
+git clone  https://github.com/theno/fabsetup.git  ~/.fabsetup
+
+# from ~/.fabsetup dir use `fab` instead of `fabsetup`
+cd ~/.fabsetup
+fab -l
+```
