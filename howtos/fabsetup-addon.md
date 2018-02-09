@@ -31,7 +31,7 @@ If you did not create a github remote repo, you can
 
 ## Boilerplate / fabsetup-addon Structure
 
-Example: https://github.com/theno/fabsetup-theno-termdown
+Example: [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termdown)
 
 * github username: `theno`
   * addon name: `termdown`  
