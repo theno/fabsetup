@@ -2,6 +2,10 @@
 
 ## Prerequisites
 
+```sh
+fabsetup -d new_addon
+```
+
 * git is
   [configured](https://help.github.com/articles/setting-your-username-in-git/)
   (email, name of author/user)
