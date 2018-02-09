@@ -28,11 +28,11 @@ If you did not create a github remote repo, you can
 Example: https://github.com/theno/fabsetup-theno-termdown
 
 * github username: `theno`
-* addon name: `termdown`
-  * full addon name / package name: `fabsetup-theno-termdown`
-  * module name: `fabsetup_theno_termdown`
-* task name: `termdown`
-  * full task name: `theno.termdown`
+  * addon name: `termdown`  
+    └─> full addon name / package name: `fabsetup-theno-termdown`  
+    └─> module name: `fabsetup_theno_termdown`
+  * task name: `termdown`  
+    └─> full task name: `theno.termdown`
 
 ```sh
 ~/.fabsetup-addon-repos/fabsetup-theno-termdown     <--- package
