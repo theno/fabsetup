@@ -25,7 +25,7 @@ task to apply for your own setup goals.
 If you did not create a github remote repo, you can
 [do it later](https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line]).
 
-## Boilerplate / fabsetup-addon structure
+## Boilerplate / fabsetup-addon Structure
 
 Example: https://github.com/theno/fabsetup-theno-termdown
 
@@ -67,7 +67,7 @@ Example: https://github.com/theno/fabsetup-theno-termdown
                                    └── termdown  <--- custom version (optional)
 ```
 
-## fabsetup-addon development
+## fabsetup-addon Development
 
 Devel commands:
 
@@ -100,7 +100,7 @@ Edit your task in [`fabsetup_theno_termdown/__init__.py`](https://github.com/the
   * [@subtask](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L193)
   * [@suggest_localhost](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L29)
 
-## Execute your task
+## Execute Your Task
 
 ```sh
 # with fabsetup installed as pip package as an fabsetup-addon
@@ -135,6 +135,8 @@ fab theno.termdow
   defined in
   [fabsetup/addons.py](https://github.com/theno/fabsetup/blob/master/fabsetup/addons.py#L11).
   
+## Known fabsetup-addons
+
 If your fabsetup-addon is in the `known_pip_addons` list, you only need to
 install the addon via pip to be able to execute the task:
 
