@@ -60,15 +60,19 @@ def add_tasks_r(addon_module, package_module, package_name):
     '''
     module_dict = package_module.__dict__
     for attr_name, attr_val in module_dict.items():
+
         if isinstance(attr_val, fabric.tasks.WrappedCallableTask):
             addon_module.__dict__[attr_name] = attr_val
+
         elif attr_name != package_name \
-                and attr_name[0] != '_' \
-                and attr_name.split('.')[-1] != package_name \
-                and isinstance(attr_val, types.ModuleType):
+                and isinstance(attr_val, types.ModuleType) \
+                and attr_val.__name__.startswith('fabsetup_') \
+                and attr_name.split('.')[-1] != package_name:
+
             submodule_name = flo('{addon_module.__name__}.{attr_name}')
             submodule = get_or_create_module_r(submodule_name)
             package_module = attr_val
+
             add_tasks_r(submodule, package_module, package_name)
             addon_module.__dict__[attr_name] = submodule
 
