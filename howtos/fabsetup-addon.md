@@ -23,14 +23,41 @@ task to apply for your setup goals.
 If you did not create a github remote repo, you can do it later:
 https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line
 
-## fabsetup-addon development
+## Boilerplate / fabsetup-addon structure
 
-Assumptions here:
-* github username: theno
-* addon name: termdown
-  * full addon name: fabsetup-theno-termdown
-* task name: termdown
-  * full task name: theno.termdown
+Example: https://gihtub.com/theno/fabsetup-theno-termdown
+
+* github username: `theno`
+* addon name: `termdown`
+  * full addon name / package name: `fabsetup-theno-termdown`
+  * module name: `fabsetup_theno_termdown`
+* task name: `termdown`
+  * full task name: `theno.termdown`
+
+```sh
+~/.fabsetup-addon-repos/fabsetup-theno-termdown     <--- package
+                        ├── fabfile-dev.py
+                        ├── fabfile.py
+                        ├── fabsetup_theno_termdown  <--- module
+                        │   ├── fabutils.py
+                        │   ├── files
+                        │   │   └── home
+                        │   │       └── USERNAME
+                        │   │           └── bin
+                        │   │               └── termdown.template
+                        │   ├── __init__.py  <--.
+                        │   └── _version.py      `- task definition
+                        ├── .git
+                        │   ├── ...
+                        │   ├── config
+                        │   └── ...
+                        ├── .gitignore
+                        ├── README.md
+                        ├── requirements.txt
+                        └── setup.py
+```
+
+## fabsetup-addon development
 
 ```sh
 cd /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
