@@ -6,10 +6,28 @@ installations and other things on a local or remote linux system
 
 ## Installation
 
+As a [pypi](https://pypi.python.org/pypi/fabsetup)
+package with command `pip` (recommended way):
+
 ```sh
+pip install fabsetup
+
+# without superuser privileges
+pip install --user fabsetup
+```
+
+Or clone the github repository:
+
+```sh
+# install requirements
 sudo apt-get install  git  fabric
-mkdir ~/repos && cd ~/repos
-git clone  https://github.com/theno/fabsetup.git
+pip install --user utlz
+
+git clone  https://github.com/theno/fabsetup.git  ~/.fabsetup
+
+# from ~/.fabsetup dir use `fab` instead of `fabsetup`
+cd ~/.fabsetup
+fab -l
 ```
 
 ## How to use fabsetup
@@ -36,7 +54,7 @@ fab -d setup.vim
 fab setup.regex_repl
 
 ## on your local host:
-fab setup.pencil_v3 -H localhost
+fab setup.pencil3 -H localhost
 
 ## remote host:
 fab up -H example.com
@@ -54,3 +72,7 @@ __[Setup-Howtos](./howtos "cookbook")__:
  * [Install latest Node.js via nvm](./howtos/nodejs.md)
  * [Create or update a reveal.js presentation](./howtos/revealjs.md)
  * __[How to create and write a fabsetup-addon](./howtos/fabsetup-addon.md)__
+
+## Known fabsetup-addons
+
+* [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termdown)
