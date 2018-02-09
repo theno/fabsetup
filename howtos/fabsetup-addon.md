@@ -50,7 +50,7 @@ Example: [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termd
                         │   │   └── home
                         │   │       └── USERNAME
                         │   │           └── bin
-                        │   │               └── termdown.template
+                        │   │               └── termdown.template  <--- default version
                         │   ├── __init__.py  <--.
                         │   └── _version.py      `- task definition                                      `
                         ├── .git
