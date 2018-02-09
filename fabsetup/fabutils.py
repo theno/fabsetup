@@ -1,3 +1,4 @@
+import doctest
 import os.path
 import re
 import sys
@@ -8,6 +9,7 @@ from os.path import dirname, expanduser, isdir, isfile, join
 import fabric.api
 import fabric.contrib.files
 import fabric.operations
+import utlz
 from fabric.context_managers import quiet
 from fabric.state import env
 from fabric.network import needs_host
@@ -342,7 +344,7 @@ def checkup_git_repo(url, name=None, base_dir='~/repos',
     return name
 
 
-def _install_file_from_template(from_template, to_, **substitutions):
+def _install_file_from_template_legacy(from_template, to_, **substitutions):
     from_str = filled_out_template(from_template, **substitutions)
     with tempfile.NamedTemporaryFile(prefix='fabsetup') as tmp_file:
         with open(tmp_file.name, 'w') as fp:
@@ -352,7 +354,6 @@ def _install_file_from_template(from_template, to_, **substitutions):
         put(tmp_file.name, to_)
 
 
-# TODO: must be compliant to addons
 def install_file_legacy(path, sudo=False, from_path=None, **substitutions):
     '''Install file with path on the host target.
 
@@ -387,13 +388,13 @@ def install_file_legacy(path, sudo=False, from_path=None, **substitutions):
         run(flo('mkdir -p  {path_dir}'))
         put(from_custom, to_)
     elif isfile(from_custom + '.template'):
-        _install_file_legacy(from_custom + '.template', to_=to_,
+        _install_file_from_template_legacy(from_custom + '.template', to_=to_,
                                     **substitutions)
     elif isfile(from_common):
         run(flo('mkdir -p  {path_dir}'))
         put(from_common, to_)
     else:
-        _install_file_legacy(from_common + '.template', to_=to_,
+        _install_file_from_template_legacy(from_common + '.template', to_=to_,
                                     **substitutions)
     if sudo:
         run(flo('sudo mv --force  {to_}  {path}'))
@@ -408,6 +409,172 @@ def install_user_command_legacy(command, **substitutions):
     path = flo('~/bin/{command}')
     install_file_legacy(path, **substitutions)
     run(flo('chmod 755 {path}'))
+
+
+AddonPackage = utlz.namedtuple(
+    typename='Names',
+    field_names=['module_dir'],
+    lazy_vals={
+        # fabsetup_theno_termdown
+        'module_name': lambda self: self.module_dir.rsplit('/', 1)[-1],
+
+        # fabsetup-theno-termdown
+        'package_name': lambda self: self.module_dir.rsplit('/', 2)[-2],
+
+        # /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
+        'package_dir': lambda self: dirname(self.module_dir),
+
+        # /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files
+        'default_files_basedir': lambda self: join(self.module_dir, 'files'),
+
+        # /home/theno/.fabsetup-custom/fabsetup-theno-termdown
+        'custom_dir': lambda self: join(FABSETUP_CUSTOM_DIR,
+                                        self.package_name),
+
+        # /home/theno/.fabsetup-custom/fabsetup-theno-termdown/config.py
+        'custom_config': lambda self: join(self.custom_dir, 'config.py'),
+
+        # /home/theno/.fabsetup-custom/fabsetup-theno-termdown/files
+        'custom_files_basedir': lambda self: join(FABSETUP_CUSTOM_DIR,
+                                                  self.package_name, 'files'),
+    })
+
+
+def _determine_froms(addon_package, path):
+    '''Return 2-Tuple (from_custom, from_default) for a given path.
+
+    Example:
+
+        >>> FABSETUP_CUSTOM_DIR = '/home/theno/.fabsetup-custom'
+        >>>
+        >>> # path is an abpath
+        ...
+        >>> addon_package = AddonPackage(module_dir='/home/theno/'
+        ...                              '.fabsetup-addon-repos/'
+        ...                              'fabsetup-theno-termdown/'
+        ...                              'fabsetup_theno_termdown')
+        >>> _determine_froms(addon_package, path='/absolute/path/foo.bar')
+        ('/home/theno/.fabsetup-custom/fabsetup-theno-termdown/files/absolute/path/foo.bar', '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files/absolute/path/foo.bar')
+        >>>
+        >>> # with home-dir expansion
+        ...
+        >>> addon_package = AddonPackage(module_dir='/home/theno/'
+        ...                              '.fabsetup-addon-repos/'
+        ...                              'fabsetup-theno-termdown/'
+        ...                              'fabsetup_theno_termdown')
+        >>> _determine_froms(addon_package, path='~/foo/bar.baz')
+        ('/home/theno/.fabsetup-custom/fabsetup-theno-termdown/files/home/USERNAME/foo/bar.baz', '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files/home/USERNAME/foo/bar.baz')
+
+    '''
+    # from_tail
+    if path.startswith('~/'):
+        path_tail = path[2:]  # path without beginning '~/'
+        from_tail = join('home', 'USERNAME', path_tail)
+    else:
+        # remove beginning '/' (if any), eg '/foo/bar' -> 'foo/bar'
+        from_tail = path.lstrip(os.sep)
+
+    from_default = join(addon_package.default_files_basedir, from_tail)
+    from_custom = join(addon_package.custom_files_basedir, from_tail)
+
+    return from_custom, from_default
+
+
+# FIXME: move to -> utlz
+def _substituted(string, substitutions):
+    substituted = string
+    for key, val in substitutions.items():
+        substituted = string.replace(key, val)
+    return substituted
+
+
+def install_file_wrapper(addon_package):
+
+    def _install_file(from_path, to_path, sudo):
+        path_dir = dirname(to_path)
+        if sudo:
+            tmp_file = join(
+                os.sep, 'tmp',
+                addon_package.package_name + '_' + os.path.basename(to_path))
+            print(flo('temporary file: {tmp_file}'))
+            put(from_path, tmp_file)
+            run(flo('mkdir -p  {path_dir}'))
+            run(flo('sudo mv --force  {tmp_file}  {to_path}'))
+        else:
+            run(flo('mkdir -p  {path_dir}'))
+            put(from_path, to_path)
+
+    def install_file(path, sudo=False, from_path=None, **substitutions):
+        '''Install file with path on the host target.
+
+        Args:
+            path(str): Where file has to be installed to
+            sudo(bool): If True install as superuser, eg. when path='/root/foo'
+            from_path([None] or str): Optional path where the file comes from
+            substitutions: kwargs with substitutions when installing a file
+                           from a template.
+
+        If from_path is None, the from file will become the first in this list
+        which exists:
+         * custom_files_basedir/path/to/file
+         * custom_files_basedir/path/to/file.template
+         * default_files_basedir/path/to/file
+         * default_files_basedir/path/to/file.template
+
+        'custom_files_basedir' is the dir `files` in the custom addon dir under
+        ~/.fabsetup-custom.
+
+        'default_files_basedir' is the dir `files` in the module dir of the
+        addon-package.
+
+        'path/to_file' is path as an relative path, a '~' will be expanded
+        to 'home/USERNAME'.
+        '''
+        if from_path is None:
+
+            from_custom, from_default = _determine_froms(addon_package, path)
+
+            from_custom_template = flo('{from_default}.template')
+            from_default_template = flo('{from_default}.template')
+
+            if isfile(from_custom):
+                from_path = from_custom
+            elif isfile(from_custom_template):
+                from_path = from_custom_template
+            elif isfile(from_default):
+                from_path = from_default
+            else:
+                from_path = from_default_template
+
+        to_path = _substituted(path, substitutions)
+
+        if from_path.endswith('.template'):
+            from_str = filled_out_template(from_path, **substitutions)
+            with tempfile.NamedTemporaryFile(
+                    prefix=addon_package.package_name) as tmp_file:
+                print(flo('filled out template: {tmp_file.name}'))
+                with open(tmp_file.name, 'w') as fp:
+                    fp.write(from_str)
+                _install_file(tmp_file.name, to_path, sudo)
+        else:
+            _install_file(from_path, to_path, sudo)
+
+    return install_file
+
+
+def install_user_command_wrapper(addon_package):
+    def install_user_command(command, **substitutions):
+        '''Install command executable file into users bin dir ('~/bin/').
+
+        If a custom executable exists it would be installed instead of the
+        "normal" one.  The executable also could exist as a <command>.template
+        file.
+        '''
+        path = flo('~/bin/{command}')
+        install_file = install_file_wrapper(addon_package)
+        install_file(path, **substitutions)
+        run(flo('chmod 755 {path}'))
+    return install_user_command
 
 
 # FIXME: should be moved to utils.py
@@ -563,3 +730,7 @@ def dn_cn_of_certificate_with_san(domain):
                                  '(You should clean-up your config.py)\n')))
         cn_dn = cns[0]
     return cn_dn
+
+
+if __name__ == '__main__':
+    doctest.testmod()
