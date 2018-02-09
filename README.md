@@ -35,7 +35,7 @@ fabsetup up -H example.com
 __[Setup-Howtos](./howtos "cookbook")__:
 
  * Customize fabsetup: [Initialize git repository
-   `fabsetup_custom`](./howtos/fabsetup_custom.md)
+   `fabsetup_custom`](./howtos/fabsetup-custom.md)
  * [Set up an environment without sudo access](./howtos/no-sudo.md)
  * [Webserver Certificates with Letsencrypt](./howtos/letsencrypt.md)
  * [Host an Owncloud Service](./howtos/owncloud.md)
