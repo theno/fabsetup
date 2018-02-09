@@ -61,7 +61,7 @@ pip install fabsetup
 pip install --user fabsetup
 ```
 
-When running with `--user`, pip installes the command `fabsetup` at
+When running with `--user`, pip installs the command `fabsetup` at
 `~/.local/bin`.  [Assure](https://stackoverflow.com/a/14638025) that
 `~/.local/bin` is set in your `$PATH` environment variable.
 
