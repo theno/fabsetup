@@ -120,20 +120,22 @@ fab theno.termdow
 
 ## Task Rules
 
+A good task informs the user what it does and behaves as expected.
+Therefore:
+
 * A task must list in its docstring all changed or created files.
 
-* A task must be able to be executed repeatedly
-  * First execution does the initial setup
-  * Next exectutions update the setup
-    * When there is nothing to update, it must not change anything
+* A task must be able to be executed again and again
+  * First run does the initial setup
+  * Next runs update the setup
+    * When there is nothing to update, nothing changes
 
-* Later:
-  The unit tests which test the setup taken by the task must pass.
+* Later: The unit tests which test the setup taken by the task must pass.
 
-* Only when this rules are met by all task of a fabsetup-addon, the
-  fabsetup-addon will be taken into the list of `known_pip_addons`
-  defined in
-  [fabsetup/addons.py](https://github.com/theno/fabsetup/blob/master/fabsetup/addons.py#L11).
+Only when this rules are met by all tasks of a fabsetup-addon, the
+fabsetup-addon will be taken into the list of `known_pip_addons`
+defined in
+[fabsetup/addons.py](https://github.com/theno/fabsetup/blob/master/fabsetup/addons.py#L11).  The unit tests which test the setup taken by the task must pass.
   
 ## Known fabsetup-addons
 
