@@ -49,6 +49,12 @@ __[Setup-Howtos](./howtos "cookbook")__:
 
 * [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termdown)
 
+Please contribute:
+[Create your own fabsetup-addon](./howtos/fabsetup-addon.md) and make a
+[pull request](https://github.com/theno/fabsetup/pulls) which adds your
+ fabsetup-addon to the `known_pip_addons` in `fabsetup/addons.py` and to this
+`README.md`.
+
 ## Installation
 
 As a [pypi package](https://pypi.python.org/pypi/fabsetup)
@@ -78,4 +84,24 @@ git clone  https://github.com/theno/fabsetup.git  ~/.fabsetup
 # from ~/.fabsetup dir use `fab` instead of `fabsetup`
 cd ~/.fabsetup
 fab -l
+```
+
+## Development
+
+Devel commands:
+
+```bash
+# save changes
+git commit -am 'I describe my changes'
+
+# upload to github
+git push origin master
+
+# update version number in fabsetup_theno_termdown
+
+# create and publish package at pypi
+fab -f fabfile-dev.py  pypi
+
+# clean up
+fab -f fabfile-dev.py  clean
 ```
