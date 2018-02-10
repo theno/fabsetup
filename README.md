@@ -84,6 +84,7 @@ Uninstall:
 
 ```sh
 pip uninstall --yes fabsetup
+pip unistanll --yse fabsetup-addon-theno
 ```
 
 You also can clone the [github repository](https://github.com/theno/fabsetup)
