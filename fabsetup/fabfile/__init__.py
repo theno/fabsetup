@@ -361,16 +361,23 @@ def new_addon():
         headline = query_input(
             '\nshort task headline:',
             default='Install or update termdown.')
+
         description = query_input(
-            'describing infos:',
-            default='Command `termdown 25m` is practical '
-                    'to time pomodoro sessions.')
+            '\ndescribing infos:',
+            default='''Termdown (https://github.com/trehn/termdown) is a
+    "[c]ountdown timer and stopwatch in your terminal".
+
+    It installs termdown via `pip install --user termdown`.  Also, it installs a
+    bash-wrapper script at `~/bin/termdown` which is convenient to time pomodoro
+    sessions and pops up a notification when the timer finishes.''')
+
         touched_files = query_input(
-            'affected files and dirs:',
-            default='~/bin/termdown')
+            '\naffected files, dirs, and installed packages:',
+            default='~/bin/termdown\n        '
+                    'pip-package termdown (`--user` install)')
 
         print('\naddon git-repository dir: {0}'.format(cyan(addon_dir)))
-        if not query_yes_no('create new addon?', default='yes'):
+        if not query_yes_no('\ncreate new addon?', default='yes'):
             print('abort')
         else:
             create_files(addon_dir, username, addonname, taskname,
