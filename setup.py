@@ -4,8 +4,8 @@
 * https://pypi.python.org/pypi/fabsetup
 """
 
+import os
 import os.path
-import shutil
 from setuptools import setup, find_packages
 from codecs import open
 

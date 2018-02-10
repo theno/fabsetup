@@ -4,32 +4,42 @@ Addon for fabsetup (https://github.com/theno/fabsetup).
 """
 
 import os
-import shutil
+import os.path
 from setuptools import setup, find_packages
 from codecs import open
 
 
 def create_readme_with_long_description():
+    '''Try to convert content of README.md into rst format using pypandoc,
+    write it into README and return it.
+
+    If pypandoc cannot be imported write content of README.md unchanged into
+    README and return it.
+    '''
     this_dir = os.path.abspath(os.path.dirname(__file__))
+
     readme_md = os.path.join(this_dir, 'README.md')
     readme = os.path.join(this_dir, 'README')
-    if os.path.isfile(readme_md):
-        if os.path.islink(readme):
+
+    if os.path.exists(readme_md):
+        # this is the case when running `python setup.py sdist`
+        if os.path.exists(readme):
             os.remove(readme)
-        shutil.copy(readme_md, readme)
-    try:
-        import pypandoc
-        long_description = pypandoc.convert(readme_md, 'rst', format='md')
-        if os.path.islink(readme):
-            os.remove(readme)
+
+        try:
+            import pypandoc
+            long_description = pypandoc.convert(readme_md, 'rst', format='md')
+        except(ImportError):
+            with open(readme_md, encoding='utf-8') as in_:
+                long_description = in_.read()
+
         with open(readme, 'w') as out:
             out.write(long_description)
-    except(IOError, ImportError, RuntimeError):
-        if os.path.isfile(readme_md):
-            os.remove(readme)
-            os.symlink(readme_md, readme)
+    else:
+        # this is in case of `pip install fabsetup-x.y.z.tar.gz`
         with open(readme, encoding='utf-8') as in_:
             long_description = in_.read()
+
     return long_description
 
 
