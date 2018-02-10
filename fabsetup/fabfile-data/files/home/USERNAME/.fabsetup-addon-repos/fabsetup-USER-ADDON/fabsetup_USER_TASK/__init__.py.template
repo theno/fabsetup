@@ -31,7 +31,7 @@ def {{taskname}}():
 
     {{description}}
 
-    Touched files and dirs:
+    Touched files, dirs, and installed packages:
 
         {{touched_files}}
     '''
