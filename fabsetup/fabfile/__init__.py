@@ -65,16 +65,41 @@ if not isdir(FABSETUP_CUSTOM_DIR):
         # instead
 
 else:
-    from fabric.api import task
     _dir = dirname(dirname(__file__)).rsplit('/fabsetup')[0]
     if _dir.endswith('site-packages'):
         _dir = os.path.join(_dir, 'fabsetup')
 
-    @task(default=True)
+    @subtask
     def list_tasks():
         '''List available tasks.'''
         fabric.operations.local('cd {_dir} && fab -l'.format(_dir=_dir))
-        print('\nfabsetup-%s' % fabsetup.__version__)
+
+    @subtask
+    def fabsetup_version():
+        print('fabsetup-%s' % fabsetup.__version__)
+
+    @subtask
+    def pip_packages():
+        fabric.operations.local('pip freeze | grep -i ^fab')
+
+    @subtask
+    def git_repos():
+        fabric.operations.local('ls -h ~/.fab* || true')
+
+    from fabric.api import task
+    from utlz import print_full_name, print_doc1
+
+    @task(default=True)
+    @print_full_name(color=magenta, prefix='\n# ', tail='\n')
+    @print_doc1
+    def info():
+        '''List available tasks, pip packages, git repos, and fabsetup version.
+        '''
+        print('more info: ' + blue('https://github.com/theno/fabsetup'))
+        list_tasks()
+        pip_packages()
+        git_repos()
+        fabsetup_version()
 
     import_fabsetup_custom(globals())
 
