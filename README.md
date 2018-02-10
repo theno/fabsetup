@@ -18,7 +18,7 @@ script.
 fabsetup -l
 
 ## show details: '-d'
-fabsetup -d setup.vim_janus
+fabsetup -d new_addon
 
 
 # run tasks
@@ -63,7 +63,22 @@ with command `pip` (recommended way):
 ```sh
 pip install fabsetup
 
-# without superuser privileges
+# install addon, eg. fabsetup-theno-termdown
+pip install fabsetup-theno-termdown
+```
+
+Update:
+
+```sh
+pip install --upgrade fabsetup
+
+# update addon (also updates fabsetup)
+pip install --upgrade fabsetup-theno-termdown
+```
+
+Install without superuser privileges:
+
+```sh
 pip install --user fabsetup
 ```
 
@@ -71,8 +86,15 @@ When running with `--user`, pip installs the command `fabsetup` at
 `~/.local/bin`.  [Assure](https://stackoverflow.com/a/14638025) that
 `~/.local/bin` is set in your `$PATH` environment variable.
 
+Uninstall:
+
+```sh
+pip uninstall --yes fabsetup
+pip uninstall --yes fabsetup-addon-theno
+```
+
 You also can clone the [github repository](https://github.com/theno/fabsetup)
-instead of using `pip`:
+instead of using `pip install`:
 
 ```sh
 # install requirements
