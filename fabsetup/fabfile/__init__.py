@@ -196,6 +196,7 @@ def create_files(
         'fabfile-dev.py',
         'fabfile.py',
         'LICENSE',
+        'MANIFEST.in',
         'README.md',
         'requirements.txt',
         'setup.py',

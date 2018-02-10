@@ -69,4 +69,8 @@ fab -d {{username}}.{{taskname}}
 git clone https://github.com/theno/fabsetup.git ~/.fabsetup
 cd ~/.fabsetup
 fab -d {{username}}.{{taskname}}
+
+# run directly, fabsetup from cloned repo
+cd ~/.fabsetup-addon-repos/fabsetup-{{username}}-{{addonname}}
+PYTHONPATH=~/.fabsetup fab -d {{username}}.{{taskname}}
 ```
