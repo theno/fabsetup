@@ -18,7 +18,7 @@ script.
 fabsetup -l
 
 ## show details: '-d'
-fabsetup -d setup.vim_janus
+fabsetup -d new_addon
 
 
 # run tasks
