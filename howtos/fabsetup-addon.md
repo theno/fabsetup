@@ -70,7 +70,7 @@ Example: [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termd
                                └── bin
                                    └── termdown  <--- custom version (optional)
 
-# when calling checkup_git_repo() in your code
+# Later: when calling checkup_git_repo() in your code
 ~/.fabsetup-downloads/fabsetup-theno-termdown
                       ├── git-repository-1
                       │   └── ...
