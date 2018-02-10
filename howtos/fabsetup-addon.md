@@ -2,9 +2,7 @@
 
 ## Prerequisites
 
-```sh
-fabsetup -d new_addon
-```
+Read task info, run: `fabsetup -d new_addon`
 
 * git is
   [configured](https://help.github.com/articles/setting-your-username-in-git/)
