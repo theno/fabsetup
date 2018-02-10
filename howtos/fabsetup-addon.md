@@ -61,7 +61,7 @@ Example: [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termd
                         ├── README.md
                         ├── requirements.txt
                         └── setup.py
-                        
+
 ~/.fabsetup-custom/fabsetup-theno-termdown
                    ├── config.py     <--- (non-public) configurations
                    └── files
@@ -102,20 +102,22 @@ git push origin master
 fab -f fabfile-dev.py pypi
 ```
 
-Edit your task in [`fabsetup_theno_termdown/__init__.py`](https://github.com/theno/fabsetup-theno-termdown/blob/master/fabsetup_theno_termdown/__init__.py). Take a look in the code, it uses some of this useful functions and decorators
+Edit your task in
+[`fabsetup_theno_termdown/__init__.py`](https://github.com/theno/fabsetup-theno-termdown/blob/master/fabsetup_theno_termdown/__init__.py).
+Take a look in the code, it uses some of this useful functions and decorators
 defined in `fabsetup/fabutils.py`:
 
 * [install_file()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L507)
 * [install_user_command()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L568) --> usage [example](https://github.com/theno/fabsetup-theno-termdown/blob/4e9823e5311a4a241aa192b4e0e44bfa2b1d75a4/fabsetup_theno_termdown/__init__.py#L15)
-* wrappers of [fabric operations](http://docs.fabfile.org/en/latest/api/core/operations.html) to be able to call them with `-H localhost`:
+* wrappers of [fabric operations](http://docs.fabfile.org/en/latest/api/core/operations.html) to be able to call them with `-H localhost`
   * [run()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L65) a shell command --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L241)
   * check if a file [exists()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L70) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/revealjs.py#L84)
   * when you know `from` and `to` you also can install a file with [put()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L80)
-* manipulate config files and scripts:
+* manipulate config files and scripts
   * [comment_out_line()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L619) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/service/selfoss.py#L186)
   * [update_or_append_line()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L590) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/powerline.py#L82)
   * [uncomment_or_update_or_append_line()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L629) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/nvm.py#L44)
-* install stuff (.deb packages only):
+* install stuff (.deb packages only)
   * [install_package()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L298) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/__init__.py#L40)
   * [install_packages()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L253) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/__init__.py#L85)
 * OS detection
@@ -124,6 +126,10 @@ defined in `fabsetup/fabutils.py`:
   * [is_ubuntu()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L702)
   * [is_raspbian()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L706)
   * [is_osmc()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L710)
+* user interaction
+  * [print_msg](https://github.com/theno/fabsetup/blob/c46e5c9c7bba2b016c3020a274c07e82c419ebcd/fabsetup/fabutils.py#L584) --> usage [example](https://github.com/theno/fabsetup/blob/c46e5c9c7bba2b016c3020a274c07e82c419ebcd/fabsetup/fabfile/setup/openssl.py#L109)
+  * [query_input](https://github.com/theno/utlz/blob/67f30b09ae914810708835c96fe061f3baa88545/utlz/__init__.py#L252) --> usage [example](https://github.com/theno/fabsetup/blob/c46e5c9c7bba2b016c3020a274c07e82c419ebcd/fabsetup/fabfile/__init__.py#L337)
+  * [query_yes_no](https://github.com/theno/utlz/blob/67f30b09ae914810708835c96fe061f3baa88545/utlz/__init__.py#L219) --> usage [example](https://github.com/theno/fabsetup/blob/c46e5c9c7bba2b016c3020a274c07e82c419ebcd/fabsetup/fabfile/__init__.py#L254)
 * decorators
   * [@task](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L171)
   * [@subtask](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L193)
@@ -166,8 +172,8 @@ Therefore:
 
 ## Known fabsetup-addons
 
-A fabsetup-addon with good tasks can be taken into the list of `known_pip_addons`
-defined in
+A fabsetup-addon with good tasks can be taken into the list of
+`known_pip_addons` defined in
 [fabsetup/addons.py](https://github.com/theno/fabsetup/blob/master/fabsetup/addons.py#L11).
 
 If your fabsetup-addon is in the `known_pip_addons` list, you only need to
@@ -180,5 +186,5 @@ fabsetup theno.termdown
 
 Please contribute: Create your own fabsetup-addon and make a
 [pull request](https://github.com/theno/fabsetup/pulls)
-which adds your fabsetup-addon to the `known_pip_addons`
-and to the `README.md`.
+which adds your fabsetup-addon to the `known_pip_addons` and to the
+`README.md`.
