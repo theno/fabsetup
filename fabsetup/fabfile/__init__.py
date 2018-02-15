@@ -80,11 +80,20 @@ else:
 
     @subtask
     def pip_packages():
-        fabric.operations.local('pip freeze | grep -i ^fab')
+        fabric.operations.local('pip freeze | grep -i ^fab || true')
 
     @subtask
     def git_repos():
-        fabric.operations.local('ls -h ~/.fab* || true')
+        for fabsetup_dir, depth in [
+                ('~/.fabsetup', 1),
+                ('~/.fabsetup-addon-repos', 1),
+                ('~/.fabsetup-downloads', 2),
+                ('~/.fabsetup-custom', 1)]:
+            fabric.operations.local(flo(
+                'if [ -d {fabsetup_dir} ]; then '
+                'tree --noreport -L {depth} {fabsetup_dir}; else '
+                'echo "{fabsetup_dir} does not exist"; fi'))
+            print('')
 
     from fabric.api import task
     from utlz import print_full_name, print_doc1
