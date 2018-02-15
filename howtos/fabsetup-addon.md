@@ -72,8 +72,7 @@ Example: [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termd
                                └── bin
                                    └── termdown  <--- custom version (optional)
 
-# Later: when calling checkup_git_repo() in your code
-~/.fabsetup-downloads/fabsetup-theno-termdown
+~/.fabsetup-downloads/fabsetup-theno-termdown    <--- checkup_git_repo() git repository downloads
                       ├── git-repository-1
                       │   └── ...
                       ├── git-repository-2
@@ -119,6 +118,9 @@ defined in `fabsetup/fabutils.py`:
   * [comment_out_line()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L619) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/service/selfoss.py#L186)
   * [update_or_append_line()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L590) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/powerline.py#L82)
   * [uncomment_or_update_or_append_line()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L629) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/nvm.py#L44)
+* download (clone) or update (pull) git repositories
+  * [checkup_git_repo()](https://github.com/theno/fabsetup/blob/d20d4ed7791130d631f519244eb4e4658a696c9d/fabsetup/fabutils.py#L416)
+  * [checkup_git_repos()](https://github.com/theno/fabsetup/blob/d20d4ed7791130d631f519244eb4e4658a696c9d/fabsetup/fabutils.py#L382)
 * install stuff (.deb packages only)
   * [install_package()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L298) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/__init__.py#L40)
   * [install_packages()](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabutils.py#L253) --> usage [example](https://github.com/theno/fabsetup/blob/ddae2cf810b3db2413cb06abd3ac4dd738d92e07/fabsetup/fabfile/setup/__init__.py#L85)
