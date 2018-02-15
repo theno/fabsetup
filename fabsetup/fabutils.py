@@ -23,7 +23,9 @@ from utils import uncomment_or_update_or_append_line as uua_local
 
 FABSETUP_DIR = dirname(__file__)
 FABFILE_DATA_DIR = join(FABSETUP_DIR, 'fabfile-data')
+
 FABSETUP_CUSTOM_DIR = join(expanduser('~'), '.fabsetup-custom')
+FABSETUP_DOWNLOADS_DIR = join(expanduser('~'), '.fabsetup-downloads')
 
 
 def suggest_localhost(func):
@@ -300,7 +302,6 @@ def install_package(package):
     install_packages([package])
 
 
-# TODO: base_dir must be compliant to addons
 @needs_packages('git')
 def checkup_git_repos_legacy(repos, base_dir='~/repos',
                              verbose=False, prefix='', postfix=''):
@@ -317,7 +318,6 @@ def checkup_git_repos_legacy(repos, base_dir='~/repos',
                                 prefix=prefix, postfix=postfix)
 
 
-# TODO: base_dir must be compliant to addons
 def checkup_git_repo_legacy(url, name=None, base_dir='~/repos',
                             verbose=False, prefix='', postfix=''):
     '''Checkout or update a git repo.'''
@@ -342,6 +342,110 @@ def checkup_git_repo_legacy(url, name=None, base_dir='~/repos',
             print_msg('update: pull from origin')
         run(flo('cd {base_dir}/{name}  &&  git pull'))
     return name
+
+
+AddonPackage = utlz.namedtuple(
+    typename='Names',
+    field_names=['module_dir'],
+    lazy_vals={
+        # eg. fabsetup_theno_termdown
+        'module_name': lambda self: self.module_dir.rsplit('/', 1)[-1],
+
+        # eg. fabsetup-theno-termdown
+        'package_name': lambda self: self.module_dir.rsplit('/', 2)[-2],
+
+        # eg. /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
+        'package_dir': lambda self: dirname(self.module_dir),
+
+        # /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files
+        'default_files_basedir': lambda self: join(self.module_dir, 'files'),
+
+        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown
+        'custom_dir': lambda self: join(FABSETUP_CUSTOM_DIR,
+                                        self.package_name),
+
+        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown/config.py
+        'custom_config': lambda self: join(self.custom_dir, 'config.py'),
+
+        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown/files
+        'custom_files_basedir': lambda self: join(FABSETUP_CUSTOM_DIR,
+                                                  self.package_name, 'files'),
+
+        # eg. /home/theno/.fabsetup-downloads/fabsetup-theno-termdown
+        'downloads_basedir': lambda self: join(FABSETUP_DOWNLOADS_DIR,
+                                               self.package_name),
+    })
+
+
+def checkup_git_repos_wrapper(package):
+
+    def checkup_git_repos(repos, base_dir=package.downloads_basedir,
+                          verbose=True, prefix='', postfix=''):
+        '''Checkout or update git repos.
+
+        repos must be a list of dicts each with an url and optional with a name
+        value.
+
+        Example:
+
+            checkup_git_repos(
+                repos=[
+                    {
+                        'url': 'https://github.com/theno/utlz.git',
+                    },
+                    {
+                        'url': 'https://github.com/theno/ctutlz.git',
+                        'name': 'ct-utils',
+                    },
+                ],
+                prefix='\n### ', postfix='\n')
+        '''
+        for repo in repos:
+            cur_base_dir = repo.get('base_dir', base_dir)
+            checkup_git_repo_legacy(url=repo['url'],
+                                    name=repo.get('name', None),
+                                    base_dir=cur_base_dir, verbose=verbose,
+                                    prefix=prefix, postfix=postfix)
+
+    return checkup_git_repos
+
+
+def checkup_git_repo_wrapper(package):
+
+    @needs_packages('git')
+    def checkup_git_repo(url, name=None, base_dir=package.downloads_basedir,
+                         verbose=True, prefix='', postfix=''):
+        '''Checkout or update a git repo.'''
+        if not name:
+            # eg. url = 'https://github.com/my-repo-name.git'
+            # =>  name = 'my-repo-name'
+            match = re.match(r'.*/(.+)\.git', url)
+            assert match, flo("Unable to extract repo name from '{url}'")
+            name = match.group(1)
+        assert name is not None, flo(
+            'Cannot extract repo name from repo: {url}')
+        assert name != '', flo(
+            'Cannot extract repo name from repo: {url} (empty)')
+        if verbose:
+            name_blue = blue(name)
+            print_msg(flo('{prefix}Checkout or update {name_blue}{postfix}'))
+        filename_readme = '~/.fabsetup-downloads/README.md'
+        if not exists(filename_readme):
+            install_file_legacy(filename_readme)
+        if not exists(base_dir):
+            run(flo('mkdir -p {base_dir}'))
+        if not exists(flo('{base_dir}/{name}/.git')):
+            run(flo('  &&  '.join([
+                    'cd {base_dir}',
+                    'git clone  {url}  {name}'])),
+                msg='clone repo')
+        else:
+            if verbose:
+                print_msg('update: pull from origin')
+            run(flo('cd {base_dir}/{name}  &&  git pull'))
+        return name
+
+    return checkup_git_repo
 
 
 def _install_file_from_template_legacy(from_template, to_, **substitutions):
@@ -409,35 +513,6 @@ def install_user_command_legacy(command, **substitutions):
     path = flo('~/bin/{command}')
     install_file_legacy(path, **substitutions)
     run(flo('chmod 755 {path}'))
-
-
-AddonPackage = utlz.namedtuple(
-    typename='Names',
-    field_names=['module_dir'],
-    lazy_vals={
-        # fabsetup_theno_termdown
-        'module_name': lambda self: self.module_dir.rsplit('/', 1)[-1],
-
-        # fabsetup-theno-termdown
-        'package_name': lambda self: self.module_dir.rsplit('/', 2)[-2],
-
-        # /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
-        'package_dir': lambda self: dirname(self.module_dir),
-
-        # /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files
-        'default_files_basedir': lambda self: join(self.module_dir, 'files'),
-
-        # /home/theno/.fabsetup-custom/fabsetup-theno-termdown
-        'custom_dir': lambda self: join(FABSETUP_CUSTOM_DIR,
-                                        self.package_name),
-
-        # /home/theno/.fabsetup-custom/fabsetup-theno-termdown/config.py
-        'custom_config': lambda self: join(self.custom_dir, 'config.py'),
-
-        # /home/theno/.fabsetup-custom/fabsetup-theno-termdown/files
-        'custom_files_basedir': lambda self: join(FABSETUP_CUSTOM_DIR,
-                                                  self.package_name, 'files'),
-    })
 
 
 def _determine_froms(addon_package, path):
