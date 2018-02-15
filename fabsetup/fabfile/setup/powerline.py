@@ -2,7 +2,7 @@ import os.path
 
 from fabric.api import env
 
-from fabsetup.fabutils import checkup_git_repo, needs_packages
+from fabsetup.fabutils import checkup_git_repo_legacy, needs_packages
 from fabsetup.fabutils import needs_repo_fabsetup_custom, suggest_localhost
 from fabsetup.fabutils import install_file_legacy, run, subtask, subsubtask, task
 from fabsetup.utils import flo, update_or_append_line, comment_out_line
@@ -60,7 +60,7 @@ def install_upgrade_powerline():
     More infos:
       https://powerline.readthedocs.io/en/latest/installation.html#pip-installation
     '''
-    checkup_git_repo('https://github.com/powerline/powerline.git')
+    checkup_git_repo_legacy('https://github.com/powerline/powerline.git')
     path_to_powerline = os.path.expanduser('~/repos/powerline')
     run(flo('pip install --user --editable={path_to_powerline}'))
     run('pip show powerline-status')  # only for information
@@ -72,8 +72,8 @@ def install_upgrade_powerline():
 
 @subtask
 def set_up_powerline_fonts():
-    checkup_git_repo('https://github.com/powerline/fonts.git',
-                     name='powerline-fonts')
+    checkup_git_repo_legacy('https://github.com/powerline/fonts.git',
+                            name='powerline-fonts')
     # install fonts into ~/.local/share/fonts
     run('cd ~/repos/powerline-fonts && ./install.sh')
     prefix = 'URxvt*font: '

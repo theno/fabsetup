@@ -3,7 +3,7 @@ from fabric.api import warn_only, execute
 from fabsetup.fabutils import custom_task as task  # here, every task is custom
 from fabsetup.fabutils import suggest_localhost, needs_packages, exists, subtask
 from fabsetup.fabutils import run, print_msg, subsubtask, install_file_legacy
-from fabsetup.fabutils import checkup_git_repos, needs_repo_fabsetup_custom
+from fabsetup.fabutils import checkup_git_repos_legacy, needs_repo_fabsetup_custom
 from fabsetup.utils import flo, query_yes_no
 
 
@@ -80,8 +80,8 @@ def set_up_vim_addon_vim_instant_markdown():
 @subsubtask
 def custom_vim_addons():
     from config import vim_janus_additional_addons
-    checkup_git_repos(vim_janus_additional_addons, base_dir='~/.janus',
-                      verbose=True, prefix='\n')
+    checkup_git_repos_legacy(vim_janus_additional_addons, base_dir='~/.janus',
+                             verbose=True, prefix='\n')
     set_up_vim_addon_xmledit()
     set_up_vim_addon_vim_instant_markdown()
 

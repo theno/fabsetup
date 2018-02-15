@@ -4,7 +4,7 @@ from fabric.context_managers import quiet
 from fabric.api import execute
 
 from fabsetup.fabutils import exists, run, task, print_msg, suggest_localhost
-from fabsetup.fabutils import checkup_git_repo, subtask, subsubtask
+from fabsetup.fabutils import checkup_git_repo_legacy, subtask, subsubtask
 from fabsetup.fabutils import install_file_legacy
 from fabsetup.fabutils import update_or_append_line, needs_repo_fabsetup_custom
 from fabsetup.utils import flo, query_input, query_yes_no
@@ -96,7 +96,8 @@ def export_repo(parent_dir, repo_url, repo_name=None):
         if exists(repo_dir):
             run(flo('rm -rf {repo_dir}'),
                 msg='delete existing repo dir')
-    repo_name = checkup_git_repo(repo_url, name=repo_name, base_dir=parent_dir)
+    repo_name = checkup_git_repo_legacy(repo_url, name=repo_name,
+                                        base_dir=parent_dir)
     run(flo('cd {parent_dir}/{repo_name} && rm -rf .git/'),
         msg='delete .git dir (the hole presentation becomes a git repository)')
 

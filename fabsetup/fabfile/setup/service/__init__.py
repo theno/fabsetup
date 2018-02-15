@@ -8,7 +8,7 @@ import tempfile
 from fabric.api import env, hide, sudo, warn_only
 from fabric.contrib.files import exists
 
-from fabsetup.fabutils import checkup_git_repo, install_packages
+from fabsetup.fabutils import checkup_git_repo_legacy, install_packages
 from fabsetup.fabutils import needs_packages, task, run, suggest_localhost, put
 from fabsetup.fabutils import FABFILE_DATA_DIR
 from fabsetup.utils import flo, query_yes_no
@@ -209,7 +209,8 @@ def vnc_raspi_osmc():
 
     print(blue('Build vnc server for raspberry pi using dispmanx '
                '(dispmanx_vnc)'))
-    checkup_git_repo(url='https://github.com/patrikolausson/dispmanx_vnc.git')
+    checkup_git_repo_legacy(
+        url='https://github.com/patrikolausson/dispmanx_vnc.git')
     run('mkdir -p ~/repos')
     run('cd ~/repos/dispmanx_vnc  &&  make')
 
