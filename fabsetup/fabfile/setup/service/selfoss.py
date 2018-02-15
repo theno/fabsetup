@@ -4,7 +4,8 @@ import tempfile
 
 from fabric.api import env
 
-from fabsetup.fabutils import checkup_git_repo, exists, needs_packages, put, run
+from fabsetup.fabutils import checkup_git_repo_legacy, exists, needs_packages
+from fabsetup.fabutils import put, run
 from fabsetup.fabutils import custom_task as task, subtask, subsubtask
 from fabsetup.fabutils import comment_out_line, print_msg, install_file_legacy
 from fabsetup.fabutils import update_or_append_line
@@ -56,7 +57,7 @@ def selfoss(reset_password=False):
 @subtask
 def checkout_latest_release_of_selfoss():
     if not exists('~/repos/selfoss/.git'):
-        checkup_git_repo('https://github.com/SSilence/selfoss.git')
+        checkup_git_repo_legacy('https://github.com/SSilence/selfoss.git')
     else:
         run('cd ~/repos/selfoss && git fetch')
 

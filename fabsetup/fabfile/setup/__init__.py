@@ -6,10 +6,10 @@ from fabric.api import env, local, sudo, warn_only
 from fabric.contrib.files import append
 
 from fabsetup.fabutils import exists, install_packages, install_package
-from fabsetup.fabutils import install_file_legacy, install_user_command_legacy, needs_packages
+from fabsetup.fabutils import install_file_legacy, install_user_command_legacy
 from fabsetup.fabutils import needs_repo_fabsetup_custom, run, suggest_localhost
-from fabsetup.fabutils import checkup_git_repo, checkup_git_repos, task
-from fabsetup.fabutils import print_msg
+from fabsetup.fabutils import checkup_git_repo_legacy, checkup_git_repos_legacy
+from fabsetup.fabutils import print_msg, task, needs_packages
 from fabsetup.utils import flo, query_yes_no
 from fabsetup.utils import magenta, cyan
 from fabsetup.utils import update_or_append_line
@@ -67,7 +67,7 @@ def regex_repl():
                 └── README.md
     '''
     install_package('libterm-readline-gnu-perl')
-    checkup_git_repo(url='https://github.com/theno/RegexREPL.git')
+    checkup_git_repo_legacy(url='https://github.com/theno/RegexREPL.git')
     for cmd in ['find_regex_repl.pl', 'match_regex_repl.pl']:
         run(flo('ln -snf  ~/repos/RegexREPL/{cmd} ~/bin/{cmd}'))
 
@@ -83,7 +83,7 @@ def i3():
     # setup: hide the mouse if not in use
     # in ~/.i3/config: 'exec /home/<USERNAME>/repos/hhpc/hhpc -i 10 &'
     install_packages(['make', 'pkg-config', 'gcc', 'libc6-dev', 'libx11-dev'])
-    checkup_git_repo(url='https://github.com/aktau/hhpc.git')
+    checkup_git_repo_legacy(url='https://github.com/aktau/hhpc.git')
     run('cd ~/repos/hhpc  &&  make')
 
 
@@ -140,7 +140,7 @@ def vim():
 
     print_msg('\n## set up pathogen\n')
     run('mkdir -p  ~/.vim/autoload  ~/.vim/bundle')
-    checkup_git_repo(url='https://github.com/tpope/vim-pathogen.git')
+    checkup_git_repo_legacy(url='https://github.com/tpope/vim-pathogen.git')
     run('ln -snf  ~/repos/vim-pathogen/autoload/pathogen.vim  '
         '~/.vim/autoload/pathogen.vim')
 
@@ -164,7 +164,7 @@ def vim():
             'url': 'https://github.com/majutsushi/tagbar.git',
         },
     ]
-    checkup_git_repos(repos, base_dir='~/.vim/bundle')
+    checkup_git_repos_legacy(repos, base_dir='~/.vim/bundle')
 
 
 @task
@@ -288,8 +288,8 @@ def pencil2():
     repo_dir = flo('~/repos/{repo_name}')
 
     print_msg('## fetch latest pencil\n')
-    checkup_git_repo(url='https://github.com/prikhi/pencil.git',
-                     name=repo_name)
+    checkup_git_repo_legacy(url='https://github.com/prikhi/pencil.git',
+                            name=repo_name)
 
     print_msg('\n## build properties\n')
     update_or_append_line(flo('{repo_dir}/build/properties.sh'),
@@ -320,7 +320,8 @@ def pencil3():
     repo_name = 'pencil3'
     repo_dir = flo('~/repos/{repo_name}')
     print_msg('## fetch latest pencil\n')
-    checkup_git_repo(url='https://github.com/evolus/pencil.git', name=repo_name)
+    checkup_git_repo_legacy(url='https://github.com/evolus/pencil.git',
+                            name=repo_name)
     run(flo('cd {repo_dir} && npm install'), msg='\n## install npms\n')
     install_user_command_legacy('pencil3', pencil3_repodir=repo_dir)
     print_msg('\nNow You can start pencil version 3 with this command:\n\n'
@@ -382,7 +383,8 @@ def server_letsencrypt():
      * https://letsencrypt.readthedocs.org/en/latest/
      * https://tty1.net/blog/2015/using-letsencrypt-in-manual-mode_en.html
     '''
-    checkup_git_repo(url='https://github.com/letsencrypt/letsencrypt.git')
+    checkup_git_repo_legacy(
+        url='https://github.com/letsencrypt/letsencrypt.git')
     sudo('service nginx stop')
     options = ' '.join([
         '--standalone',
@@ -415,8 +417,8 @@ def powerline_shell():
 
     # set up fonts for powerline
 
-    checkup_git_repo('https://github.com/powerline/fonts.git',
-            name='powerline-fonts')
+    checkup_git_repo_legacy('https://github.com/powerline/fonts.git',
+                            name='powerline-fonts')
     run('cd ~/repos/powerline-fonts && ./install.sh')
 #    run('fc-cache -vf ~/.local/share/fonts')
     prefix = 'URxvt*font: '
@@ -429,8 +431,8 @@ def powerline_shell():
 
     # set up powerline-shell
 
-    checkup_git_repo('https://github.com/banga/powerline-shell.git')
-#    checkup_git_repo('https://github.com/ohnonot/powerline-shell.git')
+    checkup_git_repo_legacy('https://github.com/banga/powerline-shell.git')
+#    checkup_git_repo_legacy('https://github.com/ohnonot/powerline-shell.git')
     install_file_legacy(path='~/repos/powerline-shell/config.py')
     run('cd ~/repos/powerline-shell && ./install.py')
 

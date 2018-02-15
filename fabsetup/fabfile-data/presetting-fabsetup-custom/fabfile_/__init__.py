@@ -7,7 +7,7 @@ custom_path = join(dirname(dirname(__file__)), 'fabfile')
 sys.path = [custom_path] + sys.path
 
 from fabsetup.fabfile import setup
-from fabsetup.fabutils import checkup_git_repo, install_packages, run
+from fabsetup.fabutils import checkup_git_repo_legacy, install_packages, run
 from fabsetup.fabutils import suggest_localhost
 from fabsetup.fabutils import custom_task as task # here every task is custom
 
@@ -92,7 +92,7 @@ def setup_webserver():
     execute(setup.solarized)
     execute(setup.vim)
     execute(setup.tmux)
-    checkup_git_repo(url='git@github.com:letsencrypt/letsencrypt.git')
+    checkup_git_repo_legacy(url='git@github.com:letsencrypt/letsencrypt.git')
     execute(setup.service.fdroid)
     execute(setup.service.owncloud)
     # circumvent circular import, cf. http://stackoverflow.com/a/18486863

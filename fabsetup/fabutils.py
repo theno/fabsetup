@@ -302,8 +302,8 @@ def install_package(package):
 
 # TODO: base_dir must be compliant to addons
 @needs_packages('git')
-def checkup_git_repos(repos, base_dir='~/repos',
-                      verbose=False, prefix='', postfix=''):
+def checkup_git_repos_legacy(repos, base_dir='~/repos',
+                             verbose=False, prefix='', postfix=''):
     '''Checkout or update git repos.
 
     repos must be a list of dicts each with an url and optional with a name
@@ -312,14 +312,14 @@ def checkup_git_repos(repos, base_dir='~/repos',
     run(flo('mkdir -p {base_dir}'))
     for repo in repos:
         cur_base_dir = repo.get('base_dir', base_dir)
-        checkup_git_repo(url=repo['url'], name=repo.get('name', None),
-                         base_dir=cur_base_dir, verbose=verbose,
-                         prefix=prefix, postfix=postfix)
+        checkup_git_repo_legacy(url=repo['url'], name=repo.get('name', None),
+                                base_dir=cur_base_dir, verbose=verbose,
+                                prefix=prefix, postfix=postfix)
 
 
 # TODO: base_dir must be compliant to addons
-def checkup_git_repo(url, name=None, base_dir='~/repos',
-                     verbose=False, prefix='', postfix=''):
+def checkup_git_repo_legacy(url, name=None, base_dir='~/repos',
+                            verbose=False, prefix='', postfix=''):
     '''Checkout or update a git repo.'''
     if not name:
         match = re.match(r'.*/(.+)\.git', url)

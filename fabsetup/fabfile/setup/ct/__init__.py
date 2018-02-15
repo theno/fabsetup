@@ -1,6 +1,6 @@
 import os.path
 
-from fabsetup.fabutils import checkup_git_repos, install_packages, run
+from fabsetup.fabutils import checkup_git_repos_legacy, install_packages, run
 from fabsetup.fabutils import custom_task as task, subtask
 from fabsetup.fabutils import query_yes_no, print_msg
 from fabsetup.utils import flo, yellow
@@ -45,7 +45,7 @@ def install_build_dependencies():
                    'depot_tools.git',
         },
     ]
-    checkup_git_repos(repos, base_dir)
+    checkup_git_repos_legacy(repos, base_dir)
 
     install_packages([
         'autoconf',

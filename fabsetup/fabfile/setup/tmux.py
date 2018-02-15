@@ -1,6 +1,6 @@
 from fabsetup.fabutils import install_file_legacy, run, suggest_localhost, subtask
 from fabsetup.fabutils import task
-from fabsetup.fabutils import checkup_git_repo
+from fabsetup.fabutils import checkup_git_repo_legacy
 
 
 @task
@@ -40,5 +40,5 @@ tic /tmp/screen.terminfo'''
 
 @subtask
 def tmux_plugin_manager():
-    checkup_git_repo(url='https://github.com/tmux-plugins/tpm',
+    checkup_git_repo_legacy(url='https://github.com/tmux-plugins/tpm',
                      name='tpm', base_dir='~/.tmux/plugins')

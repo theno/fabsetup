@@ -4,7 +4,7 @@ from os.path import expanduser
 
 from fabric.api import warn_only
 
-from fabsetup.fabutils import checkup_git_repo
+from fabsetup.fabutils import checkup_git_repo_legacy
 from fabsetup.fabutils import suggest_localhost, print_msg
 from fabsetup.fabutils import run, subtask, task
 from fabsetup.utils import flo
@@ -66,7 +66,8 @@ def openssl(version='master', ignore_test_fail=False):
 
 @subtask
 def download(src_base, version, srcdir):
-    checkup_git_repo('git://git.openssl.org/openssl.git', base_dir=src_base)
+    checkup_git_repo_legacy('git://git.openssl.org/openssl.git',
+                            base_dir=src_base)
     run(flo('cd {srcdir}  &&  git checkout {version}'))
     run(flo('cd {srcdir}  &&  git pull'))
 

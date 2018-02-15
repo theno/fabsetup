@@ -1,5 +1,5 @@
-from fabsetup.fabutils import checkup_git_repo, checkup_git_repos, flo
-from fabsetup.fabutils import install_package, install_packages
+from fabsetup.fabutils import checkup_git_repo_legacy, checkup_git_repos_legacy
+from fabsetup.fabutils import install_package, install_packages, flo
 from fabsetup.fabutils import install_user_command_legacy, run, suggest_localhost
 from fabsetup.fabutils import custom_task as task  # here, every task is custom
 
@@ -53,7 +53,8 @@ def latex():
     # circumvent circular import, cf. http://stackoverflow.com/a/18486863
     from fabfile.setup import latex
     latex()
-    checkup_git_repo('https://github.com/theno/haw-inf-thesis-template.git')
+    checkup_git_repo_legacy(
+        'https://github.com/theno/haw-inf-thesis-template.git')
 
 
 @task
@@ -63,7 +64,7 @@ def repos():
 
     The repositories are defined in list 'git_repos' in config.py.
     '''
-    checkup_git_repos(config.git_repos)
+    checkup_git_repos_legacy(config.git_repos)
 
 
 @task
@@ -72,4 +73,4 @@ def vim():
     '''Set up my vim environment.'''
     from fabfile.setup import vim
     vim()
-    checkup_git_repos(config.vim_package_repos, base_dir='~/.vim/bundle')
+    checkup_git_repos_legacy(config.vim_package_repos, base_dir='~/.vim/bundle')
