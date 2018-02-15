@@ -184,7 +184,7 @@ If your fabsetup-addon is in the `known_pip_addons` list, you only need to
 install the addon via pip to be able to execute the task.  For example:
 
 ```sh
-pip install fabsetup-theno-termdown
+pip2 install fabsetup-theno-termdown
 fabsetup theno.termdown
 ```
 
