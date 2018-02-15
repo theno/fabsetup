@@ -102,6 +102,19 @@ def needs_repo_fabsetup_custom(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
+        msg = '''\
+Git repository ~/.fabsetup-custom with configurations does not exist.
+This configs are required to use fabsetup.
+
+Clone it if you already have your own fabsetup-custom repository:
+
+    git clone <user>@<hostname>:/path/to/fabsetup-custom.git  ~/.fabetup-custom
+
+Else, initialize a new repository.
+
+Init a new repository `~/.fabsetup-custom`?'''
+        if not query_yes_no(msg, default='yes'):
+            sys.exit('abort')
         custom_dir = FABSETUP_CUSTOM_DIR
         presetting_dir = join(FABFILE_DATA_DIR, 'presetting-fabsetup-custom')
         if not isdir(custom_dir):
