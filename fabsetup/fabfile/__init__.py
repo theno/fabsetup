@@ -80,7 +80,7 @@ else:
 
     @subtask
     def pip_packages():
-        fabric.operations.local('pip freeze | grep -i ^fab || true')
+        fabric.operations.local('pip2 freeze | grep -i ^fab || true')
 
     @subtask
     def git_repos():
@@ -285,7 +285,7 @@ def summary(addon_dir, username, taskname):
     print('')
     print('    # standalone')
     print(flo('    cd {addon_dir}'))
-    print(flo('    pip install -r requirements.txt'))
+    print(flo('    pip2 install -r requirements.txt'))
     print(flo('    fab {username}.{taskname}'))
     print('')
     print('addon development:')

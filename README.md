@@ -58,28 +58,28 @@ Please contribute:
 ## Installation
 
 As a [pypi package](https://pypi.python.org/pypi/fabsetup)
-with command `pip` (recommended way):
+with command `pip2` (recommended way):
 
 ```sh
-pip install fabsetup
+pip2 install fabsetup
 
 # install addon, eg. fabsetup-theno-termdown
-pip install fabsetup-theno-termdown
+pip2 install fabsetup-theno-termdown
 ```
 
 Update:
 
 ```sh
-pip install --upgrade fabsetup
+pip2 install --upgrade fabsetup
 
 # update addon (also updates fabsetup)
-pip install --upgrade fabsetup-theno-termdown
+pip2 install --upgrade fabsetup-theno-termdown
 ```
 
 Install without superuser privileges:
 
 ```sh
-pip install --user fabsetup
+pip2 install --user fabsetup
 ```
 
 When running with `--user` pip installs the command `fabsetup` at
@@ -89,17 +89,17 @@ When running with `--user` pip installs the command `fabsetup` at
 Uninstall:
 
 ```sh
-pip uninstall --yes fabsetup
-pip uninstall --yes fabsetup-addon-theno
+pip2 uninstall --yes fabsetup
+pip2 uninstall --yes fabsetup-addon-theno
 ```
 
 You also can clone the [github repository](https://github.com/theno/fabsetup)
-instead of using `pip install`:
+instead of using `pip2 install`:
 
 ```sh
 # install requirements
 sudo apt-get install  git  fabric
-pip install --user utlz
+pip2 install --user utlz
 
 git clone  https://github.com/theno/fabsetup.git  ~/.fabsetup
 
