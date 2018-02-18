@@ -67,6 +67,16 @@ pip2 install fabsetup
 pip2 install fabsetup-theno-termdown
 ```
 
+On __[Raspberry Pi]__
+
+On a freshly installed Raspoberry Pi with raspbian (Debian) you will need at least:
+
+```sh
+sudo apt install git python python-pip libfiff-dev libssl-dev tree
+pip2 install fabsetup
+```
+Note: it seems that on raspbian pip will install with `--user` setting by default so fabsetup is located under `~/.local/bin`. So you need to add `~/.local/bin` to `$PATH`.
+
 Update:
 
 ```sh
