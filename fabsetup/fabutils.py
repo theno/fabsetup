@@ -361,30 +361,32 @@ AddonPackage = utlz.namedtuple(
     typename='Names',
     field_names=['module_dir'],
     lazy_vals={
-        # eg. fabsetup_theno_termdown
+        # eg. 'fabsetup_theno_termdown'
         'module_name': lambda self: self.module_dir.rsplit('/', 1)[-1],
 
-        # eg. fabsetup-theno-termdown
-        'package_name': lambda self: self.module_dir.rsplit('/', 2)[-2],
+        # eg. 'fabsetup-theno-termdown'
+        'package_name': lambda self: self.module_name.replace('_', '-'),
+        # would be 'site-packages' when fabsetup is installed as pip package:
+        # 'package_name': lambda self: self.module_dir.rsplit('/', 2)[-2],
 
-        # eg. /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
+        # eg. '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown'
         'package_dir': lambda self: dirname(self.module_dir),
 
-        # /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files
+        # '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files'
         'default_files_basedir': lambda self: join(self.module_dir, 'files'),
 
-        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown
+        # eg. '/home/theno/.fabsetup-custom/fabsetup-theno-termdown'
         'custom_dir': lambda self: join(FABSETUP_CUSTOM_DIR,
                                         self.package_name),
 
-        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown/config.py
+        # eg. '/home/theno/.fabsetup-custom/fabsetup-theno-termdown/config.py'
         'custom_config': lambda self: join(self.custom_dir, 'config.py'),
 
-        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown/files
+        # eg. '/home/theno/.fabsetup-custom/fabsetup-theno-termdown/files'
         'custom_files_basedir': lambda self: join(FABSETUP_CUSTOM_DIR,
                                                   self.package_name, 'files'),
 
-        # eg. /home/theno/.fabsetup-downloads/fabsetup-theno-termdown
+        # eg. '/home/theno/.fabsetup-downloads/fabsetup-theno-termdown'
         'downloads_basedir': lambda self: join(FABSETUP_DOWNLOADS_DIR,
                                                self.package_name),
     })
@@ -622,8 +624,13 @@ def install_file_wrapper(addon_package):
 
             from_custom, from_default = _determine_froms(addon_package, path)
 
-            from_custom_template = flo('{from_default}.template')
+            from_custom_template = flo('{from_custom}.template')
             from_default_template = flo('{from_default}.template')
+
+            print(from_custom)
+            print(from_custom_template)
+            print(from_default)
+            print(from_default_template)
 
             if isfile(from_custom):
                 from_path = from_custom
