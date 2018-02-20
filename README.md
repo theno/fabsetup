@@ -76,7 +76,7 @@ sudo apt install git python python-pip libfiff-dev libssl-dev tree curl
 pip2 install fabsetup
 ```
 Note: It seems that on raspbian, `pip` will install with `--user` setting by default so fabsetup is located under `~/.local/bin`. So you need to add `~/.local/bin` to `$PATH`.
-
+ 
 Update:
 
 ```sh
