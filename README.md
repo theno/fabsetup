@@ -67,9 +67,9 @@ pip2 install fabsetup
 pip2 install fabsetup-theno-termdown
 ```
 
-For __Raspberry Pi__
+### Raspberry Pi
 
-On a fresh raspbian (Debian) you will need at least the following packages before installing fabsetup with `pip2`:
+On a fresh raspbian (Debian) you will need at least the following packages before installing fabsetup with `pip`:
 
 ```sh
 sudo apt install -y git python python-pip libfiff-dev libssl-dev tree curl && sudo pip install fabsetup
