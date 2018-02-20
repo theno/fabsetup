@@ -74,7 +74,8 @@ On a fresh raspbian (Debian) you will need at least the following packages befor
 ```sh
 sudo apt install -y git python python-pip libfiff-dev libssl-dev tree curl && sudo pip install fabsetup
 ```
-The installation will take about 10 minutes so you can make yourself a tea. Note: you do not need to type `pip2` as `pip` defaults to the python2-variant of `pip`. If you run `$ pip install fabsetup as normal usr (without `sudo`) `pip` will install with `--user` setting by default so fabsetup is located under `~/.local/bin`. In this case you need to add `~/.local/bin` to `$PATH` which is located in `/etc/profile`.
+The whole installation will take about 15 minutes on a Raspi 3, so you can make yourself a tea.
+Note: You do not need to type `pip2` as `pip` defaults to the python2-variant of `pip`. If you run `$ pip install fabsetup` as normal usr (without `sudo`) `pip` will install with `--user` setting by default so fabsetup is located under `~/.local/bin`. In this case you need to add `~/.local/bin` to `$PATH` which is located in `/etc/profile`.
  
 Update:
 
