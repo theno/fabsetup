@@ -9,10 +9,13 @@ import sys
 import fabric.main
 import fabric.operations
 
+from os import chmod
 from os.path import dirname, isdir, realpath
 sys.path.append(dirname(dirname(realpath(__file__))))
 
 from fabric.api import hosts
+
+from Crypto.PublicKey import RSA
 
 import fabsetup
 from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
@@ -187,6 +190,35 @@ def git_name_and_email_or_die():
 
     return name, email
 
+# check if an ssh key is setup and if the key is imported in github
+def git_choose_ssh_or_https():
+    ssh_prv_key_fil = os.path.expanduser( '~/.ssh/id_rsa1' )
+    ssh_pub_key_fil = os.path.expanduser( '~/.ssh/id_rsa.pub1' )
+    # attempt to read ssh key
+    try:
+        with open( ssh_pub_key_fil , 'r' ) as file_content:
+            ssh_pub_key = file_content.readlines()
+    except IOError:
+        # if this fails ask if a new key should be generated
+        print( red( '~/.ssh/id_rsa.pub') + ' is missing ...\n' );
+        print( 'Using an ssh key to communicate with a git server is considered more secure' );
+        print( 'than with a normal password.' );
+        yn = query_input( 'Do you want to setup an ssh key now? (Y)es/(n)o');
+        if yn == 'y' or yn == 'Y':
+            # generate 4096 bis rsa key
+            ssh_prv_key = RSA.generate(2048)
+            ssh_pub_key = ssh_prv_key.publickey();
+            # save keys
+            with open( ssh_prv_key_fil, 'w' ) as file_content:
+                chmod( ssh_prv_key_fil, 0600 )
+                file_content.write( ssh_prv_key.exportKey('PEM') )
+            with open( ssh_pub_key_fil, 'w' ) as file_content:
+                file_content.write( ssh_pub_key.exportKey('PEM') )
+
+        sys.exit()
+    print('key ist da:')
+    print( ssh_pub_key[0] );
+    sys.exit()
 
 @subtask
 def create_files(
@@ -342,6 +374,8 @@ def new_addon():
                                 └── setup.py
     '''
     author, author_email = git_name_and_email_or_die()
+    
+    git_choose_ssh_or_https()
 
     username = query_input('github username:')
 
