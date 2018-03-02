@@ -835,5 +835,72 @@ def dn_cn_of_certificate_with_san(domain):
     return cn_dn
 
 
+def extract_minors_from_setup_py(filename_setup_py):
+    '''Extract supported python minor versions from setup.py and return them
+    as a list of str.
+
+    Return example:
+
+        ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
+    '''
+    # eg: minors_str = '2.6\n2.7\n3.3\n3.4\n3.5\n3.6'
+    minors_str = fabric.api.local(
+        flo('grep --perl-regexp --only-matching '
+            '"(?<=Programming Language :: Python :: )\\d+\\.\\d+" '
+            '{filename_setup_py}'),
+        capture=True)
+    # eg: minors = ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
+    minors = minors_str.split()
+    return minors
+
+
+def determine_latest_pythons(minors):
+    '''Determine latest stable python versions and return them as a list of str.
+
+    Args:
+        minors([<str>,..]): List of python minor versions as str, eg.
+                            ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
+
+    Return example:
+
+        ['2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
+    '''
+    # eg: ['2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
+    latests = []
+
+    versions_str = fabric.api.local(flo(
+        'pyenv install --list | tr -d [:blank:] | '
+        'grep -P "^[\d\.]+$"'), capture=True)
+    versions = versions_str.split()
+
+    for minor in minors:
+        candidates = [version
+                      for version
+                      in versions
+                      if version.startswith(minor)]
+        # sort version numbers: https://stackoverflow.com/a/2574090
+        candidates.sort(key=lambda s: [int(u) for u in s.split('.')])
+        latest = candidates[-1]
+        latests.append(latest)
+
+    print(latests)
+    return latests
+
+
+def highest_minor(python_versions):
+    '''Return highest minor of a list of stable (semantic) versions.
+
+    Example:
+        >>> python_versions = [
+        ...     '2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
+        >>> highest_minor(python_versions)
+        '3.6'
+
+    '''
+    highest = python_versions[-1]
+    major, minor, patch = highest.split('.', 2)
+    return flo('{major}.{minor}')
+
+
 if __name__ == '__main__':
     doctest.testmod()
