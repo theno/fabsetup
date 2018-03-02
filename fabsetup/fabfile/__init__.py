@@ -374,8 +374,8 @@ def new_addon():
                                 └── setup.py
     '''
     author, author_email = git_name_and_email_or_die()
-    
-    git_choose_ssh_or_https()
+
+    # git_choose_ssh_or_https()
 
     username = query_input('github username:')
 
