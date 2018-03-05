@@ -102,7 +102,8 @@ def needs_repo_fabsetup_custom(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        msg = '''\
+        if not os.path.exists(FABSETUP_CUSTOM_DIR):
+            msg = '''\
 Git repository ~/.fabsetup-custom with configurations does not exist.
 This configs are required to use fabsetup.
 
@@ -113,44 +114,48 @@ Clone it if you already have your own fabsetup-custom repository:
 Else, initialize a new repository.
 
 Init a new repository `~/.fabsetup-custom`?'''
-        if not query_yes_no(msg, default='yes'):
-            sys.exit('abort')
-        custom_dir = FABSETUP_CUSTOM_DIR
-        presetting_dir = join(FABFILE_DATA_DIR, 'presetting-fabsetup-custom')
-        if not isdir(custom_dir):
-            print(yellow('\n** **     Init ') +
-                  yellow('~/.fabsetup-custom', bold=True) +
-                  yellow('      ** **\n'))
-            print(yellow(flo('** Create files in dir {custom_dir} **')))
-            local(flo('mkdir -p {custom_dir}'))
-            local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
-            import_fabsetup_custom(globals())
-        else:
-            with quiet():
+            if not query_yes_no(msg, default='yes'):
+                sys.exit('abort')
+            custom_dir = FABSETUP_CUSTOM_DIR
+            presetting_dir = join(FABFILE_DATA_DIR,
+                                  'presetting-fabsetup-custom')
+            if not isdir(custom_dir):
+                print(yellow('\n** **     Init ') +
+                      yellow('~/.fabsetup-custom', bold=True) +
+                      yellow('      ** **\n'))
+                print(yellow(flo('** Create files in dir {custom_dir} **')))
+                local(flo('mkdir -p {custom_dir}'))
                 local(flo('cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
+                import_fabsetup_custom(globals())
+            else:
+                with quiet():
+                    local(flo(
+                        'cp -r --no-clobber {presetting_dir}/. {custom_dir}'))
 
-        if not isdir(join(custom_dir, '.git')):
-            print(yellow(
-                '\n** Git repo ~/.fabsetup-custom: init and first commit **'))
-            local(flo('cd {custom_dir} && git init'))
-            local(flo('cd {custom_dir} && git add .'))
-            local(flo('cd {custom_dir} && git commit -am "Initial commit"'))
-            print(yellow("** Done. Don't forget to create a backup of your "
-                         '~/.fabsetup-custom repo **\n'))
-            print(yellow("** But do not make it public, it's custom **\n",
-                         bold=True))
-        else:
-            with quiet():
-                cmd = flo('cd {custom_dir} && git status --porcelain')
-                res = local(cmd, capture=True)
-                if res:
-                    print(yellow('\n** git repo  ') +
-                          magenta('~/.fabsetup-custom  ') +
-                          yellow('has uncommitted changes: **'))
-                    print(cmd)
-                    print(yellow(res, bold=True))
-                    print(yellow("** Don't forget to commit them and make a "
-                                 "backup of your repo **\n"))
+            if not isdir(join(custom_dir, '.git')):
+                print(yellow(
+                    '\n** Git repo ~/.fabsetup-custom: '
+                    'init and first commit **'))
+                local(flo('cd {custom_dir} && git init'))
+                local(flo('cd {custom_dir} && git add .'))
+                local(flo('cd {custom_dir} && git commit -am "Initial commit"'))
+                print(yellow("** Done. Don't forget to create a backup of your "
+                             '~/.fabsetup-custom repo **\n'))
+                print(yellow("** But do not make it public, it's custom **\n",
+                             bold=True))
+            else:
+                with quiet():
+                    cmd = flo('cd {custom_dir} && git status --porcelain')
+                    res = local(cmd, capture=True)
+                    if res:
+                        print(yellow('\n** git repo  ') +
+                              magenta('~/.fabsetup-custom  ') +
+                              yellow('has uncommitted changes: **'))
+                        print(cmd)
+                        print(yellow(res, bold=True))
+                        print(yellow(
+                            "** Don't forget to commit them and make a "
+                            "backup of your repo **\n"))
         return func(*args, **kwargs)
     return wrapper
 
@@ -361,30 +366,32 @@ AddonPackage = utlz.namedtuple(
     typename='Names',
     field_names=['module_dir'],
     lazy_vals={
-        # eg. fabsetup_theno_termdown
+        # eg. 'fabsetup_theno_termdown'
         'module_name': lambda self: self.module_dir.rsplit('/', 1)[-1],
 
-        # eg. fabsetup-theno-termdown
-        'package_name': lambda self: self.module_dir.rsplit('/', 2)[-2],
+        # eg. 'fabsetup-theno-termdown'
+        'package_name': lambda self: self.module_name.replace('_', '-'),
+        # would be 'site-packages' when fabsetup is installed as pip package:
+        # 'package_name': lambda self: self.module_dir.rsplit('/', 2)[-2],
 
-        # eg. /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown
+        # eg. '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown'
         'package_dir': lambda self: dirname(self.module_dir),
 
-        # /home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files
+        # '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown/fabsetup_theno_termdown/files'
         'default_files_basedir': lambda self: join(self.module_dir, 'files'),
 
-        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown
+        # eg. '/home/theno/.fabsetup-custom/fabsetup-theno-termdown'
         'custom_dir': lambda self: join(FABSETUP_CUSTOM_DIR,
                                         self.package_name),
 
-        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown/config.py
+        # eg. '/home/theno/.fabsetup-custom/fabsetup-theno-termdown/config.py'
         'custom_config': lambda self: join(self.custom_dir, 'config.py'),
 
-        # eg. /home/theno/.fabsetup-custom/fabsetup-theno-termdown/files
+        # eg. '/home/theno/.fabsetup-custom/fabsetup-theno-termdown/files'
         'custom_files_basedir': lambda self: join(FABSETUP_CUSTOM_DIR,
                                                   self.package_name, 'files'),
 
-        # eg. /home/theno/.fabsetup-downloads/fabsetup-theno-termdown
+        # eg. '/home/theno/.fabsetup-downloads/fabsetup-theno-termdown'
         'downloads_basedir': lambda self: join(FABSETUP_DOWNLOADS_DIR,
                                                self.package_name),
     })
@@ -622,8 +629,13 @@ def install_file_wrapper(addon_package):
 
             from_custom, from_default = _determine_froms(addon_package, path)
 
-            from_custom_template = flo('{from_default}.template')
+            from_custom_template = flo('{from_custom}.template')
             from_default_template = flo('{from_default}.template')
+
+            print(from_custom)
+            print(from_custom_template)
+            print(from_default)
+            print(from_default_template)
 
             if isfile(from_custom):
                 from_path = from_custom
@@ -821,6 +833,73 @@ def dn_cn_of_certificate_with_san(domain):
                                  '(You should clean-up your config.py)\n')))
         cn_dn = cns[0]
     return cn_dn
+
+
+def extract_minors_from_setup_py(filename_setup_py):
+    '''Extract supported python minor versions from setup.py and return them
+    as a list of str.
+
+    Return example:
+
+        ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
+    '''
+    # eg: minors_str = '2.6\n2.7\n3.3\n3.4\n3.5\n3.6'
+    minors_str = fabric.api.local(
+        flo('grep --perl-regexp --only-matching '
+            '"(?<=Programming Language :: Python :: )\\d+\\.\\d+" '
+            '{filename_setup_py}'),
+        capture=True)
+    # eg: minors = ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
+    minors = minors_str.split()
+    return minors
+
+
+def determine_latest_pythons(minors):
+    '''Determine latest stable python versions and return them as a list of str.
+
+    Args:
+        minors([<str>,..]): List of python minor versions as str, eg.
+                            ['2.6', '2.7', '3.3', '3.4', '3.5', '3.6']
+
+    Return example:
+
+        ['2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
+    '''
+    # eg: ['2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
+    latests = []
+
+    versions_str = fabric.api.local(flo(
+        'pyenv install --list | tr -d [:blank:] | '
+        'grep -P "^[\d\.]+$"'), capture=True)
+    versions = versions_str.split()
+
+    for minor in minors:
+        candidates = [version
+                      for version
+                      in versions
+                      if version.startswith(minor)]
+        # sort version numbers: https://stackoverflow.com/a/2574090
+        candidates.sort(key=lambda s: [int(u) for u in s.split('.')])
+        latest = candidates[-1]
+        latests.append(latest)
+
+    print(latests)
+    return latests
+
+
+def highest_minor(python_versions):
+    '''Return highest minor of a list of stable (semantic) versions.
+
+    Example:
+        >>> python_versions = [
+        ...     '2.6.9', '2.7.14', '3.3.7', '3.4.8', '3.5.5', '3.6.4']
+        >>> highest_minor(python_versions)
+        '3.6'
+
+    '''
+    highest = python_versions[-1]
+    major, minor, patch = highest.split('.', 2)
+    return flo('{major}.{minor}')
 
 
 if __name__ == '__main__':
