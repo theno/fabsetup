@@ -5,6 +5,8 @@ import ConfigParser
 import os.path
 import StringIO
 import sys
+import os
+import re
 
 import fabric.main
 import fabric.operations
@@ -191,35 +193,55 @@ def git_name_and_email_or_die():
     return name, email
 
 # check if an ssh key is setup and if the key is imported in github
-def git_choose_ssh_or_https():
-    ssh_prv_key_fil = os.path.expanduser( '~/.ssh/id_rsa1' )
-    ssh_pub_key_fil = os.path.expanduser( '~/.ssh/id_rsa.pub1' )
-    # attempt to read ssh key
-    try:
-        with open( ssh_pub_key_fil , 'r' ) as file_content:
-            ssh_pub_key = file_content.readlines()
-    except IOError:
-        # if this fails ask if a new key should be generated
-        print( red( '~/.ssh/id_rsa.pub') + ' is missing ...\n' );
-        print( 'Using an ssh key to communicate with a git server is considered more secure' );
-        print( 'than with a normal password.' );
-        yn = query_input( 'Do you want to setup an ssh key now? (Y)es/(n)o');
-        if yn == 'y' or yn == 'Y':
-            # generate 4096 bis rsa key
-            ssh_prv_key = RSA.generate(2048)
-            ssh_pub_key = ssh_prv_key.publickey();
-            # save keys
-            with open( ssh_prv_key_fil, 'w' ) as file_content:
-                chmod( ssh_prv_key_fil, 0600 )
-                file_content.write( ssh_prv_key.exportKey('PEM') )
-            with open( ssh_pub_key_fil, 'w' ) as file_content:
-                file_content.write( ssh_pub_key.exportKey('PEM') )
+def git_choose_ssh_or_https(username):
+    # ssh path
+    path = os.path.expanduser('~/.ssh/')
+   
+    # ssh pub key dictionary
+    pub_keys = []
 
-        sys.exit()
-    print('key ist da:')
-    print( ssh_pub_key[0] );
-    sys.exit()
+    # search through files in ~/.ssh
+    if not os.path.isdir( path ):
+        print(red('Could not open folder "~/.ssh". If you do not have a public ssh key, please create one and place it in "~/.ssh/arbitrarykeyname.pub". Please name your public key ".pub" at the end and return to the setup.'))
+        exit(1)
 
+    for file in os.listdir( path ):
+    # check if file ends with .pub
+        if re.search( "\.pub", file):
+            try:
+                pub_key = open( path + file, 'r' )
+                for line in pub_key.readlines():
+                    line = line.split()
+                    if len(line) > 1:
+                        pub_keys.append(line[1])
+                    elif len(line) > 0:
+                        pub_keys.append(line[0])
+                        pub_key.close()
+            except IOError,OSError:
+                print(red('ERROR: Could not read your public key file in "~/.ssh".'))
+                exit(1)
+    if len(pub_keys) < 1:
+        print(red('ERROR: You do not have a ssh public key. Please create one first and import it into your github account. Then restart this setup.'))
+        exit(1)
+
+    # get github pub keys from user
+    github_pub_keys = os.popen('curl -s https://github.com/' + username + '.keys' ).read()
+
+    # search github pub keys
+    for line in github_pub_keys.splitlines():
+        line = line.split()
+        if len(line) > 1:
+            pub_keys.append(line[1])
+        elif len(line) > 0:
+            pub_keys.append(line[0])
+        else:
+            print(red('ERROR: you need to import your public key to github and restart this setup.'))
+            sys.exit(1)
+
+    if len(pub_keys) == len(set(pub_keys)):
+        print(red('ERROR: please import your public key into github and restart setup.'))
+        sys.exit(1)
+        
 @subtask
 def create_files(
         # '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown'
@@ -374,10 +396,10 @@ def new_addon():
                                 └── setup.py
     '''
     author, author_email = git_name_and_email_or_die()
-    
-    git_choose_ssh_or_https()
 
     username = query_input('github username:')
+
+    git_choose_ssh_or_https(username)
 
     addonname = query_input('\naddon name:', default='termdown')
     addonname = addonname.replace('_', '-').replace(' ', '-')  # minus only
