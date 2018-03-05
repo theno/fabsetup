@@ -193,23 +193,25 @@ def git_name_and_email_or_die():
     return name, email
 
 # check if an ssh key is setup and if the key is imported in github
+
+
 def git_choose_ssh_or_https(username):
     # ssh path
     path = os.path.expanduser('~/.ssh/')
-   
+
     # ssh pub key dictionary
     pub_keys = []
 
     # search through files in ~/.ssh
-    if not os.path.isdir( path ):
+    if not os.path.isdir(path):
         print(red('Could not open folder "~/.ssh". If you do not have a public ssh key, please create one and place it in "~/.ssh/arbitrarykeyname.pub". Please name your public key ".pub" at the end and return to the setup.'))
         exit(1)
 
-    for file in os.listdir( path ):
-    # check if file ends with .pub
-        if re.search( "\.pub", file):
+    for file in os.listdir(path):
+        # check if file ends with .pub
+        if re.search("\.pub", file):
             try:
-                pub_key = open( path + file, 'r' )
+                pub_key = open(path + file, 'r')
                 for line in pub_key.readlines():
                     line = line.split()
                     if len(line) > 1:
@@ -217,7 +219,7 @@ def git_choose_ssh_or_https(username):
                     elif len(line) > 0:
                         pub_keys.append(line[0])
                         pub_key.close()
-            except IOError,OSError:
+            except IOError, OSError:
                 print(red('ERROR: Could not read your public key file in "~/.ssh".'))
                 exit(1)
     if len(pub_keys) < 1:
@@ -225,7 +227,8 @@ def git_choose_ssh_or_https(username):
         exit(1)
 
     # get github pub keys from user
-    github_pub_keys = os.popen('curl -s https://github.com/' + username + '.keys' ).read()
+    github_pub_keys = os.popen(
+        'curl -s https://github.com/' + username + '.keys').read()
 
     # search github pub keys
     for line in github_pub_keys.splitlines():
@@ -235,13 +238,15 @@ def git_choose_ssh_or_https(username):
         elif len(line) > 0:
             pub_keys.append(line[0])
         else:
-            print(red('ERROR: you need to import your public key to github and restart this setup.'))
+            print(red(
+                'ERROR: you need to import your public key to github and restart this setup.'))
             sys.exit(1)
 
     if len(pub_keys) == len(set(pub_keys)):
         print(red('ERROR: please import your public key into github and restart setup.'))
         sys.exit(1)
-        
+
+
 @subtask
 def create_files(
         # '/home/theno/.fabsetup-addon-repos/fabsetup-theno-termdown'
@@ -352,7 +357,8 @@ def summary(addon_dir, username, taskname):
     print('    fab -f fabfile-dev.py pypi  # publish pip package at pypi')
     print('')
     print('The task code is defined in')
-    print(cyan(flo('  {addon_dir}/fabsetup_{username}_{taskname}/__init__.py')))
+    print(
+        cyan(flo('  {addon_dir}/fabsetup_{username}_{taskname}/__init__.py')))
     print('Your task output should be in markdown style.\n')
     print('More infos: '
           'https://github.com/theno/fabsetup/blob/master/howtos/'
