@@ -192,13 +192,11 @@ def git_name_and_email_or_die():
 
     return name, email
 
-# check if an ssh key is setup and if the key is imported in github
-
-
 def git_choose_ssh_or_https(username):
+    ''' Check if a ssh-key is created and imported in github. If not die. '''
+
     # ssh path
     path = os.path.expanduser('~/.ssh/')
-
     # ssh pub key dictionary
     pub_keys = []
 
@@ -207,9 +205,10 @@ def git_choose_ssh_or_https(username):
         print(red('Could not open folder "~/.ssh". If you do not have a public ssh key, please create one and place it in "~/.ssh/arbitrarykeyname.pub". Please name your public key ".pub" at the end and return to the setup.'))
         exit(1)
 
+    # check for local installed keys
     for file in os.listdir(path):
         # check if file ends with .pub
-        if re.search("\.pub", file):
+        if re.search("\.pub$", file):
             try:
                 pub_key = open(path + file, 'r')
                 for line in pub_key.readlines():
