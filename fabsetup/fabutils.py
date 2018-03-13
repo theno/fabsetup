@@ -579,7 +579,7 @@ def _determine_froms(addon_package, path):
 def _substituted(string, substitutions):
     substituted = string
     for key, val in substitutions.items():
-        substituted = string.replace(key, val)
+        substituted = substituted.replace(key, val)
     return substituted
 
 
