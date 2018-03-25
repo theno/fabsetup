@@ -17,8 +17,6 @@ sys.path.append(dirname(dirname(realpath(__file__))))
 
 from fabric.api import hosts
 
-from Crypto.PublicKey import RSA
-
 import fabsetup
 from fabsetup.fabutils import task, needs_packages, needs_repo_fabsetup_custom
 from fabsetup.fabutils import run, suggest_localhost, subtask
@@ -207,7 +205,7 @@ def git_ssh_or_die(username, key_dir='~/.ssh'):
                       'a public ssh key, create one and place it in '
                       '`~/.ssh/arbitrarykeyname.pub`.  Name your public key '
                       '`.pub` at the end and run this command again')))
-        sys.exit(1)
+        sys.exit(0)
 
     # loop through files in ~/.ssh and search for ssh public keys
     for name in os.listdir(key_dir_expanded):
@@ -224,10 +222,10 @@ def git_ssh_or_die(username, key_dir='~/.ssh'):
                     'Could not read {filename}. Still moving on ...')))
 
     if len(pub_keys) < 1:
-        print(red('ERROR: You do not have a ssh public key.  '
+        print(red('You do not have a ssh public key.  '
                   'Please create one first and import it into your github '
                   'account.  Then restart this command.'))
-        sys.exit(1)
+        sys.exit(2)
 
     # get github pub keys from user
     github_pub_keys = os.popen(flo(
@@ -239,10 +237,10 @@ def git_ssh_or_die(username, key_dir='~/.ssh'):
 
     # check if matching keys are found
     if len(pub_keys) == len(set(pub_keys)):
-        print(red('Could not find your public key in github.  '
+        print(red('Could not find your public key at github.  '
                   'Please import your public key into github '
                   'and rerun this command.'))
-        sys.exit(1)
+        sys.exit(3)
 
 
 @subtask
