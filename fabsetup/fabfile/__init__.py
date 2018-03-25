@@ -192,44 +192,56 @@ def git_name_and_email_or_die():
 
     return name, email
 
-def git_ssh_or_die(username):
-    ''' Check if a ssh-key is created and imported in github. If not die. '''
 
-    # ssh path
-    path = os.path.expanduser('~/.ssh/')
+def git_ssh_or_die(username, key_dir='~/.ssh'):
+    ''' Check if a ssh-key is created and imported in github.  Else, exit with
+    return value 1 (die).
+    '''
+    key_dir_expanded = os.path.expanduser(key_dir)
     # ssh pub key dictionary
     pub_keys = []
 
     # check if ~/.ssh exists, if not die
-    if not os.path.isdir(path):
-        print(red('Could not open folder "~/.ssh". If you do not have a public ssh key, please create one and place it in "~/.ssh/arbitrarykeyname.pub". Please name your public key ".pub" at the end and return to the setup.'))
-        exit(1)
+    if not os.path.isdir(key_dir_expanded):
+        print(red(flo('Could not open folder `{key_dir}`.  If you do not have '
+                      'a public ssh key, create one and place it in '
+                      '`~/.ssh/arbitrarykeyname.pub`.  Name your public key '
+                      '`.pub` at the end and run this command again')))
+        sys.exit(1)
 
     # loop through files in ~/.ssh and search for ssh public keys
-    for file in os.listdir(path):
-        if re.search("\.pub$", file):                # check if file ends with .pub
+    for name in os.listdir(key_dir_expanded):
+        filename = os.path.join(key_dir_expanded, name)
+        if re.search("\.pub$", filename):
+            # filename ends with .pub
             try:
-                pub_key = open(path + file, 'r')     # open found *.pub file
-                for line in pub_key.readlines():     # loop through lines and append appropriate
-                    pub_keys.append(line.split()[1]) # ssh public key if *.pub file is not empty
-                pub_key.close()                      # close *.pub file
-            except IOError, OSError:        
-                print(red('ERROR: Could not read ' + path + file + ' moving on ...'))
-    if len(pub_keys) < 1:                            # die if no public ssh key is found
-        print(red('ERROR: You do not have a ssh public key. Please create one first and import it into your github account. Then restart this setup.'))
-        exit(1)
+                with open(filename, 'r') as fh:
+                    for line in fh.readlines():
+                        # ssh public key if *.pub is not empty
+                        pub_keys.append(line.split()[1])
+            except (IOError, OSError):
+                print(red(flo(
+                    'Could not read {filename}. Still moving on ...')))
 
-    # search github pub keys
-    github_pub_keys = os.popen(                      # get github pub keys from user
-        'curl -s https://github.com/' + username + '.keys').read()
-    if github_pub_keys:                              # check if pub key is not empty
-        for line in github_pub_keys.splitlines():    # loop through github pub keys and
-            line = line.split()                      # append them to pub_keys
+    if len(pub_keys) < 1:
+        print(red('ERROR: You do not have a ssh public key.  '
+                  'Please create one first and import it into your github '
+                  'account.  Then restart this command.'))
+        sys.exit(1)
+
+    # get github pub keys from user
+    github_pub_keys = os.popen(flo(
+        'curl -s https://github.com/{username}.keys')).read()
+    if github_pub_keys:
+        for line in github_pub_keys.splitlines():
+            line = line.split()
             pub_keys.append(line[1])
 
     # check if matching keys are found
     if len(pub_keys) == len(set(pub_keys)):
-        print(red( 'ERROR: Could not find your public key in github. Please import your public key into github and restart the setup.'))
+        print(red('Could not find your public key in github.  '
+                  'Please import your public key into github '
+                  'and rerun this command.'))
         sys.exit(1)
 
 
