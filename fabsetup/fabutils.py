@@ -579,7 +579,8 @@ def _determine_froms(addon_package, path):
 def _substituted(string, substitutions):
     substituted = string
     for key, val in substitutions.items():
-        substituted = substituted.replace(key, val)
+        if isinstance(val, str):
+            substituted = substituted.replace(key, val)
     return substituted
 
 
@@ -631,11 +632,6 @@ def install_file_wrapper(addon_package):
 
             from_custom_template = flo('{from_custom}.template')
             from_default_template = flo('{from_default}.template')
-
-            print(from_custom)
-            print(from_custom_template)
-            print(from_default)
-            print(from_default_template)
 
             if isfile(from_custom):
                 from_path = from_custom
