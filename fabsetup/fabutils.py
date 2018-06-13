@@ -463,7 +463,7 @@ def checkup_git_repo_wrapper(package):
             if verbose:
                 print_msg('update: pull from origin')
             run(flo('cd {base_dir}/{name}  &&  git pull'))
-        return name
+        return flo('{base_dir}/{name}')
 
     return checkup_git_repo
 

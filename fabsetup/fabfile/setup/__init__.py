@@ -374,36 +374,6 @@ def irssi():
 
 @task
 @needs_repo_fabsetup_custom # for import of domain_groups from config.py
-@needs_packages('git', 'nginx', 'tree')
-def server_letsencrypt():
-    '''Create tls-webserver certificates which are trusted by the web pki.
-
-    More info:
-     * www.letsencrypt.org
-     * https://letsencrypt.readthedocs.org/en/latest/
-     * https://tty1.net/blog/2015/using-letsencrypt-in-manual-mode_en.html
-    '''
-    checkup_git_repo_legacy(
-        url='https://github.com/letsencrypt/letsencrypt.git')
-    sudo('service nginx stop')
-    options = ' '.join([
-        '--standalone',
-        '--rsa-key-size 4096',
-        # obtain a new certificate that duplicates an existing certificate
-#        '--duplicate',
-    ])
-    from config import domain_groups
-    for domains in domain_groups:
-        domain_opts = ' '.join([flo(' -d {domain}') for domain in domains])
-        # command 'letsencrypt-auto' requests for root by itself via 'sudo'
-        run(flo('~/repos/letsencrypt/letsencrypt-auto  certonly  {options} {domain_opts}'))
-        # FIXME 'letsencrypt-auto reenwal' of already existing certificates
-    sudo('service nginx start')
-    sudo('tree /etc/letsencrypt')
-
-
-@task
-@needs_repo_fabsetup_custom # for import of domain_groups from config.py
 @suggest_localhost
 def powerline_shell():
     '''Install and set up powerline-shell prompt.
