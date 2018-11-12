@@ -47,8 +47,9 @@ __[Setup-Howtos](./howtos "cookbook")__:
 
 ## Known fabsetup-addons
 
-* [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termdown)
+* [fabsetup-theno-letsencrypt](https://github.com/theno/fabsetup-theno-letsencrypt)
 * [fabsetup-theno-powerline-shell](https://github.com/theno/fabsetup-theno-powerline-shell)
+* [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termdown)
 
 Please contribute:
 [Create your own fabsetup-addon](./howtos/fabsetup-addon.md) and make a
