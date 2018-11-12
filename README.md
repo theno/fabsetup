@@ -48,6 +48,7 @@ __[Setup-Howtos](./howtos "cookbook")__:
 ## Known fabsetup-addons
 
 * [fabsetup-theno-termdown](https://github.com/theno/fabsetup-theno-termdown)
+* [fabsetup-theno-powerline-shell](https://github.com/theno/fabsetup-theno-powerline-shell)
 
 Please contribute:
 [Create your own fabsetup-addon](./howtos/fabsetup-addon.md) and make a
