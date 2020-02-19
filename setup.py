@@ -58,8 +58,7 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     keywords='python development utilities library',
-    packages=find_packages(
-        exclude=['contrib', 'docs', 'tests', 'fabsetup_custom']),
+    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     include_package_data=True,
     install_requires=[
         'fabric>=2.0.0',
