@@ -10,7 +10,7 @@ import re
 from setuptools import setup, find_packages
 
 thisdir = os.path.abspath(os.path.dirname(__file__))
-package = os.path.basename(thisdir)
+package = 'fabsetup'
 module = package.replace('-', '_')
 
 with open(os.path.join(thisdir, 'README.md'), encoding='utf-8') as fh_in:
@@ -58,7 +58,7 @@ setup(
         'Programming Language :: Python :: 3.8',
     ],
     keywords='python development utilities library',
-    packages=find_packages(exclude=['contrib', 'docs', 'tests']),
+    packages=find_packages(exclude=['contrib', 'docs', 'test']),
     include_package_data=True,
     install_requires=[
         'fabric>=2.0.0',
