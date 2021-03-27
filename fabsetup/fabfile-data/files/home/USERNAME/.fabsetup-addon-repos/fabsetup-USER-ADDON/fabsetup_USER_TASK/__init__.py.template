@@ -1,0 +1,23 @@
+from fabsetup.task import task, subtask
+
+from fabsetup_{{USER}}_{{TASK}}._version import __version__  # noqa: W0611
+
+
+@subtask
+def addon_files(c):
+    '''Show files of this fabsetup addon.'''
+    c.local('tree ~/.fabsetup-addon-repos/'
+            'fabsetup-{{USER}}-{{addon_name}}/')
+
+
+@subtask
+def system_info(c):
+    '''Show system information.'''
+    c.run('uname -a')
+
+
+@task
+def {{TASK}}(c, arg1=True, arg2=False, arg3='', arg4=None):
+    '''My task docstring'''
+    addon_files(c)
+    system_info(c)

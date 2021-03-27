@@ -56,12 +56,22 @@ setup(
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ],
     keywords='python development utilities library',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     include_package_data=True,
     install_requires=[
         'fabric>=2.0.0',
-        'utlz==0.10.5',
     ],
+    extras_require={
+        'devel': [
+            'black',
+            'mutmut',
+            'pytest',
+            'recommonmark',
+            'sphinx',
+            'tox',
+        ]
+    },
 )
