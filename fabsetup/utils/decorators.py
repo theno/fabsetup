@@ -4,6 +4,8 @@
 import sys
 from functools import wraps
 
+import invoke.context
+
 from fabsetup.utils.colors import blue, red, no_color, config_color
 from fabsetup.utils.docstring import lstripped_lines
 from fabsetup.utils.decorate import invoked
@@ -71,6 +73,13 @@ def print_doc(*args, **kwargs):
         @wraps(func)
         def wrapper(c, *args, **kwargs):
             """the wrapper function"""
+
+            c_or_self = c
+            if not isinstance(c, invoke.context.Context):
+                # method-type subtask
+                # cf. https://github.com/pyinvoke/invoke/issues/347
+                c = c_or_self.c
+
             col = color or config_color(
                 c.config, ["output", "color", "docstring"], blue
             )
@@ -83,7 +92,7 @@ def print_doc(*args, **kwargs):
                 msg = err_col("\n\n{}() has no docstring".format(func.__name__))
                 raise type(exc)(str(exc) + msg).with_traceback(sys.exc_info()[2])
 
-            return func(c, *args, **kwargs)
+            return func(c_or_self, *args, **kwargs)
 
         # wrapper.__signature__ = inspect.signature(func)  # TODO DEBUG
 
@@ -158,6 +167,13 @@ def print_full_name(*args, **kwargs):
         @wraps(func)
         def wrapper(c, *args, **kwargs):
             """the wrapper function"""
+
+            c_or_self = c
+            if not isinstance(c, invoke.context.Context):
+                # method-type subtask
+                # cf. https://github.com/pyinvoke/invoke/issues/347
+                c = c_or_self.c
+
             col = color or config_color(
                 c.config, ["output", "color", "full_name"], no_color
             )
@@ -183,12 +199,12 @@ def print_full_name(*args, **kwargs):
                 and c.config["output"].get("numbered")
             ):
                 first_line = "{} {}".format(
-                    ".".join(["%i" % i for i in numbered]), first_line
+                    numbered, first_line
                 )
 
             print_header(col(prefix + first_line + tail, bold))
 
-            return func(c, *args, **kwargs)
+            return func(c_or_self, *args, **kwargs)
 
         # wrapper.__signature__ = inspect.signature(func)   # TODO DEBUG
 
