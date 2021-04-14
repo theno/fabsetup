@@ -100,7 +100,8 @@ class FabsetupConfig(fabric.config.Config):
                 "hide_header": False,
                 "hide_print": False,
                 "numbered": True,
-                "numbered_state": [0],
+                # "numbered_state": [0],
+                "numbered_state": "0",
             },
             "run": {
                 "interactive": False,

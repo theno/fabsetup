@@ -6,6 +6,7 @@ from functools import wraps
 
 import fabric
 import fabric.connection
+import invoke.context
 
 import fabsetup.fabutils.queries
 from fabsetup.utils.decorators import print_doc, print_full_name
@@ -47,24 +48,24 @@ def issue_16_workaround(context):
 def increment_numbered_state(c):
 
     c.config["output"] = c.config.get("output", {})
-    c.config["output"]["numbered_state"] = c.config["output"].get("numbered_state", [0])
+    c.config["output"]["numbered_state"] = c.config["output"].get("numbered_state", "0")
 
-    copy = c.config["output"]["numbered_state"][:]
+    copy = [int(i) for i in c.config["output"]["numbered_state"].split('.')]
     copy[-1] += 1
-    c.config["output"]["numbered_state"] = copy
+    c.config["output"]["numbered_state"] = '.'.join([str(i) for i in copy])
     return c.config["output"]["numbered_state"]
 
 
 def append_numbered_index(c):
-    copy = c.config["output"]["numbered_state"][:]
+    copy = [int(i) for i in c.config["output"]["numbered_state"].split('.')]
     copy.append(0)
-    c.config["output"]["numbered_state"] = copy
+    c.config["output"]["numbered_state"] = '.'.join([str(i) for i in copy])
 
 
 def remove_numbered_index(c):
-    copy = c.config["output"]["numbered_state"][:]
+    copy = [int(i) for i in c.config["output"]["numbered_state"].split('.')]
     copy.pop()
-    c.config["output"]["numbered_state"] = copy
+    c.config["output"]["numbered_state"] = '.'.join([str(i) for i in copy])
 
 
 def wrapped_run_method(c, run_method, remote, **kwargs):
@@ -415,7 +416,7 @@ def task(*args, **kwargs):
             res = wrapped(c, *argz, **kwargz)
 
             remove_numbered_index(c)
-            c.config.task_depth = cur_depth - 1
+            c.config.task_depth = cur_depth
 
             return res
 
@@ -500,6 +501,11 @@ def subtask(*args, **kwargs):
 
             # arg = print_doc(func) if doc else func
 
+            c_or_self = c
+            if not isinstance(c, invoke.context.Context):
+                # method-type subtask
+                c = c_or_self.c
+
             cur_depth = depth
             if cur_depth is None:
                 cur_depth = int(c.config.get("task_depth", 2))
@@ -523,10 +529,10 @@ def subtask(*args, **kwargs):
             append_numbered_index(c)
             c.config.task_depth = cur_depth + 1
 
-            res = wrapped(c, *argz, **kwargz)
+            res = wrapped(c_or_self, *argz, **kwargz)
 
             remove_numbered_index(c)
-            c.config.task_depth = c.config.task_depth - 1
+            c.config.task_depth = cur_depth
 
             return res
 
