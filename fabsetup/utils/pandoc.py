@@ -24,6 +24,7 @@ class Pandoc:
                 "--to",
                 "markdown",
                 "--toc",
+                "--toc-depth=6",
                 "--standalone",
                 # "--markdown-headings",  # not available on ubuntu 16.04
                 # "atx",
