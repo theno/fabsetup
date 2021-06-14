@@ -4,6 +4,7 @@ import datetime
 import os
 import os.path
 import pprint
+import subprocess
 import sys
 
 import fabric
@@ -109,13 +110,14 @@ class FabsetupConfig(fabric.config.Config):
             "load_invoke_tasks_file": False,
             "load_fabric_fabfile": False,
             # "search_root": None,
+            "run_before": "",
+            "run_finally": "",
         }
         invoke.config.merge_dicts(defaults, ours)
         return defaults
 
 
 class Fabsetup(fabric.main.Fab):
-
     def __init__(self, *args, **kwargs):
         self.tee = None
         super().__init__(*args, **kwargs)
@@ -462,6 +464,9 @@ class Fabsetup(fabric.main.Fab):
 
     def execute(self):
 
+        if self.config.run_before:
+            subprocess.run(self.config.run_before, shell=True)
+
         self.control_output()
         self.control_outfile()
 
@@ -532,6 +537,7 @@ def main(namespace=invoke.Collection.from_module(fabsetup.fabfile)):
             config_class=FabsetupConfig,
             namespace=namespace,
         )
+
         program.run()
 
     except SystemExit as exc:
@@ -596,6 +602,9 @@ def main(namespace=invoke.Collection.from_module(fabsetup.fabfile)):
                     # css_url='https://raw.githubusercontent.com/KeithLRobertson/markdown-viewer/master/lib/sss/sss.css',
                     inline=True,
                 )
+
+        if program.config.run_finally:
+            subprocess.run(program.config.run_finally, shell=True)
 
 
 if __name__ == "__main__":
