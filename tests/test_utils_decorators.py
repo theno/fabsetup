@@ -26,6 +26,10 @@ class MockContext:
         self.user = user
         self.host = host
 
+        # mock mechanics for c_or_self and config_color()
+        self.c = self
+        # self.config = {}
+
 
 # used by test_print_doc() and test_print_full_name()
 def func(c):

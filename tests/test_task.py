@@ -12,16 +12,7 @@ import fabsetup.__main__
 import fabsetup.task
 import fabsetup.utils.colors
 
-
-# class MockContext:
-#     def __init__(self, user="username", host="hostname"):
-#         self.config = {
-#             "run": {
-#                 "env": {},
-#             },
-#         }
-#         self.user = user
-#         self.host = host
+from tests.test_utils_decorators import MockContext
 
 
 # cf. https://stackoverflow.com/q/4984647
@@ -31,20 +22,6 @@ class AttributeDict(dict):
 
     def __setattr__(self, attr, value):
         self[attr] = value
-
-
-class MockContext:
-    def __init__(self, user="username", host="hostname"):
-        self.config = AttributeDict(
-            {
-                "run": {
-                    "env": {},
-                },
-                "task_depth": 1,
-            }
-        )
-        self.user = user
-        self.host = host
 
 
 def test_issue_16_workaround(monkeypatch):
