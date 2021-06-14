@@ -198,9 +198,7 @@ def print_full_name(*args, **kwargs):
                 and c.config.get("output")
                 and c.config["output"].get("numbered")
             ):
-                first_line = "{} {}".format(
-                    numbered, first_line
-                )
+                first_line = "{} {}".format(numbered, first_line)
 
             print_header(col(prefix + first_line + tail, bold))
 
