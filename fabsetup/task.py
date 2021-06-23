@@ -195,14 +195,16 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
         }
         cmd_text = cmd_formatter.format(**cmd_text_kwargs)
 
-        # prefix = inner_prefix_formatter.format(**{
-        #     **dict(
-        #         # language='',
-        #         cmd_text=cmd_text
-        #     ),
-        #     **inner_format_kwargs
-        # })
-        prefix = inner_prefix_formatter.format(**inner_format_kwargs)
+        prefix = inner_prefix_formatter.format(
+            **{
+                **dict(
+                    # language='',
+                    cmd_text=cmd_text  # when required by custom formatter
+                    # TODO documentate usecase
+                ),
+                **inner_format_kwargs,
+            }
+        )
 
         # if inner_interactive and prefix.endswith('\n'):
         #     prefix = prefix[:-1]
