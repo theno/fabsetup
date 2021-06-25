@@ -1,9 +1,43 @@
+"""While preserving output handles write stdout and stderr to outfile."""
+
 import fileinput
 import re
 import sys
 
 
-class stream_tee(object):
+# Adapted from:
+# * https://www.tentech.ca/2011/05/stream-tee-in-python-saving-stdout-to-file-while-keeping-the-console-alive/
+# * https://gist.github.com/anandkunal/327585
+# * https://softwareadept.xyz/2020/07/getattr-vs-__getattr__-vs-__getattribute__/
+class stream_tee:
+    """Tee `stream1` to `stream2`.
+
+    :returns:
+        `stream1` wrapper which applies the tee feature.
+
+    Examples:
+
+        >>> # Prepare
+        >>> import sys
+        >>> import tempfile
+        >>> stdout_orig = sys.stdout
+
+        >>> # First Example
+        >>> outfile_handle = tempfile.TemporaryFile()
+        >>> sys.stdout = stream_tee(sys.stdout, outfile_handle)
+        >>> # output would be written to stdout and outfile
+
+        >>> # Reset
+        >>> sys.stdout = stdout_orig
+
+        >>> # Second Example
+        >>> sys.stdout = stream_tee(sys.stdout, sys.stdout)
+        >>> print("out")
+        outout
+        <BLANKLINE>
+
+    """
+
     def __init__(self, stream1, stream2):
         self.stream1 = stream1
         self.stream2 = stream2
@@ -24,20 +58,30 @@ class stream_tee(object):
         return callable1(*args, **kwargs)
 
 
-# singleton in python: https://stackoverflow.com/q/6760685
+# Adapted from this discussion on how to create a singleton in Python:
+# https://stackoverflow.com/q/6760685
 class Singleton(type):
+    """Singleton metaclass."""
+
     def __init__(cls, name, bases, dict):
         super(Singleton, cls).__init__(name, bases, dict)
-        cls.instance = None
+        cls._instance = None
 
     def __call__(cls, *args, **kwargs):
-        if cls.instance is None:
-            cls.instance = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls.instance
+        if cls._instance is None:
+            cls._instance = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instance
 
 
 class Tee(metaclass=Singleton):
+    """Single instance class in order to write both, stdout and stderr into a
+    file and also to keep stdout and stderr output active.
+
+    Uses `fabsetup.outfile.Singleton` as metaclass.
+    """
+
     def __init__(self):
+        """foo bar baz"""
 
         self.default_stdout = None
         self.default_stderr = None
@@ -48,7 +92,15 @@ class Tee(metaclass=Singleton):
         self.prefix = None
 
     def set_outfile(self, filename, prefix=""):
+        """Define the outfile where stdout and stderr will be written to.
 
+        If the outfile already exists it will be overwritten.
+
+        :param str `filename`:
+
+        :param str `prefix`:
+            Optionally write `prefix` to outfile at first.
+        """
         self.outfile_name = filename
         self.prefix = prefix
 
@@ -67,7 +119,11 @@ class Tee(metaclass=Singleton):
             sys.stderr = stream_tee(sys.stderr, self.outfile_handle)
 
     def start(self):
+        """Set up stdout, stderr and outfile handles and if given write prefix
+        to outfile.
 
+        Uses `fabsetup.utils.outfile.stream_tee()`.
+        """
         self._start()
 
         if self.prefix:
@@ -76,7 +132,7 @@ class Tee(metaclass=Singleton):
             self.prefix = None
 
     def stop(self):
-
+        """Reset stdout and stderr to previous handles and close outfile handle."""
         if self.outfile_handle:
 
             self.outfile_handle.close()
@@ -85,9 +141,16 @@ class Tee(metaclass=Singleton):
             sys.stderr = self.default_stderr
 
     def pause(self):
+        """Alias for `stop()`"""
         self.stop()
 
     def resume(self, missed_output=""):
+        """Set up like in `start()` but append to outfile.
+
+        Optionally write `missed_output` to outfile.
+
+        :param str `missed_output`:
+        """
         self._start(append=True)
         if missed_output:
             self.outfile_handle.write(missed_output)
@@ -95,6 +158,10 @@ class Tee(metaclass=Singleton):
 
 # regex source: https://stackoverflow.com/a/15780675
 def remove_color_codes(filename):
+    """Remove ANSI color codes from a file inplace.
+
+    :param str `filename`:
+    """
     with fileinput.input(filename, inplace=True) as text:
         for line in text:
             print(
