@@ -513,7 +513,7 @@ def subtask(*args, **kwargs):
 
             cur_depth = depth
             if cur_depth is None:
-                cur_depth = get_task_depth(c, default=1)
+                cur_depth = get_task_depth(c, default=2)
 
             col = color or config_color(
                 c.config, ["output", "color", "subtask_header"], cyan
