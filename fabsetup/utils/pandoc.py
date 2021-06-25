@@ -1,12 +1,26 @@
+"""With a locally installed `Pandoc <https://pandoc.org/>`_ add a table of
+content (toc) to Markdown files and create HTML from Markdown files.
+"""
+
 import os.path
 import subprocess
 
 
 class Pandoc:
+    """Pandoc command execution interface.
+
+    :param str `command`:
+        Optionally, path to Pandoc executable.
+    """
+
     def __init__(self, command="/usr/bin/pandoc"):
         self.command = command
 
     def command_available(self):
+        """Check if pandoc command is available.
+
+        Return `True` if command is available, else `False`.
+        """
         process = subprocess.Popen(
             [self.command, "--version"],
             stdout=subprocess.DEVNULL,
@@ -16,6 +30,14 @@ class Pandoc:
         return process.returncode == 0
 
     def add_toc(self, filename):
+        """Add a table of content to a Markdown file (inplace).
+
+        :param str `filename`:
+            Name of the Markdown file.
+
+        :returns:
+            `True` if toc has been added, else `False`.
+        """
         process = subprocess.Popen(
             [
                 self.command,
@@ -38,7 +60,24 @@ class Pandoc:
         process.communicate()
         return process.returncode == 0
 
-    def create_html(self, filename_from, filename_to, css_url, inline):
+    def create_html(self, filename_from, filename_to, css_url="", inline=False):
+        """From a Markdown file create an HTML file.
+
+        :param str `filename_from`:
+            Name of the Markdown file.
+
+        :param str `filename_to`:
+            Name of the HTML file.
+
+        :param str `css_url`:
+            Optional, URL of a CSS file.
+
+        :param bool `inline`:
+            Optionally embed CSS inline into the HTML file.
+
+        :returns:
+            `True` if HTML file has been created, else `False`.
+        """
 
         options = []
 
