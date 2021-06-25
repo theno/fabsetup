@@ -47,3 +47,11 @@ fabsetup.utils.outfile
    :members:
    :undoc-members:
    :show-inheritance:
+
+fabsetup.utils.pandoc
+----------------------------
+
+.. automodule:: fabsetup.utils.pandoc
+   :members:
+   :undoc-members:
+   :show-inheritance:
