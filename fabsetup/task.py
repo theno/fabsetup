@@ -50,22 +50,28 @@ def increment_numbered_state(c):
     c.config["output"] = c.config.get("output", {})
     c.config["output"]["numbered_state"] = c.config["output"].get("numbered_state", "0")
 
-    copy = [int(i) for i in c.config["output"]["numbered_state"].split('.')]
+    copy = [int(i) for i in c.config["output"]["numbered_state"].split(".")]
     copy[-1] += 1
-    c.config["output"]["numbered_state"] = '.'.join([str(i) for i in copy])
+    c.config["output"]["numbered_state"] = ".".join([str(i) for i in copy])
     return c.config["output"]["numbered_state"]
 
 
 def append_numbered_index(c):
-    copy = [int(i) for i in c.config["output"]["numbered_state"].split('.')]
+    copy = [int(i) for i in c.config["output"]["numbered_state"].split(".")]
     copy.append(0)
-    c.config["output"]["numbered_state"] = '.'.join([str(i) for i in copy])
+    c.config["output"]["numbered_state"] = ".".join([str(i) for i in copy])
 
 
 def remove_numbered_index(c):
-    copy = [int(i) for i in c.config["output"]["numbered_state"].split('.')]
+    copy = [int(i) for i in c.config["output"]["numbered_state"].split(".")]
     copy.pop()
-    c.config["output"]["numbered_state"] = '.'.join([str(i) for i in copy])
+    c.config["output"]["numbered_state"] = ".".join([str(i) for i in copy])
+
+
+def get_task_depth(c, default=1):
+    c.config["output"] = c.config.get("output", {})
+    c.config["output"]["task_depth"] = c.config["output"].get("task_depth", default)
+    return int(c.config["output"]["task_depth"])
 
 
 def wrapped_run_method(c, run_method, remote, **kwargs):
@@ -345,9 +351,8 @@ def task(*args, **kwargs):
         setup..
         ```
     '''  # noqa: E501
-    # depth = kwargs.pop("depth", int(os.environ.get("FABSETUP_TASK_DEPTH", 1)))
-    # depth = kwargs.pop("depth", None)
-    depth = None
+    # read environment variable in case of invoke or fab execution
+    depth = kwargs.pop("depth", os.environ.get("FABSETUP_OUTPUT_TASK_DEPTH", None))
     name_ = kwargs.pop("name_", None)
     doc = kwargs.pop("doc", True)
 
@@ -399,9 +404,7 @@ def task(*args, **kwargs):
 
             color = config_color(c.config, ["output", "color", "task_header"], magenta)
 
-            cur_depth = depth
-            if cur_depth is None:
-                cur_depth = int(c.config.get("task_depth", 1))
+            cur_depth = get_task_depth(c, default=int(depth or 1))
 
             wrapped = print_full_name(
                 color=color,
@@ -413,12 +416,12 @@ def task(*args, **kwargs):
             )(print_doc(prefix="")(func) if doc else func)
 
             append_numbered_index(c)
-            c.config.task_depth = cur_depth + 1
+            c.config.output["task_depth"] = cur_depth + 1
 
             res = wrapped(c, *argz, **kwargz)
 
             remove_numbered_index(c)
-            c.config.task_depth = cur_depth
+            c.config.output["task_depth"] = cur_depth
 
             return res
 
@@ -510,7 +513,7 @@ def subtask(*args, **kwargs):
 
             cur_depth = depth
             if cur_depth is None:
-                cur_depth = int(c.config.get("task_depth", 2))
+                cur_depth = get_task_depth(c, default=1)
 
             col = color or config_color(
                 c.config, ["output", "color", "subtask_header"], cyan
@@ -529,12 +532,12 @@ def subtask(*args, **kwargs):
             )(print_doc(func) if doc else func)
 
             append_numbered_index(c)
-            c.config.task_depth = cur_depth + 1
+            c.config.output["task_depth"] = cur_depth + 1
 
             res = wrapped(c_or_self, *argz, **kwargz)
 
             remove_numbered_index(c)
-            c.config.task_depth = cur_depth
+            c.config.output["task_depth"] = cur_depth
 
             return res
 
