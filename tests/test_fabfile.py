@@ -90,14 +90,14 @@ def test_info(capsys):
 
     captured = capsys.readouterr()
 
-    for header in [
+    for heading in [
         "# Fabsetup",
         "## Versions",
         "## Help",
         "## List tasks",
         "## Show task help",
     ]:
-        assert header in captured.out
+        assert heading in captured.out
 
     assert "\n[fabsetup repository]" in captured.out
     assert "fabsetup)\n\n" in captured.out

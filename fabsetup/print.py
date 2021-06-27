@@ -25,8 +25,8 @@ def print_default(*args, **kwargs):
 #         print_original(*args, **kwargs)
 
 
-def print_header(*args, **kwargs):
-    if print_header.enabled:
+def print_heading(*args, **kwargs):
+    if print_heading.enabled:
         print_original(*args, **kwargs)
 
 
@@ -52,7 +52,7 @@ def print_command_line(*args, **kwargs):
 
 # defaults
 print_default.enabled = True
-print_header.enabled = True
+print_heading.enabled = True
 print_docstring.enabled = True
 print_code_block.enabled = True
 print_command_line.enabled = True

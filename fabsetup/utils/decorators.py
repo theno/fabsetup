@@ -9,7 +9,7 @@ import invoke.context
 from fabsetup.utils.colors import blue, red, no_color, config_color
 from fabsetup.utils.docstring import lstripped_lines
 from fabsetup.utils.decorate import invoked
-from fabsetup.print import print_header, print_docstring
+from fabsetup.print import print_heading, print_docstring
 
 
 # for decorator with arguments see: http://stackoverflow.com/a/5929165
@@ -200,7 +200,7 @@ def print_full_name(*args, **kwargs):
             ):
                 first_line = "{} {}".format(numbered, first_line)
 
-            print_header(col(prefix + first_line + tail, bold))
+            print_heading(col(prefix + first_line + tail, bold))
 
             return func(c_or_self, *args, **kwargs)
 

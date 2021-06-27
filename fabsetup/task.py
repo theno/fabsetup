@@ -277,7 +277,7 @@ def task(*args, **kwargs):
 
     * On task execution produce Markdown formatted output:
 
-      + print task name as H1 header by using
+      + print task name as H1 heading by using
         ``fabsetup.utils.print_full_name()``
       + print task docstring as paragraph by using
         ``fabsetup.utils.print_doc()``.
@@ -402,7 +402,7 @@ def task(*args, **kwargs):
                 c.local = c.run
             # TODO: raise c is no context or connection TypeError
 
-            color = config_color(c.config, ["output", "color", "task_header"], magenta)
+            color = config_color(c.config, ["output", "color", "task_heading"], magenta)
 
             cur_depth = get_task_depth(c, default=int(depth or 1))
 
@@ -445,12 +445,12 @@ def subtask(*args, **kwargs):
     """Decorator which prints out the name and docstring of the decorated
     function on execution.
 
-    The output is markdown formatted and colored: A cyan colored H2 header
+    The output is markdown formatted and colored: A cyan colored H2 heading
     containing the name of the subtask and a non-colored paragraph with the
     docstring of the subtask.
 
     :param int depth:
-        Optionally set the order of the markdown header which contains the
+        Optionally set the order of the markdown heading which contains the
         subtask name. The default is `2`.
 
     :param str prefix:
@@ -516,7 +516,7 @@ def subtask(*args, **kwargs):
                 cur_depth = get_task_depth(c, default=2)
 
             col = color or config_color(
-                c.config, ["output", "color", "subtask_header"], cyan
+                c.config, ["output", "color", "subtask_heading"], cyan
             )
 
             pfx = prefix
@@ -552,12 +552,12 @@ def subtask(*args, **kwargs):
 #     """Decorator which prints out the name and docstring of the decorated
 #     function on execution.
 #
-#     The output is markdown formatted and colored: A cyan colored H3 header
+#     The output is markdown formatted and colored: A cyan colored H3 heading
 #     containing the name of the subtask and a non-colored paragraph with the
 #     docstring of the subtask.
 #
 #     :param int depth:
-#         Optionally set the order of the markdown header which contains the
+#         Optionally set the order of the markdown heading which contains the
 #         subtask name. The default is ``2``.
 #
 #     :param str prefix:

@@ -90,15 +90,15 @@ class FabsetupConfig(fabric.config.Config):
                     "docstring": "blue",
                     "error": "red",
                     "full_name": "no_color",
-                    "subtask_header": "cyan",
-                    "task_header": "magenta",
+                    "subtask_heading": "cyan",
+                    "task_heading": "magenta",
                     # "question": "default_color",
                 },
                 "color_off": False,
                 "hide_command_line": False,
                 "hide_code_block": False,
                 "hide_docstring": False,
-                "hide_header": False,
+                "hide_heading": False,
                 "hide_print": False,
                 "numbered": True,
                 "numbered_state": "0",
@@ -150,10 +150,10 @@ class Fabsetup(fabric.main.Fab):
                 help="Hide ((sub-) sub-) task docstrings.",
             ),
             invoke.Argument(
-                names=("hide-header",),
+                names=("hide-heading",),
                 kind=bool,
                 default=False,
-                help="Hide markdown headers.",
+                help="Hide markdown headings.",
             ),
             invoke.Argument(
                 names=("hide-print",),
@@ -348,8 +348,8 @@ class Fabsetup(fabric.main.Fab):
         if self.args.get("hide-docstring").value:
             self.config.output.hide_docstring = True
 
-        if self.args.get("hide-header").value:
-            self.config.output.hide_header = True
+        if self.args.get("hide-heading").value:
+            self.config.output.hide_heading = True
 
         if self.args.get("hide-print").value:
             self.config.output.hide_print = True
@@ -383,8 +383,8 @@ class Fabsetup(fabric.main.Fab):
         if self.config.output.hide_docstring:
             fabsetup.print.print_docstring.enabled = False
 
-        if self.config.output.hide_header:
-            fabsetup.print.print_header.enabled = False
+        if self.config.output.hide_heading:
+            fabsetup.print.print_heading.enabled = False
 
         if self.config.output.hide_print:
             fabsetup.print.print_default.enabled = False
