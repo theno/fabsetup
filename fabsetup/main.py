@@ -26,7 +26,7 @@ import fabsetup.utils.pandoc
 
 
 class FabsetupConfig(fabric.config.Config):
-    """An `fabric.config.Config` subclass which is an `invoke.config.Config`
+    """A `fabric.config.Config` subclass which is an `invoke.config.Config`
     subclass for prefix manipulation.
 
     This enables for fabsetup prefixed config files and FABSETUP_ prefixed
