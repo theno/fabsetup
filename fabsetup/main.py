@@ -503,6 +503,12 @@ class Fabsetup(fabric.main.Fab):
 
         super().run(argv=argv, exit=True)
 
+    # avoid sphinx warning running `make html` by overriding docstring:
+    #   fabsetup/fabsetup/main.py:docstring of fabsetup.main.Fabsetup.execute:4: WARNING: undefined label: default-values
+    def execute(self, *args, **kwargs):
+        """"""
+        super().execute(*args, **kwargs)
+
     def print_version(self):
         print(fabsetup.version_str())
 
