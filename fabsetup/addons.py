@@ -56,7 +56,7 @@ def load_addon(package_name):
         Package name of the fabsetup addon, e.g. ``'fabsetup-theno-termdown'``.
 
     :returns:
-        Two-tuple of type (`fabsetup_USERNAME_TASKNAME`, `invoke.Collection`).
+        Two-tuple ("fabsetup_USERNAME_TASKNAME", `invoke.Collection`).
     """
     module_name, username = module_username(package_name)
     module = importlib.import_module(module_name)
@@ -67,8 +67,8 @@ def load_addon(package_name):
 def load_pip_addons():
     """Load all known fabsetup addons which are installed as pypi pip-packages.
 
-    The loaded collections are returned as a list and also stored in
-    ``fabsetup.addons.PIP_MODULES``.
+    The loaded collections are returned as a list and also stored in list
+    attribute ``fabsetup.addons.PIP_MODULES``.
 
     :returns:
         list of `[invoke.Collection`, `invoke.Collection, ...]`,
