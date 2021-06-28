@@ -521,7 +521,8 @@ def test_subtask(capsys):
 
     # mysubtask() is a subtask, so we are at task_depth 2
     c = MockContext()
-    c.config.task_depth = 2
+    # c.config.output["task_depth"] = 2
+    fabsetup.task.get_task_depth(c, default=2)
 
     captured = capsys.readouterr()
 
@@ -549,7 +550,7 @@ some output
     # default: depth = kwargs.get('depth', None)
     decorated = fabsetup.task.subtask(depth=5)(mysubtask)
     decorated(c)
-    c.config.task_depth = 2  # "reset" task depth
+    c.config.output["task_depth"] = 2  # "reset" task depth
     captured = capsys.readouterr()
     assert (
         captured.out
