@@ -29,33 +29,50 @@ class FabsetupConfig(fabric.config.Config):
     """A `fabric.config.Config` subclass which is an `invoke.config.Config`
     subclass for prefix manipulation.
 
-    This enables for fabsetup prefixed config files and `FABSETUP_` prefixed
-    environment variables.
+    This enables for `fabsetup` prefixed config files and `FABSETUP_` prefixed
+    environment variables utilising the `same mechanics as Fabric
+    <https://docs.fabfile.org/en/latest/concepts/configuration.html#configuration>`_.
     """
 
     prefix = "fabsetup"
+    """The prefix used by Fabsetup => ``fabsetup.yaml, FABSETUP_ENV_VAR, ...``"""
 
     @staticmethod
-    def as_dict_r(obj):
+    def _as_dict_r(obj):
         if type(obj) is dict:
             res = {}
             for k, v in obj.items():
-                res[k] = FabsetupConfig.as_dict_r(v)
+                res[k] = FabsetupConfig._as_dict_r(v)
             return res
         if not hasattr(obj, "__dict__"):
             return obj
         else:
             try:
-                return FabsetupConfig.as_dict_r(dict(obj))
+                return FabsetupConfig._as_dict_r(dict(obj))
             except TypeError:
                 return obj
 
     def as_dict(self):
-        return FabsetupConfig.as_dict_r(self)
+        """Return this ``fabsetup.main.FabsetupConfig`` as dict.
+
+        This dict is printed in ``fabstup.main.execute`` using
+        ``pprint.pprint()``.
+        """
+        return FabsetupConfig._as_dict_r(self)
 
     @staticmethod
     def global_defaults():
-        """"""
+        """Create and return default configurations from Fabsetup, Fabric and
+        Invoke defaults.
+
+        Extends `fabric.config.Config.global_defaults
+        <https://docs.fabfile.org/en/latest/api/config.html#fabric.config.Config.global_defaults>`_
+        which extends `invoke.config.Config.global_defaults()
+        <https://docs.pyinvoke.org/en/stable/api/config.html#invoke.config.Config.global_defaults>`_.
+
+        :returns:
+            `dict` with merged defaults.
+        """
         defaults = fabric.config.Config.global_defaults()
         ours = {
             "outfile": {
@@ -476,7 +493,10 @@ class Fabsetup(fabric.main.Fab):
             self.command = " ".join(sys.argv[:])
 
     def execute(self):
-
+        """Add hooks to ``invoke.program.`` in order to run external command
+        before fabsetup task execution, control output and outfile of fabsetup
+        task execution and show effective fabsetup config.
+        """
         if self.config.run_before:
             subprocess.run(self.config.run_before, shell=True)
 
@@ -493,6 +513,7 @@ class Fabsetup(fabric.main.Fab):
         super().execute()
 
     def run(self, argv=None, exit=True):
+        """"""
 
         # self.create_config()
         # self.parse_core(argv)
@@ -502,12 +523,6 @@ class Fabsetup(fabric.main.Fab):
         # self.update_config()
 
         super().run(argv=argv, exit=True)
-
-    # avoid sphinx warning running `make html` by overriding docstring:
-    #   fabsetup/fabsetup/main.py:docstring of fabsetup.main.Fabsetup.execute:4: WARNING: undefined label: default-values
-    def execute(self, *args, **kwargs):
-        """"""
-        super().execute(*args, **kwargs)
 
     def print_version(self):
         print(fabsetup.version_str())
