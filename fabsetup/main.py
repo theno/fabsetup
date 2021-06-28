@@ -29,7 +29,7 @@ class FabsetupConfig(fabric.config.Config):
     """A `fabric.config.Config` subclass which is an `invoke.config.Config`
     subclass for prefix manipulation.
 
-    This enables for fabsetup prefixed config files and FABSETUP_ prefixed
+    This enables for fabsetup prefixed config files and `FABSETUP_` prefixed
     environment variables.
     """
 
@@ -55,6 +55,7 @@ class FabsetupConfig(fabric.config.Config):
 
     @staticmethod
     def global_defaults():
+        """"""
         defaults = fabric.config.Config.global_defaults()
         ours = {
             "outfile": {
@@ -115,11 +116,22 @@ class FabsetupConfig(fabric.config.Config):
 
 
 class Fabsetup(fabric.main.Fab):
+    """Fabsetup's CLI entrypoint and parser configuration.
+
+    It is build on top of Fabric's and Invoke's core functionality for same.
+    """
     def __init__(self, *args, **kwargs):
         self.tee = None
         super().__init__(*args, **kwargs)
 
     def core_args(self):
+        """Create core arguments.
+
+        Overwrites `fabric.main.Fab.core_args()`.
+
+        :returns:
+            List of core args each of type `invoke.parser.argument.Argument`.
+        """
         core_args = super().core_args()
         extra_args = [
             invoke.Argument(
@@ -240,6 +252,10 @@ class Fabsetup(fabric.main.Fab):
         super().parse_core(argv)
 
     def parse_cleanup(self):
+        """Add list of known fabsetup addons to program output.
+
+        Overwrites `invoke.program.Program.parse_cleanup()`.
+        """
 
         # wrap_in_code_block = (
         #     self.args.list.value or self.args.help.value

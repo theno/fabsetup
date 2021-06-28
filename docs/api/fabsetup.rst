@@ -33,6 +33,14 @@ fabsetup.fabfile
    :undoc-members:
    :show-inheritance:
 
+fabsetup.main
+--------------------
+
+.. automodule:: fabsetup.main
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 fabsetup.print
 ---------------------
 
