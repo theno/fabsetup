@@ -77,7 +77,7 @@ class FabsetupConfig(fabric.config.Config):
         ours = {
             "outfile": {
                 "dir": "",
-                "basename_formatter": "fabsetup_{now}.md",
+                "basename_formatter": "fabsetup_{now}_{tasks}.md",
                 "now_format": "%F_%H-%M-%S",
                 "name": "",
                 "keep_color": False,
@@ -137,6 +137,7 @@ class Fabsetup(fabric.main.Fab):
 
     It is build on top of Fabric's and Invoke's core functionality for same.
     """
+
     def __init__(self, *args, **kwargs):
         self.tee = None
         super().__init__(*args, **kwargs)
@@ -432,7 +433,10 @@ class Fabsetup(fabric.main.Fab):
                 now = datetime.datetime.now()
 
                 basename = self.config.outfile.basename_formatter.format(
-                    now=now.strftime(self.config.outfile.now_format)
+                    tasks="_".join(
+                        [task.name.replace(".", "-") for task in self.tasks]
+                    ),
+                    now=now.strftime(self.config.outfile.now_format),
                 )
 
                 self.config.outfile.name = os.path.join(
