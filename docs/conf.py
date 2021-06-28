@@ -1,6 +1,8 @@
+import inspect
+
 import invoke
 from sphinx.ext import autodoc
-from sphinx.util.inspect import signature, stringify_signature
+from sphinx.util.inspect import stringify_signature
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -90,7 +92,8 @@ class TaskDocumenter(
 
     def format_signature(self):
         function = self.object.body
-        sig = signature(subject=function, follow_wrapped=True)
+        # sig = signature(subject=function, follow_wrapped=True)
+        sig = inspect.signature(function, follow_wrapped=True)
         return stringify_signature(sig)
 
     def document_members(self, all_members=False):
@@ -109,5 +112,36 @@ class TaskDocumenter(
         return result
 
 
+class SubtaskDocumenter(
+        autodoc.DocstringSignatureMixin, autodoc.ModuleLevelDocumenter):
+    objtype = 'subtask'
+    directivetype = 'function'
+
+    @classmethod
+    def can_document_member(cls, member, membername, isattr, paren):
+        try:
+            return inspect.getsourcelines(member)[0][0].startswith("@subtask")
+        except Exception:
+            pass
+        return False
+
+    def format_signature(self):
+        function = self.object
+        sig = inspect.signature(function, follow_wrapped=True)
+        return stringify_signature(sig)
+
+    def document_members(self, all_members=False):
+        pass
+
+    def format_name(self):
+        nam = super().format_name()
+        return '@subtask\n{nam}'.format(nam=nam)  # noqa: E0100
+
+    def get_doc(self, **kwargs):
+        result = super().get_doc(**kwargs)
+        return result
+
+
 def setup(app):
     app.add_autodocumenter(TaskDocumenter)
+    app.add_autodocumenter(SubtaskDocumenter)
