@@ -96,7 +96,13 @@ def main(namespace=invoke.Collection.from_module(fabsetup.fabfile)):
                 program.pandoc.create_html(
                     filename_from=program.config.outfile.name,
                     filename_to=program.config.outfile.pandoc.html.name,
-                    css_url="~/.fabsetup-runs/outfile.css",
+                    css_url=os.path.join(
+                        os.path.dirname(__file__),
+                        "utils",
+                        "css",
+                        "outfile.css",
+                    ),
+                    # css_url="~/.fabsetup-runs/outfile.css",
                     # css_url='https://raw.githubusercontent.com/KeithLRobertson/markdown-viewer/master/lib/sss/sss.css',
                     inline=True,
                 )

@@ -1,4 +1,5 @@
 graft fabsetup/fabfile-data
+include fabsetup/utils/css/outfile.css
 include pyproject.toml
 include README.md
 include LICENSE.txt
