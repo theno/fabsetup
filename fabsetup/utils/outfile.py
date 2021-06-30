@@ -1,6 +1,8 @@
 """While preserving output handles write stdout and stderr to outfile."""
 
 import fileinput
+import os
+import os.path
 import re
 import sys
 
@@ -94,6 +96,8 @@ class Tee(metaclass=Singleton):
     def set_outfile(self, filename, prefix=""):
         """Define the outfile where stdout and stderr will be written to.
 
+        Recursively create parent dirs of ``filename`` if they not exist.
+
         If the outfile already exists it will be overwritten.
 
         :param str `filename`:
@@ -103,6 +107,11 @@ class Tee(metaclass=Singleton):
         """
         self.outfile_name = filename
         self.prefix = prefix
+
+        os.makedirs(
+            os.path.dirname(os.path.abspath(os.path.expanduser(filename))),
+            exist_ok=True,
+        )
 
     def _start(self, append=False):
 

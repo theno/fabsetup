@@ -2,6 +2,7 @@
 content (toc) to Markdown files and create HTML from Markdown files.
 """
 
+import os
 import os.path
 import subprocess
 
@@ -63,6 +64,8 @@ class Pandoc:
     def create_html(self, filename_from, filename_to, css_url="", inline=False):
         """From a Markdown file create an HTML file.
 
+        Recursively create parent dirs of ``filename_to`` if they not exist.
+
         :param str `filename_from`:
             Name of the Markdown file.
 
@@ -78,13 +81,18 @@ class Pandoc:
         :returns:
             `True` if HTML file has been created, else `False`.
         """
+        os.makedirs(
+            os.path.dirname(os.path.abspath(os.path.expanduser(filename_to))),
+            exist_ok=True,
+        )
 
         options = []
 
         if css_url:
             options += [
                 "--css",
-                os.path.abspath(os.path.expanduser(css_url)),
+                # os.path.abspath(os.path.expanduser(css_url)),
+                css_url,
             ]
 
         if inline:
