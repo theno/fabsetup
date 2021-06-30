@@ -4,6 +4,8 @@ import invoke
 from sphinx.ext import autodoc
 from sphinx.util.inspect import stringify_signature
 
+import fabsetup
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -26,11 +28,16 @@ from sphinx.util.inspect import stringify_signature
 # -- Project information -----------------------------------------------------
 
 project = 'Fabsetup'
-copyright = '2021 Theodor Nolte'
 author = 'Theodor Nolte'
+copyright = author  # fallback
+with open("../LICENSE.txt") as fh:
+    prefix = "Copyright (c) "
+    for line in fh.readlines():
+        if line.startswith(prefix):
+            copyright = line.split(prefix)[-1].strip()
 
 # The full version, including alpha/beta/rc tags
-release = 'fabsetup-1.0.0'
+release = 'fabsetup-{}'.format(fabsetup.__version__)
 
 
 # -- General configuration ---------------------------------------------------
