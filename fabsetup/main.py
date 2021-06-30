@@ -77,7 +77,7 @@ class FabsetupConfig(fabric.config.Config):
         ours = {
             "outfile": {
                 "dir": "",
-                "basename_formatter": "fabsetup_{now}_{tasks}.md",
+                "basename_formatter": "fabsetup_{now}{tasks}{hosts}.md",
                 "now_format": "%F_%H-%M-%S",
                 "name": "",
                 "keep_color": False,
@@ -431,12 +431,31 @@ class Fabsetup(fabric.main.Fab):
             if outfile_dir:
 
                 now = datetime.datetime.now()
+                now_str = now.strftime(self.config.outfile.now_format)
 
+                # eg. `fabsetup task1 task2 long.task.name` results
+                # in: tasks_str = "_task1_task2_long-task-name"
+                # eg. `fabsetup` (no tasks given) results
+                # in: tasks_str = ""
+                tasks_str = "".join(
+                    ["_{}".format(task.name.replace(".", "-")) for task in self.tasks]
+                )
+
+                # eg. hosts_str = "_host1_user@host2"
+                # eg. hosts_str = "_user@host"
+                # eg. hosts_str = ""
+                hosts = []
+                hs = self.core[0].as_kwargs["H"]
+                if hs:
+                    hosts = hs.split(",")
+                hosts_str = "".join(["_{}".format(user_host) for user_host in hosts])
+
+                # eg.
+                # basename = "fabsetup_2021-02-21_10-30-01_taskname_user@host.md"
                 basename = self.config.outfile.basename_formatter.format(
-                    tasks="_".join(
-                        [task.name.replace(".", "-") for task in self.tasks]
-                    ),
-                    now=now.strftime(self.config.outfile.now_format),
+                    now=now_str,
+                    tasks=tasks_str,
+                    hosts=hosts_str,
                 )
 
                 self.config.outfile.name = os.path.join(
