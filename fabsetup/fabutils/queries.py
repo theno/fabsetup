@@ -5,7 +5,23 @@ import sys
 
 import fabsetup.print
 import fabsetup.utils.outfile
-from fabsetup.utils.colors import default_color
+from fabsetup.utils.colors import magenta, no_color
+
+
+# adapted from: https://stackoverflow.com/a/2533142
+def interactive(prompt, cmd_color, prefill=""):
+    readline.set_startup_hook(lambda: readline.insert_text(prefill))
+    try:
+        tee = fabsetup.utils.outfile.Tee()
+        tee.pause()
+
+        result = input(prompt)
+
+        tee.resume(missed_output="{}{}\n".format(prompt, cmd_color(result, bold=True)))
+
+        return result
+    finally:
+        readline.set_startup_hook()
 
 
 def query_yes_no(question, default="yes"):
@@ -43,8 +59,13 @@ def query_yes_no(question, default="yes"):
         raise ValueError("invalid default answer: '%s'" % default)
 
     while True:
-        sys.stdout.write(question + prompt)
-        choice = input().lower()
+        # sys.stdout.write(question + prompt)
+        # choice = input().lower()
+        choice = interactive(
+            prompt=magenta("{}{}".format(question, prompt)),
+            cmd_color=no_color,
+            prefill="",
+        )
         if default is not None and choice == "":
             return valid[default]
         elif choice in valid:
@@ -53,7 +74,8 @@ def query_yes_no(question, default="yes"):
             sys.stdout.write("Please respond with 'yes' or 'no' " "(or 'y' or 'n').\n")
 
 
-def query_input(question, default=None, color=default_color):
+# def query_input(question, default=None, color=default_color):
+def query_input(question, default=None, color=magenta):
     """Ask a question for input via input() and return their answer.
 
     :param question:
@@ -67,33 +89,23 @@ def query_input(question, default=None, color=default_color):
 
     The 'answer' return value is a str.
     """
-    if default is None or default == "":
-        prompt = " "
-    elif type(default) == str:
-        prompt = " [{}] ".format(default)
-    else:
-        raise ValueError("invalid default answer: '%s'" % default)
+    # if default is None or default == "":
+    #     prompt = " "
+    # elif type(default) == str:
+    #     prompt = " [{}] ".format(default)
+    # else:
+    #     raise ValueError("invalid default answer: '%s'" % default)
+    prompt = ""
 
     while True:
-        sys.stdout.write(color(question + prompt))
-        choice = input()
-        if default is not None and choice == "":
-            return default
+        # sys.stdout.write(color(question + prompt))
+        # choice = input()
+        choice = interactive(
+            prompt="{} ".format(color(question + prompt)),
+            cmd_color=no_color,
+            prefill=default,
+        )
+        # if default is not None and choice == "":
+        #     return default
         if choice != "":
             return choice
-
-
-# taken from: https://stackoverflow.com/a/2533142
-def interactive(prompt, cmd_color, prefill=""):
-    readline.set_startup_hook(lambda: readline.insert_text(prefill))
-    try:
-        tee = fabsetup.utils.outfile.Tee()
-        tee.pause()
-
-        result = input(prompt)
-
-        tee.resume(missed_output="{}{}\n".format(prompt, cmd_color(result, bold=True)))
-
-        return result
-    finally:
-        readline.set_startup_hook()
