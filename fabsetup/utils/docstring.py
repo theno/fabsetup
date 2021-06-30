@@ -23,6 +23,17 @@ def lstripped_lines(text):
          some
 
     """
-    return "\n".join(
-        [line[4:] if line.startswith(" " * 4) else line for line in text.split("\n")]
-    )
+    # return "\n".join(
+    #     [line[4:] if line.startswith(" " * 4) else line for line in text.split("\n")]
+    # )
+    lines = []
+    indent = 4
+    multiplier = 0
+    for line in text.split("\n"):
+        if not multiplier:
+            rest = line
+            while rest.startswith(" " * indent):
+                rest = rest[indent:]
+                multiplier = (multiplier or 0) + 1
+        lines.append(line[indent*multiplier:])
+    return "\n".join(lines)
