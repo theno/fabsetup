@@ -130,7 +130,8 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
     postfix_formatter = kwargs.get("postfix_formatter", "```\n")
     format_kwargs = {
         **{
-            "language": "",  # 'sh'
+            # "language": "",  # 'sh'
+            "language": "sh",
             "prompt_end": "> ",
         },
         **kwargs.get("format_kwargs", {}),
@@ -396,7 +397,10 @@ def task(*args, **kwargs):
                     c,
                     run_method=c.run,
                     remote=False,
-                    local_cmd_formatter=wrap_kwargs.pop("local_cmd_formatter", "{cmd}"),
+                    local_cmd_formatter=wrap_kwargs.pop(
+                        "local_cmd_formatter", "{cmd}"
+                        # "local_cmd_formatter", "{prompt_end}{cmd}"
+                    ),
                     **wrap_kwargs
                 )
                 c.local = c.run
