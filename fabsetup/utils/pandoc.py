@@ -86,7 +86,11 @@ class Pandoc:
             exist_ok=True,
         )
 
-        options = []
+        options = [
+            # "--standalone",
+            "--include-after-body",
+            os.path.join(os.path.dirname(__file__), "css", "html-script.js"),
+        ]
 
         if css_url:
             options += [

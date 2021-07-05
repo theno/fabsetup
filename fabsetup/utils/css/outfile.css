@@ -1,4 +1,12 @@
 /*
+https://stackoverflow.com/a/6972830
+*/
+pre.sh {
+  height: 24px;
+  overflow-y:hidden;
+}
+
+/*
 Taken from markdown-viewer firefox addon created by Keith Robertson:
 https://raw.githubusercontent.com/KeithLRobertson/markdown-viewer/master/lib/sss/sss.css
 */
