@@ -35,5 +35,5 @@ def lstripped_lines(text):
             while rest.startswith(" " * indent):
                 rest = rest[indent:]
                 multiplier = (multiplier or 0) + 1
-        lines.append(line[indent*multiplier:])
+        lines.append(line[indent * multiplier:])
     return "\n".join(lines)
