@@ -79,8 +79,16 @@ def main(namespace=invoke.Collection.from_module(fabsetup.fabfile)):
                     data = fh_in.read()
 
                 with open(outfile_abspath, "w") as fh_out:
+                    # eg.
+                    #     ```
+                    #     /path/to/bin/fabsetup taskname
+                    #     [0]
+                    #     ```
+                    #
+                    #     ...output of fabsetup task execution...
+                    #
                     fh_out.write(
-                        "{}```sh\n{}\n[{}]\n```\n\n{}".format(
+                        "{}```\n{}\n[{}]\n```\n\n{}".format(
                             program.config.outfile.fabsetup_command_prefix,
                             program.command,
                             exit_code,
