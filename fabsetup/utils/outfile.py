@@ -6,6 +6,8 @@ import os.path
 import re
 import sys
 
+import fabsetup.utils.colors
+
 
 # Adapted from:
 # * https://www.tentech.ca/2011/05/stream-tee-in-python-saving-stdout-to-file-while-keeping-the-console-alive/
@@ -13,6 +15,26 @@ import sys
 # * https://softwareadept.xyz/2020/07/getattr-vs-__getattr__-vs-__getattribute__/
 class stream_tee:
     """Tee `stream1` to `stream2`.
+
+    Basically, stream_tee returns a wrapper of ``stream1`` which hooks in every
+    method call for a method of ``stream1`` to be called on ``stream2``, too.
+
+    :param typing.TextIO stream1:
+        First filehandle.
+
+    :param typing.TextIO stream2:
+        Second filehandle.
+
+    :param fabsetup.utils.colors.color-function stream1_color:
+        Optionally set a color for stream1.
+
+    :param str stream2_line_prefix:
+        Optionally set line prefix for stream2 which will be prepended to each
+        line written.
+
+    :param list<str> stream2_no_prefix_lines:
+        Optionally define lines which woud not prepended by a prefix when
+        written.
 
     :returns:
         `stream1` wrapper which applies the tee feature.
@@ -40,10 +62,22 @@ class stream_tee:
 
     """
 
-    def __init__(self, stream1, stream2):
+    def __init__(self, stream1, stream2, **kwargs):
         self.stream1 = stream1
         self.stream2 = stream2
         self.__missing_method_name = None
+
+        self.stream1_color = kwargs.get("stream1_color", None)
+
+        self.stream2_line_prefix = kwargs.get("stream2_line_prefix", None)
+        self.stream2_no_prefix_lines = (
+            kwargs.get(
+                "stream2_no_prefix_lines",
+                [],
+            )
+            + [""]  # put no prefix on empty strings without newline at the end
+        )
+        self.add_prefix = False
 
     def __getattribute__(self, name):
         return object.__getattribute__(self, name)
@@ -53,10 +87,38 @@ class stream_tee:
         return getattr(self, "__methodmissing__")
 
     def __methodmissing__(self, *args, **kwargs):
+
+        # hook into callable2
+
         callable2 = getattr(self.stream2, self.__missing_method_name)
-        callable2(*args, **kwargs)
+        prefix = self.stream2_line_prefix
+        if (
+            self.add_prefix
+            and self.__missing_method_name == "write"
+            and prefix
+        ):
+            callable2(
+                "".join(
+                    "{}{}\n".format(prefix, line)
+                    for line
+                    in args[0].split("\n")
+                    if line not in self.stream2_no_prefix_lines
+                ),
+                *args[1:],
+                **kwargs,
+            )
+        else:
+            callable2(*args, **kwargs)
+
+        # apply method to callable1
 
         callable1 = getattr(self.stream1, self.__missing_method_name)
+        if self.stream1_color and self.__missing_method_name == "write":
+            return callable1(
+                self.stream1_color(args[0]),
+                *args[1:],
+                **kwargs,
+            )
         return callable1(*args, **kwargs)
 
 
@@ -93,6 +155,10 @@ class Tee(metaclass=Singleton):
         self.outfile_name = None
         self.prefix = None
 
+        self.outfile_stdout_line_prefix = None
+        self.outfile_stdout_no_prefix_lines = []
+        self.outfile_stderr_line_prefix = None
+
     def set_outfile(self, filename, prefix=""):
         """Define the outfile where stdout and stderr will be written to.
 
@@ -124,8 +190,18 @@ class Tee(metaclass=Singleton):
 
             self.outfile_handle = open(self.outfile_name, mode)
 
-            sys.stdout = stream_tee(sys.stdout, self.outfile_handle)
-            sys.stderr = stream_tee(sys.stderr, self.outfile_handle)
+            sys.stdout = stream_tee(
+                sys.stdout,
+                self.outfile_handle,
+                stream2_line_prefix="(stdout) ",
+            )
+            # TODO: configurable errstream color
+            sys.stderr = stream_tee(
+                sys.stderr,
+                self.outfile_handle,
+                stream1_color=fabsetup.utils.colors.red,
+                stream2_line_prefix="(STDERR) ",
+            )
 
     def start(self):
         """Set up stdout, stderr and outfile handles and if given write prefix

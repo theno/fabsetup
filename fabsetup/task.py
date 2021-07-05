@@ -2,6 +2,7 @@ import inspect
 import getpass
 import os
 import socket
+import sys
 from functools import wraps
 
 import fabric
@@ -230,7 +231,13 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
             print("")
 
         try:
+            if hasattr(sys.stdout, "add_prefix"):
+                sys.stdout.add_prefix = True
+            if hasattr(sys.stderr, "add_prefix"):
+                sys.stderr.add_prefix = True
+
             res = run_method(cmd, *args, **kwargs)
+
             # import sys
             # from fabsetup.utils import red
             # res = run_method(cmd, *args, **{**kwargs, **{'hide': 'both'}})
@@ -241,6 +248,11 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
             #     err_str = res.stderr
             #     if len(err_str) > 0:
             #         print('stderr: {}'.format(res.stderr), end='')
+
+            if hasattr(sys.stdout, "add_prefix"):
+                sys.stdout.add_prefix = False
+            if hasattr(sys.stderr, "add_prefix"):
+                sys.stderr.add_prefix = False
 
             if res.return_code != 0:
                 return_code = inner_return_code_formatter.format(
