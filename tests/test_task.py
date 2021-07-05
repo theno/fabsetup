@@ -66,7 +66,7 @@ markdown_tests = [
         remote=True,
         kwargs={},
         return_code=0,
-        expected_output="\n```\nusername@hostname> "
+        expected_output="\n```sh\nusername@hostname> "
         "\033[1;33mecho foo\033[0m\nfoo\n```\n",
     ),
     MarkdownTest(
@@ -78,7 +78,7 @@ markdown_tests = [
             },
         },
         return_code=12,
-        expected_output="\n```\nUSER@HOST> "
+        expected_output="\n```sh\nUSER@HOST> "
         "\033[1;32mecho foo\033[0m\nfoo\n[12]\n```\n",
     ),
     MarkdownTest(
@@ -107,12 +107,12 @@ markdown_tests = [
             "return_code_formatter": ">> {return_code} <<\n",
             "postfix_formatter": "```\n\n----\n",
             "format_kwargs": {
-                "language": "sh",
+                "language": "bash",
                 "prompt_end": "$ ",
             },
         },
         return_code=123,
-        expected_output="```sh\nLOCAL$ \033[1;32mecho foo\033[0m\nfoo\n"
+        expected_output="```bash\nLOCAL$ \033[1;32mecho foo\033[0m\nfoo\n"
         ">> 123 <<\n```\n\n----\n",
     ),
 ]
@@ -140,7 +140,7 @@ def test_wrapped_run_method(capsys):
         remote=True,
         kwargs={},
         return_code=0,
-        expected_output="\n```\nusername@hostname> "
+        expected_output="\n```sh\nusername@hostname> "
         "\033[1;33mecho foo\033[0m\nfoo\n```\n",
     )
 
@@ -225,7 +225,7 @@ def test_cmd_in_markdown_codeblock_getuser(capsys, monkeypatch):
             remote=False,
             kwargs={},
             return_code=0,
-            expected_output="\n```\ngetpass-getuser@socket-gethostname> "
+            expected_output="\n```sh\ngetpass-getuser@socket-gethostname> "
             "\033[1;32mecho foo\033[0m\nfoo\n```\n",
         ),
         MarkdownTest(
@@ -237,14 +237,14 @@ def test_cmd_in_markdown_codeblock_getuser(capsys, monkeypatch):
                 },
             },
             return_code=12,
-            expected_output="\n```\nUSER@HOST> "
+            expected_output="\n```sh\nUSER@HOST> "
             "\033[1;32mecho foo\033[0m\nfoo\n[12]\n```\n",
         ),
         MarkdownTest(
             remote=True,
             kwargs={},
             return_code=0,
-            expected_output="\n```\nc-user@c-host> "
+            expected_output="\n```sh\nc-user@c-host> "
             "\033[1;33mecho foo\033[0m\nfoo\n```\n",
         ),
     ]
@@ -434,12 +434,12 @@ def test_task_no_args(capsys, monkeypatch, tmpdir):
 \033[34mdocstring of mytask
 \033[0m
 
-```
+```sh
 {run_prompt}\033[1;{run_color}mecho "c.run()"\033[0m
 c.run()
 ```
 
-```
+```sh
 {local_prompt}\033[1;32mecho "c.local()"\033[0m
 c.local()
 ```
