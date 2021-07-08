@@ -43,6 +43,8 @@ setup(
     entry_points={
         "console_scripts": [
             "fabsetup = fabsetup.__main__:main",
+            "fabs = fabsetup.__main__:main",
+            "fap = fabsetup.__main__:main",
         ],
     },
     classifiers=[
