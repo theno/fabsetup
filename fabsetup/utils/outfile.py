@@ -193,14 +193,14 @@ class Tee(metaclass=Singleton):
             sys.stdout = stream_tee(
                 sys.stdout,
                 self.outfile_handle,
-                stream2_line_prefix="(stdout) ",
+                # stream2_line_prefix="(stdout) ",
             )
             # TODO: configurable errstream color
             sys.stderr = stream_tee(
                 sys.stderr,
                 self.outfile_handle,
                 stream1_color=fabsetup.utils.colors.red,
-                stream2_line_prefix="(STDERR) ",
+                # stream2_line_prefix="(STDERR) ",
             )
 
     def start(self):

@@ -1,3 +1,7 @@
+<footer id="page_footer">
+<a id="collapse_expand" href="" title="collapse / expand command output">collapse / expand</a>
+</footer>
+
 <script>
 // https://stackoverflow.com/a/9541579
 function isOverflownWidth(element) {
@@ -19,6 +23,7 @@ function setPaddingBottom(element) {
 }
 
 var items = document.getElementsByClassName('sh');
+
 for (var i=0, len=items.length|0; i<len; i=i+1|0) {
 
   setPaddingBottom(items[i]);
@@ -33,6 +38,26 @@ for (var i=0, len=items.length|0; i<len; i=i+1|0) {
     }
     setPaddingBottom(this);
   }
-};
-</script>
+}
 
+var cur_height = 'auto';
+var a = document.getElementById("collapse_expand");
+
+a.onclick = function() {
+
+  if (cur_height === 'auto') {
+    cur_height = '24px';
+  }
+  else {
+    cur_height = 'auto';
+  }
+
+  for (var i=0, len=items.length|0; i<len; i=i+1|0) {
+    items[i].style.height = cur_height;
+    setPaddingBottom(items[i]);
+  }
+
+  return false;
+}
+
+</script>
