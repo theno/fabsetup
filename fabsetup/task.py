@@ -46,6 +46,17 @@ def issue_16_workaround(context):
         context.config["run"]["env"]["SSH_AUTH_SOCK"] = ssh_agent
 
 
+def from_config(config, path, default):
+    res = config
+    for item in path:
+        res = res.get(item, None)
+        if not res:
+            break
+    if not res:
+        return default
+    return res
+
+
 def increment_numbered_state(c):
 
     c.config["output"] = c.config.get("output", {})
@@ -106,6 +117,12 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
 
     :param dict format_kwargs:
         Optional, default: ``dict(language='', prompt_end='> ')``
+
+    :param str command_output_prefix:
+        Optional, default: ``(stdout) ``
+
+    :param str command_errput_prefix:
+        Optional, default: ``(STDERR) ``
     """
 
     # workaround: do not wrap if already wrapped
@@ -137,6 +154,9 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
         },
         **kwargs.get("format_kwargs", {}),
     }
+
+    command_output_prefix = kwargs.get("command_output_prefix", "")  # "(stdout) ")
+    command_errput_prefix = kwargs.get("command_errput_prefix", "")  # "(STDERR) ")
 
     # wrapped_run_method.num_calls += 1
 
@@ -174,6 +194,13 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
         )
         inner_postfix_formatter = kwargs.pop("postfix_formatter", postfix_formatter)
         inner_format_kwargs = {**format_kwargs, **kwargs.pop("format_kwargs", {})}
+
+        inner_command_output_prefix = kwargs.pop(
+            "command_output_prefix", command_output_prefix
+        )
+        inner_command_errput_prefix = kwargs.pop(
+            "command_errput_prefix", command_errput_prefix
+        )
 
         if kwargs.get("hide", None) is True:
             # no output, no markdown codeblock
@@ -233,8 +260,10 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
         try:
             if hasattr(sys.stdout, "add_prefix"):
                 sys.stdout.add_prefix = True
+                sys.stdout.stream2_line_prefix = inner_command_output_prefix
             if hasattr(sys.stderr, "add_prefix"):
                 sys.stderr.add_prefix = True
+                sys.stderr.stream2_line_prefix = inner_command_errput_prefix
 
             res = run_method(cmd, *args, **kwargs)
 
@@ -342,6 +371,12 @@ def task(*args, **kwargs):
     :param dict format_kwargs:
         Optional, default: ``dict(language='', prompt_end='> ')``
 
+    :param str command_output_prefix:
+        Optional, default: ``(stdout) ``
+
+    :param str command_errput_prefix:
+        Optional, default: ``(STDERR) ``
+
     Example:
 
     .. code-block::
@@ -377,6 +412,8 @@ def task(*args, **kwargs):
         "return_code_formatter",
         "postfix_formatter",
         "format_kwargs",
+        "command_output_prefix",
+        "command_errput_prefix",
     )
 
     wrap_kwargs = {key: kwargs[key] for key in kwargs if key in wrap_keys}
@@ -390,6 +427,23 @@ def task(*args, **kwargs):
 
             if "interactive" in kwargz:
                 wrap_kwargs["interactive"] = kwargz["interactive"]
+
+            wrap_kwargs["command_output_prefix"] = kwargs.get(
+                "command_output_prefix",
+                from_config(
+                    c.config,
+                    ["output", "command_output_prefix"],
+                    "",  # "(stdout) ",
+                ),
+            )
+            wrap_kwargs["command_errput_prefix"] = kwargs.get(
+                "command_errput_prefix",
+                from_config(
+                    c.config,
+                    ["output", "command_errput_prefix"],
+                    "",  # "(STDERR) ",
+                ),
+            )
 
             if isinstance(c, fabric.connection.Connection):
                 # `fabsetup` or `fab` was called with -H argument
@@ -410,7 +464,8 @@ def task(*args, **kwargs):
                     run_method=c.run,
                     remote=False,
                     local_cmd_formatter=wrap_kwargs.pop(
-                        "local_cmd_formatter", "{cmd}"
+                        "local_cmd_formatter",
+                        "{cmd}"
                         # "local_cmd_formatter", "{prompt_end}{cmd}"
                     ),
                     **wrap_kwargs

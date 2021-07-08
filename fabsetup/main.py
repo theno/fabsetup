@@ -97,6 +97,8 @@ class FabsetupConfig(fabric.config.Config):
                 },
                 "prepend_executed_fabsetup_command": True,
                 "fabsetup_command_prefix": "*Executed fabsetup command:*\n\n",
+                "command_output_prefix": "(stdout) ",
+                "command_errput_prefix": "(STDERR) ",
             },
             "output": {
                 "color": {
