@@ -1,5 +1,6 @@
 """Executable of fabsetup"""
 
+import collections
 import datetime
 import os
 import os.path
@@ -23,6 +24,269 @@ import fabsetup.print
 import fabsetup.utils.outfile
 import fabsetup.utils.pandoc
 # import fabsetup.fabutils.queries
+
+
+class Defaults:
+    """Fabsetup defaults."""
+
+    def __init__(self):
+
+        Entry = collections.namedtuple(
+            typename="Default",
+            field_names=["key", "default_value", "description"],
+        )
+
+        self.entries = [
+            Entry(
+                "outfile",
+                [
+                    Entry(
+                        "dir",
+                        "",
+                        "",
+                    ),
+                    Entry(
+                        "basename_formatter",
+                        "fabsetup_{now}{tasks}{hosts}.md",
+                        "",
+                    ),
+                    Entry(
+                        "now_format",
+                        "%F_%H-%M-%S",
+                        "",
+                    ),
+                    Entry(
+                        "name",
+                        "",
+                        "",
+                    ),
+                    Entry(
+                        "keep_color",
+                        False,
+                        "",
+                    ),
+                    Entry(
+                        "pandoc",
+                        [
+                            Entry(
+                                "command",
+                                "pandoc",
+                                "",
+                            ),
+                            Entry(
+                                "html",
+                                [
+                                    Entry(
+                                        "dir",
+                                        "",
+                                        "",
+                                    ),
+                                    Entry(
+                                        "name",
+                                        "",
+                                        "",
+                                    ),
+                                    Entry(
+                                        "css",
+                                        [
+                                            Entry(
+                                                "disabled",
+                                                False,
+                                                "",
+                                            ),
+                                            Entry(
+                                                "inline",
+                                                True,
+                                                "",
+                                            ),
+                                            Entry(
+                                                "url",
+                                                "",
+                                                "",
+                                            ),
+                                            Entry(
+                                                "auto_remove_markdown_file",
+                                                True,
+                                                "",
+                                            ),
+                                        ],
+                                        "css configuration",
+                                    ),
+                                ],
+                                "",
+                            ),
+                            Entry(
+                                "toc",
+                                False,
+                                "",
+                            ),
+                        ],
+                        "pandoc configuration",
+                    ),
+                    Entry(
+                        "prepend_executed_fabsetup_command",
+                        True,
+                        "",
+                    ),
+                    Entry(
+                        "fabsetup_command_prefix",
+                        "*Executed fabsetup command:*\n\n",
+                        "",
+                    ),
+                    Entry(
+                        "command_output_prefix",
+                        "(stdout) ",
+                        "",
+                    ),
+                    Entry(
+                        "command_errput_prefix",
+                        "(STDERR) ",
+                        "",
+                    ),
+                ],
+                "outfile configuration",
+            ),
+            Entry(
+                "output",
+                [
+                    Entry(
+                        "color",
+                        [
+                            Entry(
+                                "cmd_local",
+                                "green",
+                                "",
+                            ),
+                            Entry(
+                                "cmd_remote",
+                                "yellow",
+                                "",
+                            ),
+                            Entry(
+                                "docstring",
+                                "blue",
+                                "",
+                            ),
+                            Entry(
+                                "error",
+                                "red",
+                                "",
+                            ),
+                            Entry(
+                                "full_name",
+                                "no_color",
+                                "",
+                            ),
+                            Entry(
+                                "subtask_heading",
+                                "cyan",
+                                "",
+                            ),
+                            Entry(
+                                "task_heading",
+                                "magenta",
+                                "",
+                            ),
+                            # Entry("question", "default_color", "",),
+                        ],
+                        "color configuration",
+                    ),
+                    Entry(
+                        "color_off",
+                        False,
+                        "",
+                    ),
+                    Entry(
+                        "hide_command_line",
+                        False,
+                        "",
+                    ),
+                    Entry(
+                        "hide_code_block",
+                        False,
+                        "",
+                    ),
+                    Entry(
+                        "hide_docstring",
+                        False,
+                        "",
+                    ),
+                    Entry(
+                        "hide_heading",
+                        False,
+                        "",
+                    ),
+                    Entry(
+                        "hide_print",
+                        False,
+                        "",
+                    ),
+                    Entry(
+                        "numbered",
+                        True,
+                        "",
+                    ),
+                    Entry(
+                        "numbered_state",
+                        "0",
+                        "",
+                    ),
+                    Entry(
+                        "task_depth",
+                        1,
+                        "",
+                    ),
+                ],
+                "output configuration",
+            ),
+            Entry(
+                "run",
+                [
+                    Entry(
+                        "interactive",
+                        False,
+                        "",
+                    ),
+                ],
+                "run configuration",
+            ),
+            Entry(
+                "load_invoke_tasks_file",
+                False,
+                "",
+            ),
+            Entry(
+                "load_fabric_fabfile",
+                False,
+                "",
+            ),
+            # "search_root": None,
+            Entry(
+                "run_before",
+                "",
+                "command hook to be executed before fabsetup execution",
+            ),
+            Entry(
+                "run_finally",
+                "",
+                "command hook to be executed after fabsetup execution",
+            ),
+        ]
+
+    @staticmethod
+    def _as_dict_r(entries):
+        if type(entries) is list:
+            res = {}
+            for entry in entries:
+                res[entry.key] = Defaults._as_dict_r(entry.default_value)
+            return res
+        else:
+            default_value = entries
+            return default_value
+
+    def as_dict(self):
+        """Return this ``fabsetup.main.Defaults`` as dict."""
+        return Defaults._as_dict_r(self.entries)
 
 
 class FabsetupConfig(fabric.config.Config):
@@ -74,62 +338,7 @@ class FabsetupConfig(fabric.config.Config):
             `dict` with merged defaults.
         """
         defaults = fabric.config.Config.global_defaults()
-        ours = {
-            "outfile": {
-                "dir": "",
-                "basename_formatter": "fabsetup_{now}{tasks}{hosts}.md",
-                "now_format": "%F_%H-%M-%S",
-                "name": "",
-                "keep_color": False,
-                "pandoc": {
-                    "command": "pandoc",
-                    "html": {
-                        "dir": "",
-                        "name": "",
-                        "css": {
-                            "disabled": False,
-                            "inline": True,
-                            "url": "",
-                            "auto_remove_markdown_file": True,
-                        },
-                    },
-                    "toc": False,
-                },
-                "prepend_executed_fabsetup_command": True,
-                "fabsetup_command_prefix": "*Executed fabsetup command:*\n\n",
-                "command_output_prefix": "(stdout) ",
-                "command_errput_prefix": "(STDERR) ",
-            },
-            "output": {
-                "color": {
-                    "cmd_local": "green",
-                    "cmd_remote": "yellow",
-                    "docstring": "blue",
-                    "error": "red",
-                    "full_name": "no_color",
-                    "subtask_heading": "cyan",
-                    "task_heading": "magenta",
-                    # "question": "default_color",
-                },
-                "color_off": False,
-                "hide_command_line": False,
-                "hide_code_block": False,
-                "hide_docstring": False,
-                "hide_heading": False,
-                "hide_print": False,
-                "numbered": True,
-                "numbered_state": "0",
-                "task_depth": 1,
-            },
-            "run": {
-                "interactive": False,
-            },
-            "load_invoke_tasks_file": False,
-            "load_fabric_fabfile": False,
-            # "search_root": None,
-            "run_before": "",
-            "run_finally": "",
-        }
+        ours = Defaults().as_dict()
         invoke.config.merge_dicts(defaults, ours)
         return defaults
 

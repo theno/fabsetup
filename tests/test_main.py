@@ -2,8 +2,75 @@ import sys
 
 # import pytest
 
+import fabsetup.main
 import fabsetup.__main__
 
+
+# # # test main.py # # #
+
+
+def test_defaults():
+    defaults = fabsetup.main.Defaults()
+    def_dict = defaults.as_dict()
+    assert def_dict == {
+        "outfile": {
+            "dir": "",
+            "basename_formatter": "fabsetup_{now}{tasks}{hosts}.md",
+            "now_format": "%F_%H-%M-%S",
+            "name": "",
+            "keep_color": False,
+            "pandoc": {
+                "command": "pandoc",
+                "html": {
+                    "dir": "",
+                    "name": "",
+                    "css": {
+                        "disabled": False,
+                        "inline": True,
+                        "url": "",
+                        "auto_remove_markdown_file": True,
+                    },
+                },
+                "toc": False,
+            },
+            "prepend_executed_fabsetup_command": True,
+            "fabsetup_command_prefix": "*Executed fabsetup command:*\n\n",
+            "command_output_prefix": "(stdout) ",
+            "command_errput_prefix": "(STDERR) ",
+        },
+        "output": {
+            "color": {
+                "cmd_local": "green",
+                "cmd_remote": "yellow",
+                "docstring": "blue",
+                "error": "red",
+                "full_name": "no_color",
+                "subtask_heading": "cyan",
+                "task_heading": "magenta",
+                # "question": "default_color",
+            },
+            "color_off": False,
+            "hide_command_line": False,
+            "hide_code_block": False,
+            "hide_docstring": False,
+            "hide_heading": False,
+            "hide_print": False,
+            "numbered": True,
+            "numbered_state": "0",
+            "task_depth": 1,
+        },
+        "run": {
+            "interactive": False,
+        },
+        "load_invoke_tasks_file": False,
+        "load_fabric_fabfile": False,
+        # "search_root": None,
+        "run_before": "",
+        "run_finally": "",
+    }
+
+
+# # # test __main__.py # # #
 
 def test_print_version(capsys, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["program-name", "--version"])
