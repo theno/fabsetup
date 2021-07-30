@@ -119,10 +119,10 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
         Optional, default: ``dict(language='', prompt_end='> ')``
 
     :param str command_output_prefix:
-        Optional, default: ``(stdout) ``
+        Optional, default: ``"(stdout) "`` (without quotation marks).
 
     :param str command_errput_prefix:
-        Optional, default: ``(STDERR) ``
+        Optional, default: ``"(STDERR) "`` (without quotation marks).
     """
 
     # workaround: do not wrap if already wrapped
@@ -372,10 +372,10 @@ def task(*args, **kwargs):
         Optional, default: ``dict(language='', prompt_end='> ')``
 
     :param str command_output_prefix:
-        Optional, default: ``(stdout) ``
+        Optional, default: ``"(stdout) "`` (without quotation marks).
 
     :param str command_errput_prefix:
-        Optional, default: ``(STDERR) ``
+        Optional, default: ``"(STDERR) "`` (without quotation marks).
 
     Example:
 
