@@ -27,8 +27,8 @@ import fabsetup
 
 # -- Project information -----------------------------------------------------
 
-project = 'Fabsetup'
-author = 'Theodor Nolte'
+project = "Fabsetup"
+author = "Theodor Nolte"
 copyright = author  # fallback
 with open("../LICENSE.txt") as fh:
     prefix = "Copyright (c) "
@@ -37,7 +37,7 @@ with open("../LICENSE.txt") as fh:
             copyright = line.split(prefix)[-1].strip()
 
 # The full version, including alpha/beta/rc tags
-release = 'fabsetup-{}'.format(fabsetup.__version__)
+release = "fabsetup-{}".format(fabsetup.__version__)
 
 
 # -- General configuration ---------------------------------------------------
@@ -46,21 +46,20 @@ release = 'fabsetup-{}'.format(fabsetup.__version__)
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'recommonmark',
-
+    "sphinx.ext.autodoc",
+    "recommonmark",
     # TODO DEVEL
     # https://github.com/pyinvoke/invoke/issues/313#issuecomment-387249051
     # 'invocations.autodoc',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 
 # -- Options for HTML output -------------------------------------------------
@@ -68,19 +67,19 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = "alabaster"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]
 
 # sphinx.ext.autodoc
 # https://stackoverflow.com/a/37210251
-autodoc_member_order = 'bysource'
+autodoc_member_order = "bysource"
 
 
-# Fix autodoc to be able to extract fabric tasks.
+# Fix autodoc to be able to extract fabric tasks and fabsetup subtasks.
 #
 # resources:
 # https://github.com/pyinvoke/invocations/blob/master/invocations/autodoc.py#L51
@@ -88,10 +87,10 @@ autodoc_member_order = 'bysource'
 # https://github.com/sphinx-doc/sphinx/blob/697dff31ab09625ead62e1a7ec0780126aeb07c6/sphinx/ext/autodoc/__init__.py
 # https://github.com/sphinx-doc/sphinx/blob/3.2.x/sphinx/util/inspect.py
 
-class TaskDocumenter(
-        autodoc.DocstringSignatureMixin, autodoc.ModuleLevelDocumenter):
-    objtype = 'task'
-    directivetype = 'function'
+
+class TaskDocumenter(autodoc.DocstringSignatureMixin, autodoc.ModuleLevelDocumenter):
+    objtype = "task"
+    directivetype = "function"
 
     @classmethod
     def can_document_member(cls, member, membername, isattr, paren):
@@ -108,21 +107,20 @@ class TaskDocumenter(
 
     def format_name(self):
         nam = super().format_name()
-        return '@task\n{nam}'.format(nam=nam)  # noqa: E0100
+        return "@task\n{nam}".format(nam=nam)  # noqa: E0100
 
     def get_doc(self, **kwargs):
         result = super().get_doc(**kwargs)
         for arg, descr in self.object.help.items():
-            result[0].append('')
-            result[0].append(':param {arg}:'.format(arg=arg))
-            result[0].append('    {descr}'.format(descr=descr))
+            result[0].append("")
+            result[0].append(":param {arg}:".format(arg=arg))
+            result[0].append("    {descr}".format(descr=descr))
         return result
 
 
-class SubtaskDocumenter(
-        autodoc.DocstringSignatureMixin, autodoc.ModuleLevelDocumenter):
-    objtype = 'subtask'
-    directivetype = 'function'
+class SubtaskDocumenter(autodoc.DocstringSignatureMixin, autodoc.ModuleLevelDocumenter):
+    objtype = "subtask"
+    directivetype = "function"
 
     @classmethod
     def can_document_member(cls, member, membername, isattr, paren):
@@ -142,7 +140,7 @@ class SubtaskDocumenter(
 
     def format_name(self):
         nam = super().format_name()
-        return '@subtask\n{nam}'.format(nam=nam)  # noqa: E0100
+        return "@subtask\n{nam}".format(nam=nam)  # noqa: E0100
 
     def get_doc(self, **kwargs):
         result = super().get_doc(**kwargs)
