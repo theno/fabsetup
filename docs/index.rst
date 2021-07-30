@@ -14,6 +14,9 @@ on a local or remote linux system.**
    advanced-usage
 
 .. toctree::
+   configuration
+
+.. toctree::
    Addons <addons>
    Create an Addon <create-addon>
 
