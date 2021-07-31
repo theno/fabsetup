@@ -288,6 +288,24 @@ class Defaults:
         """Return this ``fabsetup.main.Defaults`` as dict."""
         return Defaults._as_dict_r(self.entries)
 
+    @staticmethod
+    def _as_restructuredtext_items_r(entries, depth=0):
+        if type(entries) is list:
+            for entry in entries:
+                print("")
+                print("  " * depth + f"* ``{entry.key}``: {entry.description}")
+                Defaults._as_restructuredtext_items_r(entry.default_value, depth=depth+1)
+        else:
+            default_value = entries
+            if default_value == "":
+                print("  " * depth + f"Empty string as default.")
+            else:
+                print("  " * depth + f'Default value is ``{repr(default_value)}``.')
+
+    def as_restructuredtext_items(self):
+        """Print configuration as list items in restructuredtext."""
+        Defaults._as_restructuredtext_items_r(self.entries)
+
 
 class FabsetupConfig(fabric.config.Config):
     """A `fabric.config.Config` subclass which is an `invoke.config.Config`
