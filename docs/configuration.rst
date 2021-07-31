@@ -6,13 +6,28 @@ The configuration of Fabsetup is based on the same mechanics as used in
 `Fabric <https://docs.fabfile.org/en/latest/concepts/configuration.html>`_ and
 `Invoke <https://docs.pyinvoke.org/en/latest/concepts/configuration.html>`_.
 
+The configuration file paths are named ``fabsetup.*`` instead of ``fabric.*``
+or ``invoke.*``, for example ``~/.fabsetup.yaml`` instead of
+``~/.fabric.yaml`` or ``~/.invoke.yaml``.
+
 The prefix for environment variables is ``FABSETUP_``, see `here
 <https://docs.pyinvoke.org/en/latest/concepts/configuration.html#environment-variables>`_
 for the rules.
 
-In order to verify which configuration is currently effective run: ``fabsetup
---show-config``.  This prints out the merged configuration before task
-execution.
+In order to verify which configuration values are currently effective, run:
+``fabsetup --show-config``.  This prints out the merged configuration before
+task execution.
+
+Values
+======
+
+In addition to the configuration values provided by Fabric and Invoke,
+Fabsetup adds the following configurations:
+
+.. exec::
+    import fabsetup.main
+    defaults = fabsetup.main.Defaults()
+    defaults.as_restructuredtext_items()
 
 Defaults
 ========
