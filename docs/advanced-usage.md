@@ -21,7 +21,8 @@ fabsetup --outfile output.md
 Logging of fabsetup calls: Automatically create a file on each fabsetup
 execution: `outfile.dir=~/.fabsetup-runs`
 
-Example, fabsetup generated output without uncolored, command output with ANSI color codes:
+Example, fabsetup generated output without uncolored, command output
+with ANSI color codes:
 
 ```sh
 @task
