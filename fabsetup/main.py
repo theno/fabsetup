@@ -39,52 +39,86 @@ class Defaults:
         self.entries = [
             Entry(
                 "outfile",
-                [
+                description="Configure if and how an outfile will be created.",
+                default_value=[
+                    Entry(
+                        "name",
+                        "",
+                        "Path of the outfile where the markdown output will be "
+                        "(over-) written to. If the value is empty on task "
+                        "execution, no outfile will be created.",
+                    ),
                     Entry(
                         "dir",
                         "",
-                        "",
+                        "If non-empty and ``outfile.name`` is empty set the "
+                        "value of ``outfile.name`` to "
+                        '``f"{outfile.dir}/{basename}"`` '
+                        "before task execution. ``basename`` is the "
+                        "formatted ``outfile.basename_formatter``.",
                     ),
                     Entry(
                         "basename_formatter",
                         "fabsetup_{now}{tasks}{hosts}.md",
-                        "",
+                        "Create a variable filename, by default containing the "
+                        "date and time of execution, the names of the exectued "
+                        "tasks and the name of the hosts (if any was given by "
+                        "``-H``), each part prepended by an underscore. "
+                        "The default value results in a filename like "
+                        "``'fabsetup_2021-02-21_12:30:45_task1_task2_host1_host2.md'``"
+                        " for example.",
                     ),
                     Entry(
                         "now_format",
                         "%F_%H-%M-%S",
-                        "",
-                    ),
-                    Entry(
-                        "name",
-                        "",
-                        "",
+                        "the ``now`` variable in ``outfile.basename_formatter`` "
+                        "is set with the current date: "
+                        "``now = datetime.datetime.now().strftime(now_format)``.",
                     ),
                     Entry(
                         "keep_color",
                         False,
-                        "",
+                        "When ``True`` do not remove ANSI color codes from the "
+                        "markdown outfile.",
                     ),
                     Entry(
                         "pandoc",
-                        [
+                        description="Configure file modifications and "
+                        "conversions applied by pandoc.",
+                        default_value=[
                             Entry(
                                 "command",
                                 "pandoc",
-                                "",
+                                "Pandoc executable, could be set for example to "
+                                "``'pandoc'`` or ``'/usr/bin/pandoc'``.",
+                            ),
+                            Entry(
+                                "toc",
+                                False,
+                                "If ``True`` add a table of contents to the "
+                                "markdown outfile.",
                             ),
                             Entry(
                                 "html",
-                                [
-                                    Entry(
-                                        "dir",
-                                        "",
-                                        "",
-                                    ),
+                                description="Configure HTML file creation.",
+                                default_value=[
                                     Entry(
                                         "name",
                                         "",
+                                        "If non-empty on task execution and a "
+                                        "markdown outfile exists use pandoc to "
+                                        "convert the markdown to an HTML file.",
+                                    ),
+                                    Entry(
+                                        "dir",
                                         "",
+                                        "If non-empty and "
+                                        "``outfile.pandoc.html.name`` is empty "
+                                        "set ``outfile.pandoc.html.name`` to "
+                                        '``f"{dir}/{basename}.html"`` '
+                                        "before task execution. ``basename`` is "
+                                        "the basename of the markdown outfile "
+                                        "without the trailing ``.md``.",
                                     ),
                                     Entry(
                                         "css",
@@ -92,12 +126,16 @@ class Defaults:
                                             Entry(
                                                 "disabled",
                                                 False,
-                                                "",
+                                                "If ``True`` the created HTML "
+                                                "file will not use CSS.",
                                             ),
                                             Entry(
                                                 "inline",
                                                 True,
-                                                "",
+                                                "If ``True`` embed the CSS "
+                                                "inline into the HTML file, "
+                                                "else create a CSS file next "
+                                                "to it.",
                                             ),
                                             Entry(
                                                 "url",
@@ -110,18 +148,11 @@ class Defaults:
                                                 "",
                                             ),
                                         ],
-                                        "css configuration",
+                                        "Configure Cascading Style Sheets.",
                                     ),
                                 ],
-                                "",
-                            ),
-                            Entry(
-                                "toc",
-                                False,
-                                "",
                             ),
                         ],
-                        "pandoc configuration",
                     ),
                     Entry(
                         "prepend_executed_fabsetup_command",
@@ -144,11 +175,11 @@ class Defaults:
                         "",
                     ),
                 ],
-                "outfile configuration",
             ),
             Entry(
                 "output",
-                [
+                description="Configure the produced output on fabsetup task execution.",
+                default_value=[
                     Entry(
                         "color",
                         [
@@ -237,18 +268,17 @@ class Defaults:
                         "",
                     ),
                 ],
-                "output configuration",
             ),
             Entry(
                 "run",
-                [
+                description="run configuration",
+                default_value=[
                     Entry(
                         "interactive",
                         False,
                         "",
                     ),
                 ],
-                "run configuration",
             ),
             Entry(
                 "load_invoke_tasks_file",
@@ -264,12 +294,12 @@ class Defaults:
             Entry(
                 "run_before",
                 "",
-                "command hook to be executed before fabsetup execution",
+                "Command hook to be executed before fabsetup execution.",
             ),
             Entry(
                 "run_finally",
                 "",
-                "command hook to be executed after fabsetup execution",
+                "Command hook to be executed after fabsetup execution.",
             ),
         ]
 
@@ -294,13 +324,15 @@ class Defaults:
             for entry in entries:
                 print("")
                 print("  " * depth + f"* ``{entry.key}``: {entry.description}")
-                Defaults._as_restructuredtext_items_r(entry.default_value, depth=depth+1)
+                Defaults._as_restructuredtext_items_r(
+                    entry.default_value, depth=depth + 1
+                )
         else:
             default_value = entries
             if default_value == "":
                 print("  " * depth + f"Empty string as default.")
             else:
-                print("  " * depth + f'Default value is ``{repr(default_value)}``.')
+                print("  " * depth + f"Default value is ``{repr(default_value)}``.")
 
     def as_restructuredtext_items(self):
         """Print configuration as list items in restructuredtext."""

@@ -11,18 +11,21 @@ or ``invoke.*``, for example ``~/.fabsetup.yaml`` instead of
 ``~/.fabric.yaml`` or ``~/.invoke.yaml``.
 
 The prefix for environment variables is ``FABSETUP_``, see `here
-<https://docs.pyinvoke.org/en/latest/concepts/configuration.html#environment-variables>`_
+<https://docs.pyinvoke.org/en/latest/concepts/configuration.html#environment-variables>`__
 for the rules.
 
-In order to verify which configuration values are currently effective, run:
-``fabsetup --show-config``.  This prints out the merged configuration before
-task execution.
+See `here
+<https://docs.pyinvoke.org/en/latest/concepts/configuration.html#the-configuration-hierarchy>`__
+for the order in which configuration values override one another.  To verify
+which configuration values are currently effective run: ``fabsetup
+--show-config``.  This prints out the merged configuration before task
+execution.
 
 Values
 ======
 
 In addition to the configuration values provided by Fabric and Invoke,
-Fabsetup adds the following configurations:
+Fabsetup comes with the following configurations:
 
 .. exec::
     import fabsetup.main
