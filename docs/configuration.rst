@@ -44,7 +44,7 @@ Fabsetup uses sane defaults and is usable "out of the box":
     defaults = fabsetup.main.Defaults()
     print(".. code-block:: python\n")
     lines = black.format_str(
-        str(defaults.as_dict()),
+        str(defaults.as_dict()),  # preserve order
         # pprint.pformat(defaults.as_dict()),  # sorts keys
         mode=black.FileMode()
     )
@@ -54,14 +54,27 @@ Fabsetup uses sane defaults and is usable "out of the box":
 Customization Examples
 ======================
 
-Log every fabsetup call as an HTML file with inline CSS, add in Your
-``~/.fabsetup.yaml``:
+* Log every fabsetup call as an HTML file with a table of contents and with
+  inline CSS. Add to Your ``~/.fabsetup.yaml``:
 
-.. code-block:: yaml
+  .. code-block:: yaml
 
-    outfile:
-      dir: ~/.fabsetup-runs
-      pandoc:
-        html:
-          dir: ~/.fabsetup-runs/html
-        toc: true
+      outfile:
+        dir: ~/.fabsetup-runs
+        pandoc:
+          html:
+            dir: ~/.fabsetup-runs/html
+          toc: true
+
+* Depending on the executed tasks, Fabsetup calls could need some time to
+  finish or ask for interaction.  It would be useful if Fabsetup talks to You
+  when such an event occurs.  Among `others <https://askubuntu.com/a/501917>`_
+  the tool `spd-say <https://freebsoft.org/speechd>`_ synthesises speech from
+  text.  In order to be informed on this events amend Your ``~/.fabsetup.yaml``
+  by something like this values:
+
+  .. code-block:: yaml
+
+      run-before: spd-say Yo!
+      run-on-question: spd-say "Ok Carbon unit: Question!"
+      run-after: spd-say Done!
