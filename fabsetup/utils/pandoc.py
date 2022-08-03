@@ -4,6 +4,7 @@ content (toc) to Markdown files and create HTML from Markdown files.
 
 import os
 import os.path
+import pathlib
 import subprocess
 
 
@@ -39,6 +40,8 @@ class Pandoc:
         :returns:
             `True` if toc has been added, else `False`.
         """
+        fname = os.path.abspath(os.path.expanduser(filename))
+        # fname_stem = pathlib.Path(fname).stem
         process = subprocess.Popen(
             [
                 self.command,
@@ -53,9 +56,10 @@ class Pandoc:
                 # "atx",
                 # "setext",
                 # "--atx-headers",  # deprecated, works with ubuntu 16.04
+                # "--metadata pagetitle=\"{stem}\"".format(stem=fname_stem),
                 "--output",
-                os.path.abspath(os.path.expanduser(filename)),
-                os.path.abspath(os.path.expanduser(filename)),
+                fname,
+                fname,
             ],
         )
         process.communicate()
@@ -86,10 +90,16 @@ class Pandoc:
             exist_ok=True,
         )
 
+        fname_from = os.path.abspath(os.path.expanduser(filename_from))
+
+        fname_to = os.path.abspath(os.path.expanduser(filename_from))
+        fname_to_stem = pathlib.Path(fname_to).stem
+
         options = [
             # "--standalone",
             "--include-after-body",
             os.path.join(os.path.dirname(__file__), "css", "html-script.js"),
+            "--metadata=pagetitle:\"{stem}\"".format(stem=fname_to_stem),
         ]
 
         if css_url:
@@ -113,8 +123,8 @@ class Pandoc:
             + options
             + [
                 "--output",
-                os.path.abspath(os.path.expanduser(filename_to)),
-                os.path.abspath(os.path.expanduser(filename_from)),
+                fname_to,
+                fname_from,
             ]
         )
         # print(' '.join(cmd))  # TODO DEVEL
