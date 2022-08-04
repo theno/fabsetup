@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to Fabsetup! &#8212; Fabsetup fabsetup-1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Advanced Usage" href="advanced-usage.html" />
+    <link rel="prev" title="Welcome to Fabsetup!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="welcome-to-fabsetup">
+<h1>Welcome to Fabsetup!<a class="headerlink" href="#welcome-to-fabsetup" title="Permalink to this headline">¶</a></h1>
+<p><strong>Set up and maintain configurations, software installations and other
+things on a local or remote linux system.</strong></p>
+<p>Features:</p>
+<ul class="simple">
+<li><p>Fabsetup’s <strong>tasks</strong> do the things:</p>
+<ul>
+<li><p>tasks execute commands commented and comprehensible</p></li>
+<li><p>tasks produce output formatted in Markdown or HTML</p></li>
+<li><p>run a task local or on a remote host</p></li>
+</ul>
+</li>
+<li><p><strong>Addons</strong>:</p>
+<ul>
+<li><p>only install the tasks you need</p></li>
+<li><p>create Your own addon with Your task</p></li>
+</ul>
+</li>
+<li><p>The Command <strong><code class="docutils literal notranslate"><span class="pre">fabsetup</span></code></strong>, based on <a class="reference external" href="https://www.fabfile.org/">Fabric</a>,
+is a pimped <a class="reference external" href="https://docs.fabfile.org/en/latest/getting-started.html#addendum-the-fab-command-line-tool"><code class="docutils literal notranslate"><span class="pre">fab</span></code> command</a>
+with the same <a class="reference external" href="https://docs.fabfile.org/en/latest/cli.html">options and
+arguments</a>. And some more:</p>
+<ul>
+<li><p>Control markdown formatted output:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--hide-code-block</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--hide-command-line</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--hide-command-output</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--hide-docstring</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--hide-header</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--hide-print</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--unnumbered</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--pandoc-add-toc</span></code></p></li>
+</ul>
+</li>
+<li><p>Write output to file:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--outfile</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--pandoc-html-file</span></code></p></li>
+</ul>
+</li>
+<li><p>Control ANSI color codes:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--color-off</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--color-keep</span></code></p></li>
+</ul>
+</li>
+<li><p>Control execution of commands:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--interactive</span></code></p></li>
+</ul>
+</li>
+<li><p>Load fabfiles and invoke tasks:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--load-fab</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--load-inv</span></code></p></li>
+</ul>
+</li>
+<li><p>Show effective config:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--show-config</span></code></p></li>
+</ul>
+</li>
+<li><p>List known Fabsetup addons:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">--known-addons</span></code></p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong>API</strong>:</p>
+<ul>
+<li><p>for Your own Fabsetup addon</p></li>
+<li><p>use Fabsetup in Your own <a class="reference external" href="https://docs.fabfile.org/en/2.5/api/tasks.html#fabric.tasks.task">Fabric tasks</a>
+and <a class="reference external" href="http://docs.pyinvoke.org/en/latest/getting-started.html#defining-and-running-task-functions">Invoke tasks</a></p></li>
+</ul>
+</li>
+</ul>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>Install fabsetup the same way like
+<a class="reference external" href="https://www.fabfile.org/installing.html">fabric</a>, best via
+<a class="reference external" href="https://pip.pypa.io/">pip</a>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install fabsetup
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Run task <code class="docutils literal notranslate"><span class="pre">info</span></code>:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>fabsetup info
+</pre></div>
+</div>
+<p>Important options:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># Show versions</span>
+fabsetup --version
+
+<span class="c1"># Help</span>
+fabsetup -h
+
+<span class="c1"># List tasks</span>
+fabsetup -l
+
+<span class="c1"># Show task help</span>
+fabsetup info --help
+fabsetup new --help
+</pre></div>
+</div>
+</section>
+<section id="tab-completion">
+<h2>Tab Completion<a class="headerlink" href="#tab-completion" title="Permalink to this headline">¶</a></h2>
+<p>Invokes <a class="reference external" href="https://docs.pyinvoke.org/en/stable/invoke.html#tab-completion">shell tab completion</a> also works
+with fabsetup:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>fabsetup -h <span class="p">|</span> grep -A1 <span class="s2">&quot;completion&quot;</span>
+</pre></div>
+</div>
+<p>Apply this simple setup of tab completion in bash:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="nb">echo</span> <span class="s1">&#39;source &lt;(fabsetup --print-completion-script bash)&#39;</span> &gt;&gt; ~/.bashrc
+<span class="nb">source</span> ~/.bashrc
+</pre></div>
+</div>
+<p>Now You are able to “tab” through the available fabsetup tasks and options:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>fabsetup --h&lt;TAB&gt;&lt;TAB&gt;  -&gt;  --help  --hide  --hosts
+fabsetup --he&lt;TAB&gt;      -&gt;  fabsetup --help
+fabsetup --help i&lt;TAB&gt;  -&gt;  fabsetup --help info
+</pre></div>
+</div>
+</section>
+<section id="addons">
+<h2>Addons<a class="headerlink" href="#addons" title="Permalink to this headline">¶</a></h2>
+<p>Fabsetup itself only comes with two tasks, <code class="docutils literal notranslate"><span class="pre">info</span></code> and <code class="docutils literal notranslate"><span class="pre">new</span></code>.  The tasks
+that “really do things” reside in separate fabsetup addons.</p>
+<p>They will be installed the same way like fabsetup and fabric, best via pip.
+For example:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install fabsetup-theno-termdown
+</pre></div>
+</div>
+<p>Now You are able to run the task <code class="docutils literal notranslate"><span class="pre">theno.termdown</span></code>.  This task sets up
+<a class="reference external" href="https://github.com/trehn/termdown">termdown</a>, locally or on a remote
+host:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span><span class="c1"># local</span>
+fabsetup theno.termdown
+
+<span class="c1"># remote</span>
+fabsetup -H user@host theno.termdown
+</pre></div>
+</div>
+</section>
+<section id="your-addon">
+<h2>Your Addon<a class="headerlink" href="#your-addon" title="Permalink to this headline">¶</a></h2>
+<p>Create Your own fabsetup addon doing great things! Start now:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>fabsetup new
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Fabsetup</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tab-completion">Tab Completion</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#addons">Addons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#your-addon">Your Addon</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced-usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">Addons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-addon.html">Create an Addon</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/fabsetup.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-usage.html">API Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to Fabsetup!</a></li>
+      <li>Next: <a href="advanced-usage.html" title="next chapter">Advanced Usage</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2021 Theodor Nolte.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/README.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

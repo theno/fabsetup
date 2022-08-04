@@ -1,88 +1,79 @@
-"""fabric setup scripts and fabric utils library
+"""Summary: fabric-2 setup scripts and fabric utils library
 
 * https://github.com/theno/fabsetup
 * https://pypi.python.org/pypi/fabsetup
 """
 
+import codecs
 import os
-import os.path
+import re
 from setuptools import setup, find_packages
-from codecs import open
+
+thisdir = os.path.abspath(os.path.dirname(__file__))
+package = "fabsetup"
+module = package.replace("-", "_")
+
+with open(os.path.join(thisdir, "README.md"), encoding="utf-8") as fh_in:
+    long_description = fh_in.read()
 
 
-def create_readme_with_long_description():
-    '''Try to convert content of README.md into rst format using pypandoc,
-    write it into README and return it.
-
-    If pypandoc cannot be imported write content of README.md unchanged into
-    README and return it.
-    '''
-    this_dir = os.path.abspath(os.path.dirname(__file__))
-
-    readme_md = os.path.join(this_dir, 'README.md')
-    readme = os.path.join(this_dir, 'README')
-
-    if os.path.exists(readme_md):
-        # this is the case when running `python setup.py sdist`
-        if os.path.exists(readme):
-            os.remove(readme)
-
-        try:
-            import pypandoc
-            long_description = pypandoc.convert(readme_md, 'rst', format='md')
-        except(ImportError):
-            with open(readme_md, encoding='utf-8') as in_:
-                long_description = in_.read()
-
-        with open(readme, 'w') as out:
-            out.write(long_description)
-    else:
-        # this is in case of `pip install fabsetup-x.y.z.tar.gz`
-        with open(readme, encoding='utf-8') as in_:
-            long_description = in_.read()
-
-    return long_description
+def read(*parts):
+    with codecs.open(os.path.join(thisdir, *parts), "r") as fp:
+        return fp.read()
 
 
-this_dir = os.path.abspath(os.path.dirname(__file__))
-filename = os.path.join(this_dir, 'fabsetup', '_version.py')
-with open(filename, 'rt') as fh:
-    version = fh.read().split('"')[1]
+def find_version(*file_paths):
+    version_file = read(*file_paths)
+    version_match = re.search(r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M)
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
 
-description = __doc__.split('\n')[0]
-long_description = create_readme_with_long_description()
-
-packages = find_packages(exclude=['contrib', 'docs', 'tests',
-                                  'fabsetup_custom'])
 
 setup(
-    name='fabsetup',
-    version=version,
-    description=description,
+    name=package,
+    version=find_version(module, "_version.py"),
+    description=__doc__.split("\n")[0],
     long_description=long_description,
-    url='https://github.com/theno/fabsetup',
-    author='Theodor Nolte',
-    author_email='fabsetup@theno.eu',
-    license='MIT',
+    long_description_content_type="text/markdown",
+    url="https://github.com/theno/fabsetup",
+    author="Theodor Nolte",
+    author_email="fabsetup@theno.eu",
+    license="MIT",
     entry_points={
-        'console_scripts': [
-            'fabsetup = fabsetup.__main__:main',
+        "console_scripts": [
+            "fabsetup = fabsetup.__main__:main",
+            "fabs = fabsetup.__main__:main",
+            "fap = fabsetup.__main__:main",
         ],
     },
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
-        'Topic :: Software Development :: Libraries :: Python Modules',
-        'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.6',
-        'Programming Language :: Python :: 2.7',
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.5",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
-    keywords='python development utilities library',
-    packages=packages,
+    keywords="python development utilities library",
+    packages=find_packages(exclude=["contrib", "docs", "tests"]),
     include_package_data=True,
     install_requires=[
-        'fabric',
-        'utlz',
+        "fabric>=2.0.0",
     ],
+    extras_require={
+        "devel": [
+            "black",
+            "mutmut",
+            "pytest",
+            "recommonmark",
+            "sphinx",
+            "tox",
+        ]
+    },
 )

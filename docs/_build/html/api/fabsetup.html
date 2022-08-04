@@ -1,0 +1,794 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>fabsetup API &#8212; Fabsetup fabsetup-1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="fabsetup.fabutils" href="fabsetup.fabutils.html" />
+    <link rel="prev" title="Create a Fabsetup Addon" href="../create-addon.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-fabsetup">
+<span id="fabsetup-api"></span><h1>fabsetup API<a class="headerlink" href="#module-fabsetup" title="Permalink to this headline">¶</a></h1>
+<p>fabric-2 tasks and utils. <a class="reference external" href="https://github.com/theno/fabsetup/tree/master/fabsetup">Latest sources</a></p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.version_str">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.</span></span><span class="sig-name descname"><span class="pre">version_str</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.version_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return versions of fabsetup addons, fabsetup, fabric, paramiko, and
+invoke.</p>
+</dd></dl>
+
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="fabsetup.fabutils.html">fabsetup.fabutils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.fabutils.html#module-fabsetup.fabutils.addon">fabsetup.fabutils.addon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.fabutils.html#module-fabsetup.fabutils.queries">fabsetup.fabutils.queries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="fabsetup.utils.html">fabsetup.utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.utils.html#module-fabsetup.utils.colors">fabsetup.utils.colors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.utils.html#module-fabsetup.utils.decorate">fabsetup.utils.decorate</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.utils.html#module-fabsetup.utils.decorators">fabsetup.utils.decorators</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.utils.html#module-fabsetup.utils.docstring">fabsetup.utils.docstring</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.utils.html#module-fabsetup.utils.outfile">fabsetup.utils.outfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.utils.html#module-fabsetup.utils.pandoc">fabsetup.utils.pandoc</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="module-fabsetup.addons">
+<span id="fabsetup-addons"></span><h2>fabsetup.addons<a class="headerlink" href="#module-fabsetup.addons" title="Permalink to this headline">¶</a></h2>
+<p>Functions to load tasks of available fabsetup addons.</p>
+<p><code class="docutils literal notranslate"><span class="pre">load_pip_addons()</span></code> and <code class="docutils literal notranslate"><span class="pre">load_repo_addons()</span></code>  will be used in
+<code class="docutils literal notranslate"><span class="pre">fabsetup.__main__.main()</span></code> to add fabsetup addons to fabsetup.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.addons.module_username">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.addons.</span></span><span class="sig-name descname"><span class="pre">module_username</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.addons.module_username" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a <code class="docutils literal notranslate"><span class="pre">(module-name,</span> <span class="pre">user-name)</span></code> pair derived from a given fabsetup
+addon <code class="docutils literal notranslate"><span class="pre">package_name</span></code>.</p>
+<p>A fabsetup addon package-name has a name format
+<code class="docutils literal notranslate"><span class="pre">fabsetup-USERNAME-TASKNAME</span></code> where <code class="docutils literal notranslate"><span class="pre">USERNAME</span></code> is a pypi and
+git{hub,lab,…} user-name and <code class="docutils literal notranslate"><span class="pre">TASKNAME</span></code> is the name of the (main) task
+function of the fabsetup addon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>package_name</strong> (<em>str</em>) – Package name of the fabsetup addon, e.g. <code class="docutils literal notranslate"><span class="pre">'fabsetup-theno-termdown'</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Two-tuple of (<cite>str</cite>, <cite>str</cite>).</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">module_username</span><span class="p">(</span><span class="s1">&#39;fabsetup-theno-termdown&#39;</span><span class="p">)</span>
+<span class="go">(&#39;fabsetup_theno_termdown&#39;, &#39;theno&#39;)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.addons.load_addon">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.addons.</span></span><span class="sig-name descname"><span class="pre">load_addon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">package_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.addons.load_addon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load fabsetup addon <code class="docutils literal notranslate"><span class="pre">package_name</span></code> and return it as a
+<code class="docutils literal notranslate"><span class="pre">(module,</span> <span class="pre">collection)</span></code> pair.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>package_name</strong> (<em>str</em>) – Package name of the fabsetup addon, e.g. <code class="docutils literal notranslate"><span class="pre">'fabsetup-theno-termdown'</span></code>.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Two-tuple (“fabsetup_USERNAME_TASKNAME”, <cite>invoke.Collection</cite>).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.addons.load_pip_addons">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.addons.</span></span><span class="sig-name descname"><span class="pre">load_pip_addons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.addons.load_pip_addons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load all known fabsetup addons which are installed as pypi pip-packages.</p>
+<p>The loaded collections are returned as a list and also stored in list
+attribute <code class="docutils literal notranslate"><span class="pre">fabsetup.addons.PIP_MODULES</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of <cite>[invoke.Collection</cite>, <cite>invoke.Collection, …]</cite>,</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.addons.load_repo_addons">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.addons.</span></span><span class="sig-name descname"><span class="pre">load_repo_addons</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.addons.load_repo_addons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load all fabsetup addons which are stored under
+<code class="docutils literal notranslate"><span class="pre">~/.fabsetup-addon-repos</span></code> as git repositories.</p>
+<p>The loaded collections are returned as a list and also stored in
+<code class="docutils literal notranslate"><span class="pre">fabsetup.addons.REPO_MODULES</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>list of <cite>[invoke.Collection</cite>, <cite>invoke.Collection, …]</cite>,</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.addons.merge_or_add_r">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.addons.</span></span><span class="sig-name descname"><span class="pre">merge_or_add_r</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">collection</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.addons.merge_or_add_r" title="Permalink to this definition">¶</a></dt>
+<dd><p>Recursively add <code class="docutils literal notranslate"><span class="pre">collection</span></code> as sub-collection to (mutable)
+<code class="docutils literal notranslate"><span class="pre">namespace</span></code>.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">namespace</span></code> already contains a same-named sub-collection, the tasks
+and sub-namespaces of <code class="docutils literal notranslate"><span class="pre">collection</span></code> each will be added to the same-named
+sub-collection, i.e. merged into it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>namespace</strong> (<em>invoke.Collection</em>) – Target collection</p></li>
+<li><p><strong>collection</strong> (<em>invoke.Collection</em>) – The collection where tasks and sub-collections will be taken or merged
+from.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fabsetup.fabfile">
+<span id="fabsetup-fabfile"></span><h2>fabsetup.fabfile<a class="headerlink" href="#module-fabsetup.fabfile" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.versions">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">versions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.versions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show version numbers of all available fabsetup addons, fabsetup,
+fabric, paramiko, and invoke.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.help">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">help</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show help command</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.tasks">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">tasks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show available tasks.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.task_help">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">task_help</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmd</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.task_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show task help command.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;task</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.info">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">info</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Show fabsetup info.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.fabfile.git_name_and_email_or_die">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">git_name_and_email_or_die</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.git_name_and_email_or_die" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.fabfile.show_or_ask">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">show_or_ask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.show_or_ask" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.fabfile.sanitize">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">sanitize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.sanitize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.gather_from_user_and_task_name">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">gather_from_user_and_task_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.gather_from_user_and_task_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather username, task name, addon name, full addon name, and addon dir
+from username and task name.</p>
+<p>Query for username and task name if not set already.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.gather_task_infos">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">gather_task_infos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headline</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">touched_files</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.gather_task_infos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query for headline, description and touched files if not set already.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.create_files">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">create_files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addon_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addon_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">author_email</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">touched_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.create_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create addon files.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.create_git_repo">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">create_git_repo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">basedir</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.create_git_repo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create git repository.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;subtask</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.summary">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addon_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.summary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Summarize addon infos</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">&#64;task</span></span></dt>
+<dt class="sig sig-object py" id="fabsetup.fabfile.new">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.fabfile.</span></span><span class="sig-name descname"><span class="pre">new</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">touched_files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.fabfile.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new fabsetup addon.</p>
+<p>The created addon will reside inside of a created git repository and
+contains the fabsetup addon boilerplate code.  Afterwards, You can start to
+add code and functionality to Your addon.</p>
+<p>This task needs the following infos from You:</p>
+<ul class="simple">
+<li><p><cite>user</cite> name</p></li>
+<li><p><cite>task</cite> name</p></li>
+<li><p><cite>headline</cite>, <cite>description</cite>, and touched (and created) files and dirs for
+the task docstring and the <cite>README.md</cite></p></li>
+</ul>
+<p>You can set them by task argument. If You omit any argument You will be
+asked for when this task runs.</p>
+<p>The addon name will be derived from the task name.</p>
+<p>This files and dirs will be created:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>~/.fabsetup-addon-repos/fabsetup-<span class="o">{</span>user<span class="o">}</span>-<span class="o">{</span>addon<span class="o">}</span>
+                        │
+                        ├── fabsetup_<span class="o">{</span>user<span class="o">}</span>_<span class="o">{</span>task<span class="o">}</span>
+                        │   ├── __init__.py  <span class="c1"># task definition</span>
+                        │   └── _version.py
+                        │
+                        ├── README.md
+                        │
+                        ├── requirements.txt
+                        ├── setup.py
+                        │
+                        ├── .gitignore
+                        │
+                        └── .git
+                            ├── ...
+                            ├── config
+                            └── ...
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-fabsetup.main">
+<span id="fabsetup-main"></span><h2>fabsetup.main<a class="headerlink" href="#module-fabsetup.main" title="Permalink to this headline">¶</a></h2>
+<p>Executable of fabsetup</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fabsetup.main.Defaults">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fabsetup.main.</span></span><span class="sig-name descname"><span class="pre">Defaults</span></span><a class="headerlink" href="#fabsetup.main.Defaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Fabsetup defaults.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Defaults.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Defaults.as_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return this <code class="docutils literal notranslate"><span class="pre">fabsetup.main.Defaults</span></code> as dict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Defaults.as_restructuredtext_items">
+<span class="sig-name descname"><span class="pre">as_restructuredtext_items</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Defaults.as_restructuredtext_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print configuration as list items in restructuredtext.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fabsetup.main.FabsetupConfig">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fabsetup.main.</span></span><span class="sig-name descname"><span class="pre">FabsetupConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.FabsetupConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fabric.config.Config</span></code></p>
+<p>A <cite>fabric.config.Config</cite> subclass which is an <cite>invoke.config.Config</cite>
+subclass for prefix manipulation.</p>
+<p>This enables for <cite>fabsetup</cite> prefixed config files and <cite>FABSETUP_</cite> prefixed
+environment variables utilising the <a class="reference external" href="https://docs.fabfile.org/en/latest/concepts/configuration.html#configuration">same mechanics as Fabric</a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="fabsetup.main.FabsetupConfig.prefix">
+<span class="sig-name descname"><span class="pre">prefix</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'fabsetup'</span></em><a class="headerlink" href="#fabsetup.main.FabsetupConfig.prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>The prefix used by Fabsetup =&gt; <code class="docutils literal notranslate"><span class="pre">fabsetup.yaml,</span> <span class="pre">FABSETUP_ENV_VAR,</span> <span class="pre">...</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.FabsetupConfig.as_dict">
+<span class="sig-name descname"><span class="pre">as_dict</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.FabsetupConfig.as_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return this <code class="docutils literal notranslate"><span class="pre">fabsetup.main.FabsetupConfig</span></code> as dict.</p>
+<p>This dict is printed in <code class="docutils literal notranslate"><span class="pre">fabstup.main.execute</span></code> using
+<code class="docutils literal notranslate"><span class="pre">pprint.pprint()</span></code>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.FabsetupConfig.global_defaults">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">global_defaults</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.FabsetupConfig.global_defaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return default configurations from Fabsetup, Fabric and
+Invoke defaults.</p>
+<p>Extends <a class="reference external" href="https://docs.fabfile.org/en/latest/api/config.html#fabric.config.Config.global_defaults">fabric.config.Config.global_defaults</a>
+which extends <a class="reference external" href="https://docs.pyinvoke.org/en/stable/api/config.html#invoke.config.Config.global_defaults">invoke.config.Config.global_defaults()</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>dict</cite> with merged defaults.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fabsetup.main.</span></span><span class="sig-name descname"><span class="pre">Fabsetup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">fabric.main.Fab</span></code></p>
+<p>Fabsetup’s CLI entrypoint and parser configuration.</p>
+<p>It is build on top of Fabric’s and Invoke’s core functionality for same.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.core_args">
+<span class="sig-name descname"><span class="pre">core_args</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.core_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create core arguments.</p>
+<p>Overwrites <cite>fabric.main.Fab.core_args()</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of core args each of type <cite>invoke.parser.argument.Argument</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.parse_core">
+<span class="sig-name descname"><span class="pre">parse_core</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.parse_core" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.parse_cleanup">
+<span class="sig-name descname"><span class="pre">parse_cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.parse_cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add list of known fabsetup addons to program output.</p>
+<p>Overwrites <cite>invoke.program.Program.parse_cleanup()</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.load_invoke_tasks">
+<span class="sig-name descname"><span class="pre">load_invoke_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.load_invoke_tasks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.load_fabric_tasks">
+<span class="sig-name descname"><span class="pre">load_fabric_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.load_fabric_tasks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.parse_tasks">
+<span class="sig-name descname"><span class="pre">parse_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.parse_tasks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse leftover args, which are typically tasks &amp; per-task args.</p>
+<p>Sets <code class="docutils literal notranslate"><span class="pre">self.parser</span></code> to the parser used, <code class="docutils literal notranslate"><span class="pre">self.tasks</span></code> to the
+parsed per-task contexts, and <code class="docutils literal notranslate"><span class="pre">self.core_via_tasks</span></code> to a context
+holding any core flags seen within the task contexts.</p>
+<p>Also modifies <code class="docutils literal notranslate"><span class="pre">self.core</span></code> to include the data from <code class="docutils literal notranslate"><span class="pre">core_via_tasks</span></code>
+(so that it correctly reflects any supplied core flags regardless of
+where they appeared).</p>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.update_config">
+<span class="sig-name descname"><span class="pre">update_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.update_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update the previously instantiated <cite>.Config</cite> with parsed data.</p>
+<p>For example, this is how <code class="docutils literal notranslate"><span class="pre">--echo</span></code> is able to override the default
+config value for <code class="docutils literal notranslate"><span class="pre">run.echo</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>merge</strong> (<em>bool</em>) – Whether to merge at the end, or defer. Primarily useful for
+subclassers. Default: <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</dd>
+</dl>
+<div class="versionadded">
+<p><span class="versionmodified added">New in version 1.0.</span></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.control_output">
+<span class="sig-name descname"><span class="pre">control_output</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.control_output" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.control_outfile">
+<span class="sig-name descname"><span class="pre">control_outfile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.control_outfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.execute">
+<span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add hooks to <code class="docutils literal notranslate"><span class="pre">invoke.program.</span></code> in order to run external command
+before fabsetup task execution, control output and outfile of fabsetup
+task execution and show effective fabsetup config.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.run">
+<span class="sig-name descname"><span class="pre">run</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">argv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.run" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.print_version">
+<span class="sig-name descname"><span class="pre">print_version</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.print_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.task_list_opener">
+<span class="sig-name descname"><span class="pre">task_list_opener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.task_list_opener" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.main.Fabsetup.print_help">
+<span class="sig-name descname"><span class="pre">print_help</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.main.Fabsetup.print_help" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-fabsetup.print">
+<span id="fabsetup-print"></span><h2>fabsetup.print<a class="headerlink" href="#module-fabsetup.print" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.print.print_default">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.print.</span></span><span class="sig-name descname"><span class="pre">print_default</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.print.print_default" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.print.print_heading">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.print.</span></span><span class="sig-name descname"><span class="pre">print_heading</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.print.print_heading" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.print.print_docstring">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.print.</span></span><span class="sig-name descname"><span class="pre">print_docstring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.print.print_docstring" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.print.print_code_block">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.print.</span></span><span class="sig-name descname"><span class="pre">print_code_block</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.print.print_code_block" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.print.print_command_line">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.print.</span></span><span class="sig-name descname"><span class="pre">print_command_line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.print.print_command_line" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-fabsetup.task">
+<span id="fabsetup-task"></span><h2>fabsetup.task<a class="headerlink" href="#module-fabsetup.task" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.issue_16_workaround">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">issue_16_workaround</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.issue_16_workaround" title="Permalink to this definition">¶</a></dt>
+<dd><p>In a given <code class="docutils literal notranslate"><span class="pre">context</span></code> set the os ssh-agent socket filename if it
+exists.</p>
+<p>Workaround for <a class="reference external" href="https://github.com/fabric/patchwork/issues/16">Fabric issue 16</a> provided by <a class="reference external" href="https://github.com/fabric/patchwork/issues/16#issuecomment-390384999">max-arnold</a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>context</strong> (<em>invoke.context.Context</em>) – The given context.</p>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Note: issue_16_workaround() is applied in</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#       fabsetup.task.task()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1">#       so this example uses fabric&#39;s task</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fabric</span> <span class="kn">import</span> <span class="n">task</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@task</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">mytask</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="c1"># c is of type `fabric.connection.Connection` which is</span>
+<span class="gp">... </span>    <span class="c1"># derived from `invoke.context.Context`</span>
+<span class="gp">... </span>    <span class="n">issue_16_workaround</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;uname -a&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.from_config">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">from_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.from_config" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.increment_numbered_state">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">increment_numbered_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.increment_numbered_state" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.append_numbered_index">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">append_numbered_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.append_numbered_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.remove_numbered_index">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">remove_numbered_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.remove_numbered_index" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.get_task_depth">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">get_task_depth</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.get_task_depth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.wrapped_run_method">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">wrapped_run_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run_method</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">remote</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.wrapped_run_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap <code class="docutils literal notranslate"><span class="pre">run_method</span></code> with internal function
+<code class="docutils literal notranslate"><span class="pre">cmd_in_markdown_codeblock()</span></code>.</p>
+<p>A call of such a wrapped run method (<code class="docutils literal notranslate"><span class="pre">c.run()</span></code> or <code class="docutils literal notranslate"><span class="pre">c.local()</span></code>) prints
+out its command and output inside of a markdown codeblock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>run_method</strong> – Required, <code class="docutils literal notranslate"><span class="pre">c.run()</span></code>, or <code class="docutils literal notranslate"><span class="pre">c.local()</span></code></p></li>
+<li><p><strong>remote</strong> (<em>bool</em>) – Required, if <code class="docutils literal notranslate"><span class="pre">True</span></code>, <code class="docutils literal notranslate"><span class="pre">run_method</span></code> is treated as a <code class="docutils literal notranslate"><span class="pre">run()</span></code>
+method, if <code class="docutils literal notranslate"><span class="pre">False</span></code>, as a <code class="docutils literal notranslate"><span class="pre">local()</span></code> method.</p></li>
+<li><p><strong>prefix_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">'\n```{language}\n'</span></code></p></li>
+<li><p><strong>local_cmd_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">'{user}&#64;{host}{prompt_end}{cmd}'</span></code></p></li>
+<li><p><strong>remote_cmd_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">'{user}&#64;{host}{prompt_end}{cmd}'</span></code></p></li>
+<li><p><strong>return_code_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">'[{return_code}]\n'</span></code></p></li>
+<li><p><strong>postfix_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">3*'`'+'\n'</span></code></p></li>
+<li><p><strong>format_kwargs</strong> (<em>dict</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">dict(language='',</span> <span class="pre">prompt_end='&gt;</span> <span class="pre">')</span></code></p></li>
+<li><p><strong>command_output_prefix</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">&quot;(stdout)</span> <span class="pre">&quot;</span></code> (without quotation marks).</p></li>
+<li><p><strong>command_errput_prefix</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">&quot;(STDERR)</span> <span class="pre">&quot;</span></code> (without quotation marks).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.task">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.task" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator based on <a class="reference external" href="https://docs.fabfile.org/en/latest/api/tasks.html#fabric.tasks.task">fabric.tasks.task</a>
+with the following modifications:</p>
+<ul class="simple">
+<li><p>On task execution produce Markdown formatted output:</p>
+<ul>
+<li><p>print task name as H1 heading by using
+<code class="docutils literal notranslate"><span class="pre">fabsetup.utils.print_full_name()</span></code></p></li>
+<li><p>print task docstring as paragraph by using
+<code class="docutils literal notranslate"><span class="pre">fabsetup.utils.print_doc()</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">c.run()</span></code> and <code class="docutils literal notranslate"><span class="pre">c.local()</span></code> command calls from inside of a decorated
+function and its output are printed as markdown codeblocks with the
+power of <code class="docutils literal notranslate"><span class="pre">fabsetup.task.wrapped_run_method()</span></code>.</p></li>
+</ul>
+</li>
+<li><p>The context method <code class="docutils literal notranslate"><span class="pre">c.local()</span></code> exists and works even when no hosts are
+given by <a class="reference external" href="https://docs.fabfile.org/en/latest/cli.html#cmdoption-h">(Fabric) argument</a>
+<code class="docutils literal notranslate"><span class="pre">-H,</span> <span class="pre">--hosts</span></code>. In such a case, <code class="docutils literal notranslate"><span class="pre">c.local()</span></code> and <code class="docutils literal notranslate"><span class="pre">c.run()</span></code> are the
+same.  This feature is a monkey-patch, addresses
+<a class="reference external" href="https://github.com/fabric/fabric/issues/1789#issuecomment-424116753">Fabric issue 1789</a>,
+<a class="reference external" href="https://github.com/fabric/fabric/issues/1591#issuecomment-296903582">issue 1591</a>,
+and <a class="reference external" href="https://github.com/fabric/fabric/issues/98">issue 98</a>.</p></li>
+<li><p>Apply workaround for <a class="reference external" href="https://github.com/fabric/patchwork/issues/16">Fabric issue 16</a> by using
+<code class="docutils literal notranslate"><span class="pre">fabsetup.task.issue_16_workaround()</span></code>.</p></li>
+</ul>
+<p>Wraps and extends Fabric’s <code class="docutils literal notranslate"><span class="pre">&#64;task</span></code> and <a class="reference external" href="https://docs.pyinvoke.org/en/latest/api/tasks.html#invoke.tasks.task">Invoke’s</a>
+<code class="docutils literal notranslate"><span class="pre">&#64;task</span></code> with the following additional keyword arguments:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name_</strong> (<em>str</em>) – Optionally set a custom task name.</p></li>
+<li><p><strong>doc</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code>, print the task’s docstring on task execution (default).</p></li>
+<li><p><strong>prefix_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">'\n```{language}\n'</span></code></p></li>
+<li><p><strong>local_cmd_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">'{user}&#64;{host}{prompt_end}{cmd}'</span></code></p></li>
+<li><p><strong>remote_cmd_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">'{user}&#64;{host}{prompt_end}{cmd}'</span></code></p></li>
+<li><p><strong>return_code_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">'[{return_code}]\n'</span></code></p></li>
+<li><p><strong>postfix_formatter</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">3*'`'+'\n'</span></code></p></li>
+<li><p><strong>format_kwargs</strong> (<em>dict</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">dict(language='',</span> <span class="pre">prompt_end='&gt;</span> <span class="pre">')</span></code></p></li>
+<li><p><strong>command_output_prefix</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">&quot;(stdout)</span> <span class="pre">&quot;</span></code> (without quotation marks).</p></li>
+<li><p><strong>command_errput_prefix</strong> (<em>str</em>) – Optional, default: <code class="docutils literal notranslate"><span class="pre">&quot;(STDERR)</span> <span class="pre">&quot;</span></code> (without quotation marks).</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">fabsetup.task</span> <span class="kn">import</span> <span class="n">task</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@task</span><span class="p">()</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">termdown</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;Install and set up termdown&quot;&quot;&quot;</span>
+<span class="gp">... </span>    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;echo setup..&#39;</span><span class="p">)</span>
+
+<span class="go">.&gt;&gt; termdown(c)</span>
+
+<span class="go"># termdown</span>
+
+<span class="go">Install and set up termdown</span>
+
+<span class="go">```</span>
+<span class="go">myuser@myhost&gt; echo setup..</span>
+<span class="go">setup..</span>
+<span class="go">```</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.task.subtask">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.task.</span></span><span class="sig-name descname"><span class="pre">subtask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.task.subtask" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decorator which prints out the name and docstring of the decorated
+function on execution.</p>
+<p>The output is markdown formatted and colored: A cyan colored H2 heading
+containing the name of the subtask and a non-colored paragraph with the
+docstring of the subtask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>depth</strong> (<em>int</em>) – Optionally set the order of the markdown heading which contains the
+subtask name. The default is <cite>2</cite>.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – Optionally set a custom prefix of the heading,
+default: <code class="docutils literal notranslate"><span class="pre">'\n##</span> <span class="pre">'</span></code>.</p></li>
+<li><p><strong>tail</strong> (<em>str</em>) – Optionally set a custom tail of the heading,
+default: <code class="docutils literal notranslate"><span class="pre">'\n'</span></code>.</p></li>
+<li><p><strong>doc</strong> (<em>bool</em>) – If <code class="docutils literal notranslate"><span class="pre">True</span></code> (the default) print the docstring as a paragraph.</p></li>
+<li><p><strong>color</strong> (<em>fabsetup.utils.color-function</em>) – Optionally set a custom color of the heading,
+default: <code class="docutils literal notranslate"><span class="pre">fabsetup.utils.cyan</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Optionally define a name which is printed as the heading text instead
+of the name of the subtask function (default: <code class="docutils literal notranslate"><span class="pre">None</span></code>).</p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">invoke.context</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">invoke</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">Context</span><span class="p">()</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@subtask</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">mysubtask</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="s1">&#39;This is my subtask&#39;</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mysubtask</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">[36m</span>
+<span class="go">## mysubtask</span>
+<span class="go">[0m</span>
+<span class="go">[34mThis is my subtask</span>
+<span class="go">[0m</span>
+<span class="go">foo</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Fabsetup</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Getting Started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced-usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../addons.html">Addons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create-addon.html">Create an Addon</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="fabsetup.fabutils.html">fabsetup.fabutils</a></li>
+<li class="toctree-l3"><a class="reference internal" href="fabsetup.utils.html">fabsetup.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fabsetup.addons">fabsetup.addons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fabsetup.fabfile">fabsetup.fabfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fabsetup.main">fabsetup.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fabsetup.print">fabsetup.print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-fabsetup.task">fabsetup.task</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api-usage.html">API Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../create-addon.html" title="previous chapter">Create a Fabsetup Addon</a></li>
+      <li>Next: <a href="fabsetup.fabutils.html" title="next chapter">fabsetup.fabutils</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2021 Theodor Nolte.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/fabsetup.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,2 +1,0 @@
-fabric
-fabsetup>=0.6.0

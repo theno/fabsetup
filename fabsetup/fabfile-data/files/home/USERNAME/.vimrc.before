@@ -1,5 +1,0 @@
-let mapleader = " "
-
-"https://stackoverflow.com/questions/38599147/how-to-disable-a-nerdtree-mapping-that-conflicts-with-a-custom-mapping?rq=1
-let g:NERDTreeMapJumpPrevSibling = ''
-let g:NERDTreeMapJumpNextSibling = ''

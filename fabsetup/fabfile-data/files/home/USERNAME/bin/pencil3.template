@@ -1,4 +1,0 @@
-#!/bin/bash
-unset http_proxy
-unset HTTP_PROXY
-cd {{pencil3_repodir}} && npm start

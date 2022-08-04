@@ -1,42 +1,23 @@
-from fabsetup.fabutils import print_msg, run, subtask, suggest_localhost, task
+from fabsetup.task import task, subtask
 
-from fabsetup_{{username}}_{{taskname}}.fabutils import checkup_git_repo
-from fabsetup_{{username}}_{{taskname}}.fabutils import checkup_git_repos
-from fabsetup_{{username}}_{{taskname}}.fabutils import install_file
-from fabsetup_{{username}}_{{taskname}}.fabutils import install_user_command
-from fabsetup_{{username}}_{{taskname}}._version import __version__
+from fabsetup_{{USER}}_{{TASK}}._version import __version__  # noqa: W0611
 
 
 @subtask
-def install_pip_package():
-    run('pip install --user termdown')
+def addon_files(c):
+    '''Show files of this fabsetup addon.'''
+    c.local('tree ~/.fabsetup-addon-repos/'
+            'fabsetup-{{USER}}-{{addon_name}}/')
 
 
 @subtask
-def install_command():
-    install_user_command('termdown',
-                         TIMER_FINISHED_MESSAGE='TIMER FINISHED')
-
-
-@subtask
-def show_termdown_usage():
-    print('termdown is now installed\n')
-    print_msg('    python -m termdown --help\n')
-    print('for example: time a pomodoro session\n')
-    print_msg('    termdown 25m')
+def system_info(c):
+    '''Show system information.'''
+    c.run('uname -a')
 
 
 @task
-@suggest_localhost
-def {{taskname}}():
-    '''{{headline}}
-
-    {{description}}
-
-    Touched files, dirs, and installed packages:
-
-        {{touched_files}}
-    '''
-    install_pip_package()
-    install_command()
-    show_termdown_usage()
+def {{TASK}}(c, arg1=True, arg2=False, arg3='', arg4=None):
+    '''My task docstring'''
+    addon_files(c)
+    system_info(c)

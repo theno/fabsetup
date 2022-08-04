@@ -1,5 +1,0 @@
-#!/bin/bash
-
-# cf. https://github.com/prikhi/pencil#linux
-# xulrunner Outputs/Linux/application.ini || firefox --app Outputs/Linux/application.ini
-firefox --app {{pencil2_repodir}}/build/Outputs/Linux/application.ini

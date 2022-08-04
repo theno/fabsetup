@@ -1,0 +1,300 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Create a Fabsetup Addon &#8212; Fabsetup fabsetup-1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="fabsetup API" href="api/fabsetup.html" />
+    <link rel="prev" title="Fabsetup Addons" href="addons.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="create-a-fabsetup-addon">
+<h1>Create a Fabsetup Addon<a class="headerlink" href="#create-a-fabsetup-addon" title="Permalink to this headline">¶</a></h1>
+<section id="in-a-nutshell">
+<h2>In a Nutshell<a class="headerlink" href="#in-a-nutshell" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="#scaffold">Scaffold</a>: Run <code class="docutils literal notranslate"><span class="pre">fabsetup</span> <span class="pre">new</span></code> which scaffolds a new Fabsetup
+addon</p></li>
+<li><p><a class="reference external" href="#code">Code</a>: Implement Your task, use decorators <code class="docutils literal notranslate"><span class="pre">task</span></code>, <code class="docutils literal notranslate"><span class="pre">subtask</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">subsubtask</span></code> of module <code class="docutils literal notranslate"><span class="pre">fabsetup.fabutils.task</span></code></p></li>
+<li><p><a class="reference external" href="#documentation">Documentation</a>: Set up documentation (sphinx powered page)</p></li>
+<li><p><a class="reference external" href="#ci-cd">CI/CD</a>: Auto-test Your addon and set up shields</p></li>
+<li><p><a class="reference external" href="#pypi">PyPI</a>: Publish Your addon repository on git{hub,lab,…}
+and upload Your addon to PyPI</p></li>
+</ul>
+</section>
+<section id="en-detail">
+<h2>En Détail<a class="headerlink" href="#en-detail" title="Permalink to this headline">¶</a></h2>
+<section id="scaffold">
+<h3>Scaffold<a class="headerlink" href="#scaffold" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>fabsetup new
+</pre></div>
+</div>
+</section>
+<section id="code">
+<h3>Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h3>
+<p>Implement Your task, use decorators of module <code class="docutils literal notranslate"><span class="pre">fabsetup.fabutils.task</span></code>.</p>
+<p>An academic example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">fabsetup.fabutils.task</span> <span class="kn">import</span> <span class="n">task</span><span class="p">,</span> <span class="n">subtask</span><span class="p">,</span> <span class="n">subsubtask</span>
+
+<span class="nd">@subsubtask</span>
+<span class="k">def</span> <span class="nf">my_subsubtask_a</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;subsubtask a&#39;&#39;&#39;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;echo subsubtask a&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@subsubtask</span>
+<span class="k">def</span> <span class="nf">my_subsubtask_b</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;subsubtask b&#39;&#39;&#39;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;echo subsubtask b&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@subtask</span>
+<span class="k">def</span> <span class="nf">my_subtask_1</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;subtask 1&#39;&#39;&#39;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;echo subtask 1&#39;</span><span class="p">)</span>
+    <span class="n">my_subsubtask_a</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">my_subsubtask_b</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+
+<span class="nd">@subsubtask</span>
+<span class="k">def</span> <span class="nf">my_subsubtask_c</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;subsubtask c&#39;&#39;&#39;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;echo subsubtask c&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@subsubtask</span>
+<span class="k">def</span> <span class="nf">my_subsubtask_d</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;subsubtask d&#39;&#39;&#39;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;echo subsubtask d&#39;</span><span class="p">)</span>
+
+
+<span class="nd">@subtask</span>
+<span class="k">def</span> <span class="nf">my_subtask_2</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;subtask 2&#39;&#39;&#39;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;echo subtask 2&#39;</span><span class="p">)</span>
+    <span class="n">my_subsubtask_c</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">my_subsubtask_d</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+
+<span class="nd">@task</span>
+<span class="k">def</span> <span class="nf">my_task</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;Run my_subtask_1 and my_subtask_2&#39;&#39;&#39;</span>
+    <span class="n">c</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;echo task&#39;</span><span class="p">)</span>
+    <span class="n">my_subtask_1</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+    <span class="n">my_subtask_2</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>set up documentation (github page)</p></li>
+</ul>
+</section>
+<section id="ci-cd">
+<h3>CI/CD<a class="headerlink" href="#ci-cd" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>TODO: auto-test Your addon and use shields</p></li>
+</ul>
+</section>
+<section id="pypi">
+<h3>PyPI<a class="headerlink" href="#pypi" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p>upload to pypi</p></li>
+</ul>
+</section>
+</section>
+<section id="more-details">
+<h2>More Details<a class="headerlink" href="#more-details" title="Permalink to this headline">¶</a></h2>
+<section id="files">
+<h3>Files<a class="headerlink" href="#files" title="Permalink to this headline">¶</a></h3>
+<p>Where to put files and templates, used by a fabsetup task.</p>
+</section>
+<section id="git-repositories">
+<h3>Git Repositories<a class="headerlink" href="#git-repositories" title="Permalink to this headline">¶</a></h3>
+<p>How to manage a git repository used by a fabsetup task.</p>
+</section>
+<section id="downloads">
+<h3>Downloads<a class="headerlink" href="#downloads" title="Permalink to this headline">¶</a></h3>
+<p>How to manage a downloaded file used by a fabsetup task.</p>
+</section>
+</section>
+<section id="styleguide">
+<h2>Styleguide<a class="headerlink" href="#styleguide" title="Permalink to this headline">¶</a></h2>
+<p><em>“I whish You all the best four Your Fabsetup addon.”</em></p>
+<section id="cleanliness">
+<h3>Cleanliness<a class="headerlink" href="#cleanliness" title="Permalink to this headline">¶</a></h3>
+<p>There is <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">PEP 8</a>. And tools
+like <a class="reference external" href="https://flake8.pycqa.org/">flake8</a> and
+<a class="reference external" href="https://github.com/psf/black">black</a>.  Please meet this baseline in
+writing <a class="reference external" href="https://www.informit.com/martinseries">clean code</a>.</p>
+</section>
+<section id="comprehensibility">
+<h3>Comprehensibility<a class="headerlink" href="#comprehensibility" title="Permalink to this headline">¶</a></h3>
+<p>A Fabsetup user should understand for every single command of a task why it
+is executed.  Therefore, please write a docstring for every <code class="docutils literal notranslate"><span class="pre">task</span></code>,
+<code class="docutils literal notranslate"><span class="pre">subtask</span></code>, and <code class="docutils literal notranslate"><span class="pre">subsubtask</span></code> and describe what the code is intended to
+achieve.</p>
+</section>
+<section id="traceability">
+<h3>Traceability<a class="headerlink" href="#traceability" title="Permalink to this headline">¶</a></h3>
+<p>A Fabsetup user should be able to achieve what a task does by manually
+executing each command listed on task execution.  Therefore, please use
+“all-inclusive” commands (e.g. <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">path/to/somewhere</span> <span class="pre">&amp;&amp;</span> <span class="pre">./run-something</span></code>
+instead of <a class="reference external" href="https://docs.pyinvoke.org/en/stable/api/context.html#invoke.context.Context.cd">invoke.context.Context.cd</a>
+which would not show the current dir where a command is executed from).
+Also, consider to avoide the execution of hidden commands in Your task.</p>
+</section>
+<section id="repetitions">
+<h3>Repetitions<a class="headerlink" href="#repetitions" title="Permalink to this headline">¶</a></h3>
+<p>By intuition, a Fabsetup user expects that repeated runs of a Fabsetup
+task would not alter the achievements of the first run.  Please take
+care to meet this assumption of idempotency for Your task.</p>
+</section>
+<section id="markdown-output">
+<h3>Markdown Output<a class="headerlink" href="#markdown-output" title="Permalink to this headline">¶</a></h3>
+<p>You probably have noted that the output of the tasks <code class="docutils literal notranslate"><span class="pre">info</span></code> and <code class="docutils literal notranslate"><span class="pre">new</span></code> is
+in <a class="reference external" href="https://daringfireball.net/projects/markdown/">markdown</a>.  Please
+assure that Your fabsetup addon also creates markdown formatted output.</p>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Fabsetup</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">Getting Started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced-usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="addons.html">Addons</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Create an Addon</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#in-a-nutshell">In a Nutshell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#en-detail">En Détail</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scaffold">Scaffold</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#code">Code</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#documentation">Documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ci-cd">CI/CD</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pypi">PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#more-details">More Details</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#files">Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#git-repositories">Git Repositories</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#downloads">Downloads</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#styleguide">Styleguide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cleanliness">Cleanliness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#comprehensibility">Comprehensibility</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#traceability">Traceability</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#repetitions">Repetitions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#markdown-output">Markdown Output</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/fabsetup.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-usage.html">API Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="addons.html" title="previous chapter">Fabsetup Addons</a></li>
+      <li>Next: <a href="api/fabsetup.html" title="next chapter">fabsetup API</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2021 Theodor Nolte.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/create-addon.md.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

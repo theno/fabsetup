@@ -1,6 +1,0 @@
-#!/bin/bash
-
-for file in *.svg
-do
-  svg2pdf $file
-done

@@ -1,4 +1,0 @@
-; see http://selfoss.aditu.de for more information about
-; the configuration parameters
-[globals]
-salt={{salt}}

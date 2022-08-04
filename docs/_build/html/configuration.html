@@ -1,0 +1,341 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Configuration &#8212; Fabsetup fabsetup-1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Fabsetup Addons" href="addons.html" />
+    <link rel="prev" title="Advanced Usage" href="advanced-usage.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="configuration">
+<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<p>The configuration of Fabsetup is based on the same mechanics as used in
+<a class="reference external" href="https://docs.fabfile.org/en/latest/concepts/configuration.html">Fabric</a> and
+<a class="reference external" href="https://docs.pyinvoke.org/en/latest/concepts/configuration.html">Invoke</a>.</p>
+<p>The configuration file paths are named <code class="docutils literal notranslate"><span class="pre">fabsetup.*</span></code> instead of <code class="docutils literal notranslate"><span class="pre">fabric.*</span></code>
+or <code class="docutils literal notranslate"><span class="pre">invoke.*</span></code>, for example <code class="docutils literal notranslate"><span class="pre">~/.fabsetup.yaml</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">~/.fabric.yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">~/.invoke.yaml</span></code>.</p>
+<p>The prefix for environment variables is <code class="docutils literal notranslate"><span class="pre">FABSETUP_</span></code>, see <a class="reference external" href="https://docs.pyinvoke.org/en/latest/concepts/configuration.html#environment-variables">here</a>
+for the rules.</p>
+<p>See <a class="reference external" href="https://docs.pyinvoke.org/en/latest/concepts/configuration.html#the-configuration-hierarchy">here</a>
+for the order in which configuration values override one another.  To verify
+which configuration values are currently effective run: <code class="docutils literal notranslate"><span class="pre">fabsetup</span>
+<span class="pre">--show-config</span></code>.  This prints out the merged configuration before task
+execution.</p>
+<section id="values">
+<h2>Values<a class="headerlink" href="#values" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the configuration values provided by Fabric and Invoke,
+Fabsetup comes with the following configurations:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">outfile</span></code>: Configure if and how an outfile will be created.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: Path of the outfile where the markdown output will be (over-) written to. If the value is empty on task execution, no outfile will be created.
+Empty string as default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dir</span></code>: If non-empty and <code class="docutils literal notranslate"><span class="pre">outfile.name</span></code> is empty set the value of <code class="docutils literal notranslate"><span class="pre">outfile.name</span></code> to <code class="docutils literal notranslate"><span class="pre">f&quot;{outfile.dir}/{basename}&quot;</span></code> before task execution. <code class="docutils literal notranslate"><span class="pre">basename</span></code> is the formatted <code class="docutils literal notranslate"><span class="pre">outfile.basename_formatter</span></code>.
+Empty string as default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">basename_formatter</span></code>: Create a variable filename, by default containing the date and time of execution, the names of the exectued tasks and the name of the hosts (if any was given by <code class="docutils literal notranslate"><span class="pre">-H</span></code>), each part prepended by an underscore. The default value results in a filename like <code class="docutils literal notranslate"><span class="pre">'fabsetup_2021-02-21_12:30:45_task1_task2_host1_host2.md'</span></code> for example.
+Default value is <code class="docutils literal notranslate"><span class="pre">'fabsetup_{now}{tasks}{hosts}.md'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">now_format</span></code>: the <code class="docutils literal notranslate"><span class="pre">now</span></code> variable in <code class="docutils literal notranslate"><span class="pre">outfile.basename_formatter</span></code> is set with the current date: <code class="docutils literal notranslate"><span class="pre">now</span> <span class="pre">=</span> <span class="pre">datetime.datetime.now().strftime(now_format)</span></code>.
+Default value is <code class="docutils literal notranslate"><span class="pre">'%F_%H-%M-%S'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">keep_color</span></code>: When <code class="docutils literal notranslate"><span class="pre">True</span></code> do not remove ANSI color codes from the markdown outfile.
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">pandoc</span></code>: Configure file modifications and conversions applied by pandoc.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">command</span></code>: Pandoc executable, could be set for example to <code class="docutils literal notranslate"><span class="pre">'pandoc'</span></code> or <code class="docutils literal notranslate"><span class="pre">'/usr/bin/pandoc'</span></code>.
+Default value is <code class="docutils literal notranslate"><span class="pre">'pandoc'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">toc</span></code>: If <code class="docutils literal notranslate"><span class="pre">True</span></code> add a table of contents to the markdown outfile.
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">html</span></code>: Configure HTML file creation.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: If non-empty on task execution and a markdown outfile exists use pandoc to convert the markdown to an HTML file.
+Empty string as default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dir</span></code>: If non-empty and <code class="docutils literal notranslate"><span class="pre">outfile.pandoc.html.name</span></code> is empty set <code class="docutils literal notranslate"><span class="pre">outfile.pandoc.html.name</span></code> to <code class="docutils literal notranslate"><span class="pre">f&quot;{dir}/{basename}.html&quot;</span></code> before task execution. <code class="docutils literal notranslate"><span class="pre">basename</span></code> is the basename of the markdown outfile without the trailing <code class="docutils literal notranslate"><span class="pre">.md</span></code>.
+Empty string as default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">css</span></code>: Configure Cascading Style Sheets.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">disabled</span></code>: If <code class="docutils literal notranslate"><span class="pre">True</span></code> the created HTML file will not use CSS.
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">inline</span></code>: If <code class="docutils literal notranslate"><span class="pre">True</span></code> embed the CSS inline into the HTML file, else create a CSS file next to it.
+Default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">url</span></code>:
+Empty string as default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">auto_remove_markdown_file</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">prepend_executed_fabsetup_command</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fabsetup_command_prefix</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'*Executed</span> <span class="pre">fabsetup</span> <span class="pre">command:*\n\n'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">command_output_prefix</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'(stdout)</span> <span class="pre">'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">command_errput_prefix</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'(STDERR)</span> <span class="pre">'</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span></code>: Configure the produced output on fabsetup task execution.</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">color</span></code>: color configuration</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmd_local</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'green'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmd_remote</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'yellow'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">docstring</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'blue'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">error</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'red'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">full_name</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'no_color'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">subtask_heading</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'cyan'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">task_heading</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'magenta'</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">color_off</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hide_command_line</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hide_code_block</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hide_docstring</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hide_heading</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">hide_print</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numbered</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">numbered_state</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">'0'</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">task_depth</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">1</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run</span></code>: run configuration</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">interactive</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load_invoke_tasks_file</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">load_fabric_fabfile</span></code>:
+Default value is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_before</span></code>: Command hook to be executed before fabsetup execution.
+Empty string as default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">run_finally</span></code>: Command hook to be executed after fabsetup execution.
+Empty string as default.</p></li>
+</ul>
+</section>
+<section id="defaults">
+<h2>Defaults<a class="headerlink" href="#defaults" title="Permalink to this headline">¶</a></h2>
+<p>Fabsetup uses sane defaults and is usable “out of the box”:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;outfile&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dir&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;basename_formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;fabsetup_</span><span class="si">{now}{tasks}{hosts}</span><span class="s2">.md&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;now_format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%F</span><span class="s2">_%H-%M-%S&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;keep_color&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;pandoc&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;command&quot;</span><span class="p">:</span> <span class="s2">&quot;pandoc&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;toc&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;html&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;dir&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;css&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;disabled&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                    <span class="s2">&quot;inline&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;auto_remove_markdown_file&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="p">},</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;prepend_executed_fabsetup_command&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;fabsetup_command_prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;*Executed fabsetup command:*</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;command_output_prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;(stdout) &quot;</span><span class="p">,</span>
+        <span class="s2">&quot;command_errput_prefix&quot;</span><span class="p">:</span> <span class="s2">&quot;(STDERR) &quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;output&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;cmd_local&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cmd_remote&quot;</span><span class="p">:</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;docstring&quot;</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;error&quot;</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="s2">&quot;no_color&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;subtask_heading&quot;</span><span class="p">:</span> <span class="s2">&quot;cyan&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;task_heading&quot;</span><span class="p">:</span> <span class="s2">&quot;magenta&quot;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;color_off&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;hide_command_line&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;hide_code_block&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;hide_docstring&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;hide_heading&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;hide_print&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;numbered&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;numbered_state&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;task_depth&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;run&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;interactive&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">},</span>
+    <span class="s2">&quot;load_invoke_tasks_file&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;load_fabric_fabfile&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s2">&quot;run_before&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;run_finally&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="customization-examples">
+<h2>Customization Examples<a class="headerlink" href="#customization-examples" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>Log every fabsetup call as an HTML file with a table of contents and with
+inline CSS. Add to Your <code class="docutils literal notranslate"><span class="pre">~/.fabsetup.yaml</span></code>:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">outfile</span><span class="p">:</span>
+  <span class="nt">dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/.fabsetup-runs</span>
+  <span class="nt">pandoc</span><span class="p">:</span>
+    <span class="nt">html</span><span class="p">:</span>
+      <span class="nt">dir</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">~/.fabsetup-runs/html</span>
+    <span class="nt">toc</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">true</span>
+</pre></div>
+</div>
+</li>
+<li><p>Depending on the executed tasks, Fabsetup calls could need some time to
+finish or ask for interaction.  It would be useful if Fabsetup talks to You
+when such an event occurs.  Among <a class="reference external" href="https://askubuntu.com/a/501917">others</a>
+the tool <a class="reference external" href="https://freebsoft.org/speechd">spd-say</a> synthesises speech from
+text.  In order to be informed on this events amend Your <code class="docutils literal notranslate"><span class="pre">~/.fabsetup.yaml</span></code>
+by something like this values:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">run-before</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spd-say Yo!</span>
+<span class="nt">run-on-question</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spd-say &quot;Ok Carbon unit</span><span class="p p-Indicator">:</span> <span class="l l-Scalar l-Scalar-Plain">Question!&quot;</span>
+<span class="nt">run-after</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">spd-say Done!</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Fabsetup</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="README.html">Getting Started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced-usage.html">Advanced Usage</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#values">Values</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#defaults">Defaults</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#customization-examples">Customization Examples</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">Addons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="create-addon.html">Create an Addon</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/fabsetup.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api-usage.html">API Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="advanced-usage.html" title="previous chapter">Advanced Usage</a></li>
+      <li>Next: <a href="addons.html" title="next chapter">Fabsetup Addons</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2021 Theodor Nolte.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/configuration.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

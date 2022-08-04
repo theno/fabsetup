@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>fabsetup.utils &#8212; Fabsetup fabsetup-1.0.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Usage" href="../api-usage.html" />
+    <link rel="prev" title="fabsetup.fabutils" href="fabsetup.fabutils.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-fabsetup.utils">
+<span id="fabsetup-utils"></span><h1>fabsetup.utils<a class="headerlink" href="#module-fabsetup.utils" title="Permalink to this headline">¶</a></h1>
+<p>Fabsetup utils.</p>
+<section id="module-fabsetup.utils.colors">
+<span id="fabsetup-utils-colors"></span><h2>fabsetup.utils.colors<a class="headerlink" href="#module-fabsetup.utils.colors" title="Permalink to this headline">¶</a></h2>
+<p>Wrap text with ANSI escape color sequences.</p>
+<p>Code originally comes from <a class="reference external" href="https://github.com/fabric/fabric/blob/1.10/fabric/colors.py">Fabric-1</a>,
+<code class="docutils literal notranslate"><span class="pre">default_color</span></code> and <code class="docutils literal notranslate"><span class="pre">no_color</span></code> were added.</p>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">blue</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">))</span>
+\<span class="mi">033</span><span class="p">[</span><span class="mi">34</span><span class="n">mfoo</span>\<span class="mi">033</span><span class="p">[</span><span class="mi">0</span><span class="n">m</span>
+
+<span class="o">.&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">red</span><span class="p">(</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">bold</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+\<span class="mi">033</span><span class="p">[</span><span class="mi">1</span><span class="p">;</span><span class="mi">31</span><span class="n">mbar</span>\<span class="mi">033</span><span class="p">[</span><span class="mi">0</span><span class="n">m</span>
+
+<span class="o">.&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">no_color</span><span class="p">(</span><span class="s1">&#39;baz&#39;</span><span class="p">))</span>
+<span class="n">baz</span>
+</pre></div>
+</div>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/ANSI_escape_code#3-bit_and_4-bit">Color codes</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">black</span><span class="p">:</span>   <span class="mi">30</span>
+<span class="n">red</span><span class="p">:</span>     <span class="mi">31</span>
+<span class="n">green</span><span class="p">:</span>   <span class="mi">32</span>
+<span class="n">yellow</span><span class="p">:</span>  <span class="mi">33</span>
+<span class="n">blue</span><span class="p">:</span>    <span class="mi">34</span>
+<span class="n">magenta</span><span class="p">:</span> <span class="mi">35</span>
+<span class="n">cyan</span><span class="p">:</span>    <span class="mi">36</span>
+<span class="n">white</span><span class="p">:</span>   <span class="mi">37</span>
+
+<span class="n">default_color</span><span class="p">:</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.black">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">black</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.black" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.red">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">red</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.red" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.green">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">green</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.green" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.yellow">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">yellow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.yellow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.blue">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">blue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.blue" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.magenta">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">magenta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.magenta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.cyan">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">cyan</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.cyan" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.white">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">white</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.white" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.default_color">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">default_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.default_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.no_color">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">no_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.no_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default, return text unchanged.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">bold</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>, return wrapped using default color code in bold style.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.color_by_name">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">color_by_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.color_by_name" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.colors.config_color">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.colors.</span></span><span class="sig-name descname"><span class="pre">config_color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.colors.config_color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-fabsetup.utils.decorate">
+<span id="fabsetup-utils-decorate"></span><h2>fabsetup.utils.decorate<a class="headerlink" href="#module-fabsetup.utils.decorate" title="Permalink to this headline">¶</a></h2>
+<p>Function decorator helper.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.decorate.invoked">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.decorate.</span></span><span class="sig-name descname"><span class="pre">invoked</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.decorate.invoked" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return True if <cite>args</cite> is None or if <cite>kwargs</cite> is not None.</p>
+<p>This means if a decorator which calls <cite>invoked()</cite> decorates a function
+invoked, i.e. with braces containing zero or more <cite>kwargs</cite>, <cite>invoked()</cite>
+returns True.  And returns False, if the decorator decorates a function
+non-invoked, i.e. without braces.</p>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">json</span>  <span class="c1"># print dict `kwargs` in order</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">decorator</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">inner</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">func</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">invoked</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;invoked&#39;</span><span class="p">,</span>
+<span class="gp">... </span>              <span class="n">args</span><span class="p">,</span>
+<span class="gp">... </span>              <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">inner</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;not invoked&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">return</span> <span class="n">inner</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># non-invoked decorator</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@decorator</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">not invoked</span>
+<span class="go">inner</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># &quot;manually&quot; apply non-invoked decorator</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">decorator</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="go">not invoked</span>
+<span class="go">inner</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># invoke decorator without kwargs</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@decorator</span><span class="p">()</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">invoked () {}</span>
+<span class="go">inner</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># invoke decorator with kwargs</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@decorator</span><span class="p">(</span><span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">invoked () {&quot;a&quot;: 1, &quot;b&quot;: 2}</span>
+<span class="go">inner</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># &quot;manually&quot; apply decorator with kwargs</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">foo</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tmp</span> <span class="o">=</span> <span class="n">decorator</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="go">invoked (0,) {&quot;a&quot;: 1, &quot;b&quot;: 2}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="go">inner</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># invoke decorator with args but without kwargs</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># (not possible)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@decorator</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">foo</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="gr">TypeError</span>: <span class="n">&#39;int&#39; object is not callable</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-fabsetup.utils.decorators">
+<span id="fabsetup-utils-decorators"></span><h2>fabsetup.utils.decorators<a class="headerlink" href="#module-fabsetup.utils.decorators" title="Permalink to this headline">¶</a></h2>
+<p>Function decorators.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.decorators.print_doc">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">print_doc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.decorators.print_doc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the docstring of the decorated function.</p>
+<p>May be invoked as a simple, argument-less decorator (i.e. <code class="docutils literal notranslate"><span class="pre">print_doc</span></code>)
+or with named arguments <code class="docutils literal notranslate"><span class="pre">color</span></code>, <code class="docutils literal notranslate"><span class="pre">bold</span></code>, <code class="docutils literal notranslate"><span class="pre">prefix</span></code>, or <code class="docutils literal notranslate"><span class="pre">tail</span></code>
+(eg. <code class="docutils literal notranslate"><span class="pre">print_doc(color=utils.red,</span> <span class="pre">bold=True,</span> <span class="pre">prefix='</span> <span class="pre">')</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> – Optionally define another color, default is color is
+<code class="docutils literal notranslate"><span class="pre">utils.colors.blue</span></code>.</p></li>
+<li><p><strong>bold</strong> (<em>bool</em>) – Optionally print docstring in bold letters, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – Optionally set a prefix, default is ‘’ (empty string).</p></li>
+<li><p><strong>tail</strong> (<em>str</em>) – Optionally set a tail, default is ‘n’.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># a context/connection is required</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">invoke.context</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">invoke</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">Context</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># argument-less</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@print_doc</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;docstring of func&quot;&quot;&quot;</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">[34mdocstring of func</span>
+<span class="go">[0m</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># with named arguments</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@print_doc</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">no_color</span><span class="p">,</span> <span class="n">tail</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n\n</span><span class="s1">Note! foobar&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="sd">&quot;&quot;&quot;docstring of func&quot;&quot;&quot;</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">docstring of func</span>
+
+<span class="go">Note! foobar</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.decorators.print_full_name">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.decorators.</span></span><span class="sig-name descname"><span class="pre">print_full_name</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.decorators.print_full_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the full name of the decorated function.</p>
+<p>May be invoked as a simple, argument-less decorator (i.e.
+<code class="docutils literal notranslate"><span class="pre">print_full_name</span></code>) or with named arguments <code class="docutils literal notranslate"><span class="pre">color</span></code>, <code class="docutils literal notranslate"><span class="pre">bold</span></code>,
+<code class="docutils literal notranslate"><span class="pre">prefix</span></code>, or <code class="docutils literal notranslate"><span class="pre">tail</span></code> (eg.
+<code class="docutils literal notranslate"><span class="pre">print_full_name(color=utils.red,</span> <span class="pre">bold=True,</span> <span class="pre">prefix='')</span></code>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>color</strong> – Optionally define another color, default is color is <code class="docutils literal notranslate"><span class="pre">no_color</span></code>.</p></li>
+<li><p><strong>bold</strong> (<em>bool</em>) – Optionally print docstring in bold letters, default is <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – Optionally set a prefix, default is ‘’ (empty string).</p></li>
+<li><p><strong>tail</strong> (<em>str</em>) – Optionally set a tail, default is ‘\n’.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Optionally set for another function name.</p></li>
+<li><p><strong>numbered</strong> (<em>[</em><em>int</em><em>]</em>) – Optionally set a numeration identifier</p></li>
+</ul>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># a context/connection is required</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">invoke.context</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">invoke</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">Context</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># argument-less</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@print_full_name</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">func</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># with named arguments</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@print_full_name</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="n">red</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;# &#39;</span><span class="p">,</span> <span class="n">tail</span><span class="o">=</span><span class="s1">&#39; mytail&#39;</span><span class="p">)</span>
+<span class="gp">... </span><span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">c</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">pass</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">func</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+<span class="go">[31m# func mytail[0m</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-fabsetup.utils.docstring">
+<span id="fabsetup-utils-docstring"></span><h2>fabsetup.utils.docstring<a class="headerlink" href="#module-fabsetup.utils.docstring" title="Permalink to this headline">¶</a></h2>
+<p>Manipulate docstring.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.docstring.lstripped_lines">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.docstring.</span></span><span class="sig-name descname"><span class="pre">lstripped_lines</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">text</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.docstring.lstripped_lines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return multiline string <code class="docutils literal notranslate"><span class="pre">text</span></code> each line stripped by four spaces if
+they exist.</p>
+<p>Example:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;# task</span><span class="se">\n\n</span><span class="s1">    docstring</span><span class="se">\n</span><span class="s1">     some&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="go"># task</span>
+
+<span class="go">    docstring</span>
+<span class="go">     some</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">lstripped_lines</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span>
+<span class="go">&#39;# task\n\ndocstring\n some&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+<span class="go"># task</span>
+
+<span class="go">docstring</span>
+<span class="go"> some</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-fabsetup.utils.outfile">
+<span id="fabsetup-utils-outfile"></span><h2>fabsetup.utils.outfile<a class="headerlink" href="#module-fabsetup.utils.outfile" title="Permalink to this headline">¶</a></h2>
+<p>While preserving output handles write stdout and stderr to outfile.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.stream_tee">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fabsetup.utils.outfile.</span></span><span class="sig-name descname"><span class="pre">stream_tee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream2</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.stream_tee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Tee <cite>stream1</cite> to <cite>stream2</cite>.</p>
+<p>Basically, stream_tee returns a wrapper of <code class="docutils literal notranslate"><span class="pre">stream1</span></code> which hooks in every
+method call for a method of <code class="docutils literal notranslate"><span class="pre">stream1</span></code> to be called on <code class="docutils literal notranslate"><span class="pre">stream2</span></code>, too.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stream1</strong> (<em>typing.TextIO</em>) – First filehandle.</p></li>
+<li><p><strong>stream2</strong> (<em>typing.TextIO</em>) – Second filehandle.</p></li>
+<li><p><strong>stream1_color</strong> (<em>fabsetup.utils.colors.color-function</em>) – Optionally set a color for stream1.</p></li>
+<li><p><strong>stream2_line_prefix</strong> (<em>str</em>) – Optionally set line prefix for stream2 which will be prepended to each
+line written.</p></li>
+<li><p><strong>stream2_no_prefix_lines</strong> (<em>list&lt;str&gt;</em>) – Optionally define lines which woud not prepended by a prefix when
+written.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>stream1</cite> wrapper which applies the tee feature.</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Prepare</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">tempfile</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stdout_orig</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># First Example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">outfile_handle</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryFile</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stream_tee</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">outfile_handle</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># output would be written to stdout and outfile</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Reset</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout_orig</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Second Example</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stream_tee</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;out&quot;</span><span class="p">)</span>
+<span class="go">outout</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.Singleton">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fabsetup.utils.outfile.</span></span><span class="sig-name descname"><span class="pre">Singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.Singleton" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<p>Singleton metaclass.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.Tee">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fabsetup.utils.outfile.</span></span><span class="sig-name descname"><span class="pre">Tee</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.Tee" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Single instance class in order to write both, stdout and stderr into a
+file and also to keep stdout and stderr output active.</p>
+<p>Uses <cite>fabsetup.outfile.Singleton</cite> as metaclass.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.Tee.set_outfile">
+<span class="sig-name descname"><span class="pre">set_outfile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.Tee.set_outfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Define the outfile where stdout and stderr will be written to.</p>
+<p>Recursively create parent dirs of <code class="docutils literal notranslate"><span class="pre">filename</span></code> if they not exist.</p>
+<p>If the outfile already exists it will be overwritten.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – </p></li>
+<li><p><strong>prefix</strong> (<em>str</em>) – Optionally write <cite>prefix</cite> to outfile at first.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.Tee.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.Tee.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up stdout, stderr and outfile handles and if given write prefix
+to outfile.</p>
+<p>Uses <cite>fabsetup.utils.outfile.stream_tee()</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.Tee.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.Tee.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset stdout and stderr to previous handles and close outfile handle.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.Tee.pause">
+<span class="sig-name descname"><span class="pre">pause</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.Tee.pause" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for <cite>stop()</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.Tee.resume">
+<span class="sig-name descname"><span class="pre">resume</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">missed_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.Tee.resume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up like in <cite>start()</cite> but append to outfile.</p>
+<p>Optionally write <cite>missed_output</cite> to outfile.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>missed_output</strong> (<em>str</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="fabsetup.utils.outfile.remove_color_codes">
+<span class="sig-prename descclassname"><span class="pre">fabsetup.utils.outfile.</span></span><span class="sig-name descname"><span class="pre">remove_color_codes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.outfile.remove_color_codes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove ANSI color codes from a file inplace.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – </p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-fabsetup.utils.pandoc">
+<span id="fabsetup-utils-pandoc"></span><h2>fabsetup.utils.pandoc<a class="headerlink" href="#module-fabsetup.utils.pandoc" title="Permalink to this headline">¶</a></h2>
+<p>With a locally installed <a class="reference external" href="https://pandoc.org/">Pandoc</a> add a table of
+content (toc) to Markdown files and create HTML from Markdown files.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="fabsetup.utils.pandoc.Pandoc">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">fabsetup.utils.pandoc.</span></span><span class="sig-name descname"><span class="pre">Pandoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/usr/bin/pandoc'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.pandoc.Pandoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Pandoc command execution interface.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>command</strong> (<em>str</em>) – Optionally, path to Pandoc executable.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.utils.pandoc.Pandoc.command_available">
+<span class="sig-name descname"><span class="pre">command_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.pandoc.Pandoc.command_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if pandoc command is available.</p>
+<p>Return <cite>True</cite> if command is available, else <cite>False</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.utils.pandoc.Pandoc.add_toc">
+<span class="sig-name descname"><span class="pre">add_toc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.pandoc.Pandoc.add_toc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a table of content to a Markdown file (inplace).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – Name of the Markdown file.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>True</cite> if toc has been added, else <cite>False</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="fabsetup.utils.pandoc.Pandoc.create_html">
+<span class="sig-name descname"><span class="pre">create_html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename_from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename_to</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">css_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#fabsetup.utils.pandoc.Pandoc.create_html" title="Permalink to this definition">¶</a></dt>
+<dd><p>From a Markdown file create an HTML file.</p>
+<p>Recursively create parent dirs of <code class="docutils literal notranslate"><span class="pre">filename_to</span></code> if they not exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename_from</strong> (<em>str</em>) – Name of the Markdown file.</p></li>
+<li><p><strong>filename_to</strong> (<em>str</em>) – Name of the HTML file.</p></li>
+<li><p><strong>css_url</strong> (<em>str</em>) – Optional, URL of a CSS file.</p></li>
+<li><p><strong>inline</strong> (<em>bool</em>) – Optionally embed CSS inline into the HTML file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>True</cite> if HTML file has been created, else <cite>False</cite>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">Fabsetup</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../README.html">Getting Started</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../advanced-usage.html">Advanced Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../configuration.html">Configuration</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../addons.html">Addons</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../create-addon.html">Create an Addon</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="fabsetup.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="fabsetup.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="fabsetup.fabutils.html">fabsetup.fabutils</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">fabsetup.utils</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-fabsetup.utils.colors">fabsetup.utils.colors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-fabsetup.utils.decorate">fabsetup.utils.decorate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-fabsetup.utils.decorators">fabsetup.utils.decorators</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-fabsetup.utils.docstring">fabsetup.utils.docstring</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-fabsetup.utils.outfile">fabsetup.utils.outfile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-fabsetup.utils.pandoc">fabsetup.utils.pandoc</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.html#module-fabsetup.addons">fabsetup.addons</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.html#module-fabsetup.fabfile">fabsetup.fabfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.html#module-fabsetup.main">fabsetup.main</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.html#module-fabsetup.print">fabsetup.print</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fabsetup.html#module-fabsetup.task">fabsetup.task</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../api-usage.html">API Usage</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Development</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="fabsetup.html">fabsetup API</a><ul>
+      <li>Previous: <a href="fabsetup.fabutils.html" title="previous chapter">fabsetup.fabutils</a></li>
+      <li>Next: <a href="../api-usage.html" title="next chapter">API Usage</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2016-2021 Theodor Nolte.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/api/fabsetup.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

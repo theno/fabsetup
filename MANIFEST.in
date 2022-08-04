@@ -1,1 +1,7 @@
 graft fabsetup/fabfile-data
+include fabsetup/utils/css/outfile.css
+include fabsetup/utils/css/html-script.js
+include fabsetup/utils/pandoc-filter/fenced-raw-codeblock.lua
+include pyproject.toml
+include README.md
+include LICENSE.txt
