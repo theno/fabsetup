@@ -10,11 +10,13 @@ import sys
 
 # import fabric
 import fabric.config
+
 # import fabric.connection
 import fabric.main
 import invoke
 import invoke.main
 import invoke.config
+
 # import invoke.context
 import invoke.parser
 from invoke.util import debug
@@ -23,6 +25,7 @@ import fabsetup.addons
 import fabsetup.print
 import fabsetup.utils.outfile
 import fabsetup.utils.pandoc
+
 # import fabsetup.fabutils.queries
 
 
@@ -323,16 +326,26 @@ class Defaults:
         if type(entries) is list:
             for entry in entries:
                 print("")
-                print("  " * depth + f"* ``{entry.key}``: {entry.description}")
+                # print("  " * depth + f"* ``{entry.key}``: {entry.description}")
+                print(
+                    "  " * depth
+                    + "* ``{entry.key}``: {entry.description}".format(entry=entry)
+                )
                 Defaults._as_restructuredtext_items_r(
                     entry.default_value, depth=depth + 1
                 )
         else:
             default_value = entries
             if default_value == "":
-                print("  " * depth + f"Empty string as default.")
+                print("  " * depth + "Empty string as default.")
             else:
-                print("  " * depth + f"Default value is ``{repr(default_value)}``.")
+                # print("  " * depth + f"Default value is ``{repr(default_value)}``.")
+                print(
+                    "  " * depth
+                    + "Default value is ``{default_value}``.".format(
+                        default_value=repr(default_value)
+                    )
+                )
 
     def as_restructuredtext_items(self):
         """Print configuration as list items in restructuredtext."""
