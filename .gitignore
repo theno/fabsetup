@@ -1,4 +1,9 @@
 /fabsetup_custom/
+docs/README.md
+docs/_build/
+.coverage
+.python-version
+.tox/
 
 # cf. https://github.com/github/gitignore
 
