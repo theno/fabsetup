@@ -70,13 +70,9 @@ class stream_tee:
         self.stream1_color = kwargs.get("stream1_color", None)
 
         self.stream2_line_prefix = kwargs.get("stream2_line_prefix", None)
-        self.stream2_no_prefix_lines = (
-            kwargs.get(
-                "stream2_no_prefix_lines",
-                [],
-            )
-            + [""]  # put no prefix on empty strings without newline at the end
-        )
+        self.stream2_no_prefix_lines = kwargs.get("stream2_no_prefix_lines", [],) + [
+            ""
+        ]  # put no prefix on empty strings without newline at the end
         self.add_prefix = False
 
     def __getattribute__(self, name):
@@ -92,16 +88,11 @@ class stream_tee:
 
         callable2 = getattr(self.stream2, self.__missing_method_name)
         prefix = self.stream2_line_prefix
-        if (
-            self.add_prefix
-            and self.__missing_method_name == "write"
-            and prefix
-        ):
+        if self.add_prefix and self.__missing_method_name == "write" and prefix:
             callable2(
                 "".join(
                     "{}{}\n".format(prefix, line)
-                    for line
-                    in args[0].split("\n")
+                    for line in args[0].split("\n")
                     if line not in self.stream2_no_prefix_lines
                 ),
                 *args[1:],

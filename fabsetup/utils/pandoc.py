@@ -99,7 +99,7 @@ class Pandoc:
             # "--standalone",
             "--include-after-body",
             os.path.join(os.path.dirname(__file__), "css", "html-script.js"),
-            "--metadata=pagetitle:\"{stem}\"".format(stem=fname_to_stem),
+            '--metadata=pagetitle:"{stem}"'.format(stem=fname_to_stem),
         ]
 
         if css_url:
