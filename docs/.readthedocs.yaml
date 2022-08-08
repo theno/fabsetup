@@ -8,6 +8,8 @@ build:
   tools:
     python: "3.9"
   commands:
+    - pip3.9 install --upgrade -e .[devel]
+
     # apply same steps as described in docs/development.md
 
     # include README
@@ -34,14 +36,3 @@ build:
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
 #    - pdf
-
-# Optionally declare the Python requirements required to build your docs
-python:
-   install:
-     - method: pip
-       path: .
-       extra_requirements:
-         - devel
-     # install fabsetup itself and dependency fabric and dep-deps like invoke
-     - method: pip
-       path: .
