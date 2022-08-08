@@ -16,7 +16,8 @@ build:
     - ln -s ../README.md  docs/
 
     # update api docs structure
-    - rm -rf docs/api && sphinx-apidoc -o docs/api --module-first fabsetup
+    # - rm -rf docs/api && sphinx-apidoc -o docs/api --module-first fabsetup
+    - rm -rf docs/api && python3.9 -m sphinx.ext.apidoc -o docs/api --module-first fabsetup
 
     # apply tweaks
     - sed -i '/Submodules/{ N; s/.*----------//; }' docs/api/fabsetup{,.{fab,}utils}.rst
