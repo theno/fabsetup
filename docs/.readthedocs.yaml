@@ -42,5 +42,6 @@ python:
        path: .
        extra_requirements:
          - devel
-     - method: setuptools
+     # install fabsetup itself and dependency fabric and dep-deps like invoke
+     - method: pip
        path: .
