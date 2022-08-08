@@ -20,7 +20,7 @@ build:
     - rm -rf docs/api && python3.9 -m sphinx.ext.apidoc -o docs/api --module-first fabsetup
 
     # apply tweaks
-    - sed -i '/Submodules/{ N; s/.*----------//; }' docs/api/fabsetup{,.{fab,}utils}.rst
+    # - sed -i '/Submodules/{ N; s/.*----------//; }' docs/api/fabsetup{,.{fab,}utils}.rst
     - sed -i 's/fabsetup package/fabsetup API/' docs/api/fabsetup.rst
     - sed -i 's/Subpackages/Submodules/' docs/api/fabsetup.rst
     - sed -i 's/ package$//' docs/api/fabsetup.{fab,}utils.rst
