@@ -22,11 +22,11 @@ build:
     # apply tweaks
     # commands dialect needs to be different
     # cf. https://github.com/readthedocs/readthedocs.org/issues/9397
-    - bash -c '- sed -i "/Submodules/{ N; s/.*----------//; }" docs/api/fabsetup{,.{fab,}utils}.rst'
+    - bash -c \'- sed -i "/Submodules/{ N; s/.*----------//; }" docs/api/fabsetup{,.{fab,}utils}.rst\'
     - sed -i "s/fabsetup package/fabsetup API/" docs/api/fabsetup.rst
     - sed -i "s/Subpackages/Submodules/" docs/api/fabsetup.rst
-    - bash -c 'sed -i "s/ package$//" docs/api/fabsetup.{fab,}utils.rst'
-    - bash -c 'sed -i "s/ module$//g" docs/api/fabsetup{,.{fab,}utils}.rst'
+    - bash -c \'sed -i "s/ package$//" docs/api/fabsetup.{fab,}utils.rst\'
+    - bash -c \'sed -i "s/ module$//g" docs/api/fabsetup{,.{fab,}utils}.rst\'
     - rm docs/api/modules.rst
 
     # run sphinx
