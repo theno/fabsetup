@@ -42,6 +42,8 @@ build:
 
     # create symlink for readthedocs upload
     - ln -s docs/_build/ _readthedocs
+
+    # inspect dirs for debugging in case of build errors
     - ls -ahl docs/_build || true
     - ls -ahl docs/_build/html || true
     - ls -ahl _readthedocs || true
