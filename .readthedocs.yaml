@@ -10,6 +10,7 @@ build:
   commands:
     # install fabsetup and devel dependencies including sphinx tools
     - pip3.9 install --upgrade -e .[devel]
+    - asdf reshim
 
     # apply same steps as described in docs/development.md
 
@@ -17,9 +18,7 @@ build:
     - ln -s ../README.md  docs/
 
     # update api docs structure
-    # - rm -rf docs/api && sphinx-apidoc -o docs/api --module-first fabsetup
-    # command shpinx-apidoc is not in environment, call it via python
-    - rm -rf docs/api && python3.9 -m sphinx.ext.apidoc -o docs/api --module-first fabsetup
+    - rm -rf docs/api && sphinx-apidoc -o docs/api --module-first fabsetup
 
     # apply tweaks
     # commands dialect needs to be different
@@ -41,23 +40,10 @@ build:
     - rm docs/api/modules.rst
 
     # run sphinx
-    # command shpinx-build is not in environment, create an alias for it
-    # - alias sphinx-build="python3.9 -m sphinx.cmd.build" && sphinx-build --version
     - echo $PATH
-    - env
     - command -v python3.9
     - command -v pip3.9
-
-    - ls -ahl /home/docs/checkouts/readthedocs.org/user_builds/fabsetup/envs/latest/bin || true
-    - ls -ahl /home/docs/checkouts/readthedocs.org/user_builds/fabsetup/envs/latest/lib/pyhton3.9/site-packages || true
-    - ls -ahl /home/docs/.asdf/shims || true
-    - ls -ahl /home/docs/.asdf/bin || true
-    - ls -ahl /usr/local/sbin || true
-    - ls -ahl /usr/local/bin || true
-    - ls -ahl /usr/sbin || true
-    - ls -ahl /usr/bin || true
-    - ls -ahl /sbin || true
-    - ls -ahl /bin || true
+    - ls -ahl /home/docs/.asdf/shims
 
     - cd docs && make clean html; cd ..
 
