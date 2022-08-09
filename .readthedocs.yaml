@@ -23,29 +23,29 @@ build:
     # apply tweaks
     # commands dialect needs to be different
     # cf. https://github.com/readthedocs/readthedocs.org/issues/9397
-
     - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.fabutils.rst
     - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.rst
     - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.utils.rst
-
+    #
     - sed -i "s/fabsetup package/fabsetup API/" docs/api/fabsetup.rst
     - sed -i "s/Subpackages/Submodules/" docs/api/fabsetup.rst
-
+    #
     - sed -i "s/ package$//" docs/api/fabsetup.fabutils.rst
     - sed -i "s/ package$//" docs/api/fabsetup.utils.rst
-
+    #
     - sed -i "s/ module$//g" docs/api/fabsetup.fabutils.rst
     - sed -i "s/ module$//g" docs/api/fabsetup.rst
     - sed -i "s/ module$//g" docs/api/fabsetup.utils.rst
-
+    #
     - rm docs/api/modules.rst
 
     # run sphinx
     # command shpinx-build is not in environment, create an alias for it
-    - alias sphinx-build="python3.9 -m sphinx.cmd.build
+    - alias sphinx-build="python3.9 -m sphinx.cmd.build"
     - cd docs && make clean html; cd ..
 
     # create symlink for readthedocs upload
+
     - mkdir _readthedocs
     - ln -s docs/_build/ _readthedocs
     - ls -ahl _readthedocs
