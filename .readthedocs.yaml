@@ -42,3 +42,11 @@ build:
 
     # create symlink for readthedocs upload
     - ln -s _build/ _readthedocs
+    - ls -ahl docs/_build || true
+    - ls -ahl docs/_build/html || true
+    - ls -ahl _build || true
+    - ls -ahl _build/html || true
+    - ls -ahl _readthedocs || true
+    - ls -ahl _readthedocs/ || true
+    - ls -ahl _readthedocs/html || true
+    - pwd
