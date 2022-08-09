@@ -42,8 +42,7 @@ build:
 
     # run sphinx
     # command shpinx-build is not in environment, create an alias for it
-    - alias sphinx-build="python3.9 -m sphinx.cmd.build"
-    - sphinx-build --version
+    - alias sphinx-build="python3.9 -m sphinx.cmd.build" && sphinx-build --version
     - echo $PATH
     - env
     - cd docs && make clean html; cd ..
