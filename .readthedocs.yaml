@@ -41,6 +41,4 @@ build:
     - cd docs && make clean html; cd ..
 
     # create symlink for readthedocs upload
-
-    - mkdir _readthedocs
     - ln -s _build/ _readthedocs
