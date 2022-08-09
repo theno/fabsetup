@@ -3,6 +3,10 @@
 **Set up and maintain configurations, software installations and other
 things on a local or remote linux system.**
 
+Source: <https://github.com/theno/fabsetup>
+
+Documentation: <https://fabsetup.readthedocs.io>
+
 Features:
 
 * Fabsetup's **tasks** do the things:
@@ -128,6 +132,9 @@ fabsetup --he<TAB>      ->  fabsetup --help
 fabsetup --help i<TAB>  ->  fabsetup --help info
 ```
 
+More features:
+[Advanced Usage](https://fabsetup.readthedocs.io/en/latest/advanced-usage.html)
+
 ## Addons
 
 Fabsetup itself only comes with two tasks, `info` and `new`.  The tasks
@@ -152,6 +159,9 @@ fabsetup theno.termdown
 fabsetup -H user@host theno.termdown
 ```
 
+More infos:
+[Fabsetup Addons](https://fabsetup.readthedocs.io/en/latest/addons.html)
+
 ## Your Addon
 
 Create Your own fabsetup addon doing great things! Start now:
@@ -159,3 +169,6 @@ Create Your own fabsetup addon doing great things! Start now:
 ```sh
 fabsetup new
 ```
+
+More infos:
+[Create a Fabsetup Addon](https://fabsetup.readthedocs.io/en/latest/create-addon.html)
