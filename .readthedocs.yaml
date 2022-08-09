@@ -8,6 +8,7 @@ build:
   tools:
     python: "3.9"
   commands:
+    # install fabsetup and devel dependencies including sphinx tools
     - pip3.9 install --upgrade -e .[devel]
 
     # apply same steps as described in docs/development.md
@@ -42,6 +43,9 @@ build:
     # run sphinx
     # command shpinx-build is not in environment, create an alias for it
     - alias sphinx-build="python3.9 -m sphinx.cmd.build"
+    - sphinx-build --version
+    - echo $PATH
+    - env
     - cd docs && make clean html; cd ..
 
     # create symlink for readthedocs upload
