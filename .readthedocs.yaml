@@ -46,6 +46,19 @@ build:
     - echo $PATH
     - env
     - command -v python3.9
+    - command -v pip3.9
+
+    - ls -ahl /home/docs/checkouts/readthedocs.org/user_builds/fabsetup/envs/latest/bin
+    - ls -ahl /home/docs/checkouts/readthedocs.org/user_builds/fabsetup/envs/latest/lib/pyhton3.9/site-packages
+    - ls -ahl /home/docs/.asdf/shims
+    - ls -ahl /home/docs/.asdf/bin
+    - ls -ahl /usr/local/sbin
+    - ls -ahl /usr/local/bin
+    - ls -ahl /usr/sbin
+    - ls -ahl /usr/bin
+    - ls -ahl /sbin
+    - ls -ahl /bin
+
     - cd docs && make clean html; cd ..
 
     # create symlink for readthedocs upload
