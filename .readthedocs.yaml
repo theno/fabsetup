@@ -10,6 +10,8 @@ build:
   commands:
     # install fabsetup and devel dependencies including sphinx tools
     - pip3.9 install --upgrade -e .[devel]
+
+    # enable commands sphinx-apidoc and sphinx-build
     - asdf reshim
 
     # apply same steps as described in docs/development.md
@@ -21,40 +23,24 @@ build:
     - rm -rf docs/api && sphinx-apidoc -o docs/api --module-first fabsetup
 
     # apply tweaks
-    # commands dialect needs to be different
+    # commands syntax needs to be different
     # cf. https://github.com/readthedocs/readthedocs.org/issues/9397
     - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.fabutils.rst
     - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.rst
     - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.utils.rst
-    #
     - sed -i "s/fabsetup package/fabsetup API/" docs/api/fabsetup.rst
     - sed -i "s/Subpackages/Submodules/" docs/api/fabsetup.rst
-    #
     - sed -i "s/ package$//" docs/api/fabsetup.fabutils.rst
     - sed -i "s/ package$//" docs/api/fabsetup.utils.rst
-    #
     - sed -i "s/ module$//g" docs/api/fabsetup.fabutils.rst
     - sed -i "s/ module$//g" docs/api/fabsetup.rst
     - sed -i "s/ module$//g" docs/api/fabsetup.utils.rst
-    #
     - rm docs/api/modules.rst
 
     # run sphinx
-    - echo $PATH
-    - command -v python3.9
-    - command -v pip3.9
-    - ls -ahl /home/docs/.asdf/shims
-
     - cd docs && make clean html; cd ..
 
     # create symlink for readthedocs upload
 
     - mkdir _readthedocs
-    - ln -s docs/_build/ _readthedocs
-    - ls -ahl _readthedocs
-    - ls -ahl _readthedocs/
-    - ls -ahl _readthedocs/html
-
-# If using Sphinx, optionally build your docs in additional formats such as PDF
-# formats:
-#    - pdf
+    - ln -s _build/ _readthedocs
