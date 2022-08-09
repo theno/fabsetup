@@ -25,8 +25,14 @@ build:
     # bash -c 'sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.fabutils.rst docs/api/fabsetup.rst docs/api/fabsetup.utils.rst'
     - sed -i "s/fabsetup package/fabsetup API/" docs/api/fabsetup.rst
     - sed -i "s/Subpackages/Submodules/" docs/api/fabsetup.rst
-    - bash -c "sed -i 's/ package$//' docs/api/fabsetup.fabutils.rst docs/api/fabsetup.utils.rst"
-    - bash -c "sed -i 's/ module$//g' docs/api/fabsetup.fabutils.rst docs/api/fabsetup.rst docs/api/fabsetup.utils.rst"
+
+    - sed -i "s/ package$//" docs/api/fabsetup.fabutils.rst
+    - sed -i "s/ package$//" docs/api/fabsetup.utils.rst
+
+    - sed -i "s/ module$//g" docs/api/fabsetup.fabutils.rst
+    - sed -i "s/ module$//g" docs/api/fabsetup.rst
+    - sed -i "s/ module$//g" docs/api/fabsetup.utils.rst
+
     - rm docs/api/modules.rst
 
     # run sphinx
