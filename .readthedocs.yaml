@@ -17,12 +17,17 @@ build:
 
     # update api docs structure
     # - rm -rf docs/api && sphinx-apidoc -o docs/api --module-first fabsetup
+    # command shpinx-apidoc is not in environment, call it via python
     - rm -rf docs/api && python3.9 -m sphinx.ext.apidoc -o docs/api --module-first fabsetup
 
     # apply tweaks
     # commands dialect needs to be different
     # cf. https://github.com/readthedocs/readthedocs.org/issues/9397
-    # bash -c 'sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.fabutils.rst docs/api/fabsetup.rst docs/api/fabsetup.utils.rst'
+
+    - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.fabutils.rst
+    - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.rst
+    - sed -i "/Submodules/{ N; s/.*----------//; }"  docs/api/fabsetup.utils.rst
+
     - sed -i "s/fabsetup package/fabsetup API/" docs/api/fabsetup.rst
     - sed -i "s/Subpackages/Submodules/" docs/api/fabsetup.rst
 
@@ -41,6 +46,7 @@ build:
     # create symlink for readthedocs upload
     - mkdir _readthedocs
     - ln -s docs/_build/ _readthedocs
+    - ls -ahl _readthedocs
 
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
