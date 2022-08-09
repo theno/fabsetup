@@ -40,7 +40,7 @@ build:
 
     # create symlink for readthedocs upload
     - mkdir _readthedocs
-    - ln -s _readthedocs/html ../docs/_build/html
+    - ln -s ../docs/_build/html _readthedocs/html
 
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
