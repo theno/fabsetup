@@ -47,6 +47,8 @@ build:
     - mkdir _readthedocs
     - ln -s docs/_build/ _readthedocs
     - ls -ahl _readthedocs
+    - ls -ahl _readthedocs/
+    - ls -ahl _readthedocs/html
 
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
