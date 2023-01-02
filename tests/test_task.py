@@ -313,7 +313,8 @@ def run_test_task(test, capsys, monkeypatch, tmpdir):
     hostname = socket.gethostname()
 
     user_host = "%s@%s" % (username, hostname)
-    user_localhost = "%s@%s" % (username, "localhost")
+    # user_localhost = "%s@%s" % (username, "localhost")
+    user_localhost = "%s@%s" % (username, hostname)
 
     run_prompt = "%s> " % user_host
     local_prompt = "%s> " % user_localhost
