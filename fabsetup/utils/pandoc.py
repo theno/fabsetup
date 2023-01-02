@@ -7,6 +7,8 @@ import os.path
 import pathlib
 import subprocess
 
+from invoke.util import debug
+
 
 class Pandoc:
     """Pandoc command execution interface.
@@ -92,7 +94,7 @@ class Pandoc:
 
         fname_from = os.path.abspath(os.path.expanduser(filename_from))
 
-        fname_to = os.path.abspath(os.path.expanduser(filename_from))
+        fname_to = os.path.abspath(os.path.expanduser(filename_to))
         fname_to_stem = pathlib.Path(fname_to).stem
 
         options = [
@@ -128,6 +130,7 @@ class Pandoc:
             ]
         )
         # print(' '.join(cmd))  # TODO DEVEL
+        debug(cmd)
         process = subprocess.Popen(cmd)
         process.communicate()
         return process.returncode == 0
