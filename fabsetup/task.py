@@ -8,6 +8,7 @@ from functools import wraps
 import fabric
 import fabric.connection
 import invoke.context
+from invoke.util import debug
 
 import fabsetup.fabutils.queries
 from fabsetup.utils.decorators import print_doc, print_full_name
@@ -445,8 +446,14 @@ def task(*args, **kwargs):
                 ),
             )
 
-            if isinstance(c, fabric.connection.Connection):
+            if (
+                isinstance(c, fabric.connection.Connection)
+                and hasattr(c, "host")
+                and c.host != "localhost"
+            ):
                 # `fabsetup` or `fab` was called with -H argument
+
+                debug(f"called with `-H {c.user}@{c.host}`".format(c))
 
                 c.run = wrapped_run_method(
                     c, run_method=c.run, remote=True, **wrap_kwargs
@@ -454,10 +461,57 @@ def task(*args, **kwargs):
                 c.local = wrapped_run_method(
                     c, run_method=c.local, remote=False, **wrap_kwargs
                 )
+
+                def put_scp(local, remote, recursive=False):
+
+                    rcsv = ""
+                    if recursive:
+                        rcsv = " -r"
+
+                    res = c.local(
+                        "scp{rcsv} {local} {c.user}@{c.host}:{remote}".format(
+                            rcsv=rcsv,
+                            local=local,
+                            remote=remote,
+                            c=c,
+                        )
+                    )
+                    return res
+
+                c.put = put_scp
+
+            elif hasattr(c, "host") and c.host == "localhost":
+
+                debug("`-H localhost` is used")
+
+                c.local = wrapped_run_method(
+                    c, run_method=c.local, remote=False, **wrap_kwargs
+                )
+                c.run = c.local
+
+                def put_cp(local, remote, recursive=False):
+
+                    rcsv = ""
+                    if recursive:
+                        rcsv = " -r"
+
+                    res = c.local(
+                        "cp{rcsv} {local} {remote}".format(
+                            rcsv=rcsv,
+                            local=local,
+                            remote=remote,
+                        )
+                    )
+                    return res
+
+                c.put = put_cp
+
             else:
                 # type of c is invoke.context.Context
                 # `fabsetup` or `fab` was called without -H argument
                 # or `invoke` was called
+
+                debug("no `-H` argument used")
 
                 c.run = wrapped_run_method(
                     c,
@@ -471,6 +525,24 @@ def task(*args, **kwargs):
                     **wrap_kwargs
                 )
                 c.local = c.run
+
+                def put_cp(local, remote, recursive=False):
+
+                    rcsv = ""
+                    if recursive:
+                        rcsv = " -r"
+
+                    res = c.local(
+                        "cp{rcsv} {local} {remote}".format(
+                            rcsv=rcsv,
+                            local=local,
+                            remote=remote,
+                        )
+                    )
+                    return res
+
+                c.put = put_cp
+
             # TODO: raise c is no context or connection TypeError
 
             color = config_color(c.config, ["output", "color", "task_heading"], magenta)
