@@ -19,9 +19,7 @@ def test_stream_tee(capsys):
     )
 
     tests = [
-
         # "straight forward"
-
         Test(
             stream1=sys.stdout,
             stream2=sys.stdout,
@@ -46,9 +44,7 @@ def test_stream_tee(capsys):
             expected_out="baz\n",
             expected_err="baz\n",
         ),
-
         # "advanced"
-
         Test(
             stream1=sys.stdout,
             stream2=sys.stderr,
@@ -65,7 +61,6 @@ def test_stream_tee(capsys):
             expected_out="foofoo\n\n",
             expected_err="bar\n",
         ),
-
         # kwargs
     ]
 

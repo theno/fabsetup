@@ -72,6 +72,7 @@ def test_defaults():
 
 # # # test __main__.py # # #
 
+
 def test_print_version(capsys, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["program-name", "--version"])
 

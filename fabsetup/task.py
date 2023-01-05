@@ -104,6 +104,10 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
     :param str prefix_formatter:
         Optional, default: ``'\\n```{language}\\n'``
 
+    :param str cmd_placeholder:
+        Will be printed instead of the actual``cmd``.
+        Optional, default: ``None``
+
     :param str local_cmd_formatter:
         Optional, default: ``'{user}@{host}{prompt_end}{cmd}'``
 
@@ -184,6 +188,7 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
         )
 
         inner_prefix_formatter = kwargs.pop("prefix_formatter", prefix_formatter)
+        inner_cmd_placeholder = kwargs.pop("cmd_placeholder", None)
         inner_local_cmd_formatter = kwargs.pop(
             "local_cmd_formatter", local_cmd_formatter
         )
@@ -216,7 +221,9 @@ def wrapped_run_method(c, run_method, remote, **kwargs):
 
         user = getpass.getuser()
         host = socket.gethostname()
-        cmd_arg = color_local(cmd, bold=True)
+        cmd_arg = color_local(
+            inner_cmd_placeholder if inner_cmd_placeholder else cmd, bold=True
+        )
         cmd_formatter = inner_local_cmd_formatter
 
         if remote:
@@ -402,6 +409,13 @@ def task(*args, **kwargs):
     '''  # noqa: E501
     # read environment variable in case of invoke or fab execution
     depth = kwargs.pop("depth", os.environ.get("FABSETUP_OUTPUT_TASK_DEPTH", None))
+    output_numbered = kwargs.pop(
+        "output_numbered", os.environ.get("FABSETUP_OUTPUT_NUMBERED", None)
+    )
+    numbered_state = kwargs.pop(
+        "numbered_state", os.environ.get("FABSETUP_OUTPUT_NUMBERED_STATE", None)
+    )
+
     name_ = kwargs.pop("name_", None)
     doc = kwargs.pop("doc", True)
 
@@ -522,7 +536,7 @@ def task(*args, **kwargs):
                         "{cmd}"
                         # "local_cmd_formatter", "{prompt_end}{cmd}"
                     ),
-                    **wrap_kwargs
+                    **wrap_kwargs,
                 )
                 c.local = c.run
 
@@ -548,6 +562,13 @@ def task(*args, **kwargs):
             color = config_color(c.config, ["output", "color", "task_heading"], magenta)
 
             cur_depth = get_task_depth(c, default=int(depth or 1))
+
+            if output_numbered:
+                c.config["output"]["numbered"] = True
+
+            if numbered_state:
+                c.config["output"] = c.config.get("output", {})
+                c.config["output"]["numbered_state"] = numbered_state
 
             wrapped = print_full_name(
                 color=color,
