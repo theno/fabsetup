@@ -1,1 +1,1 @@
-__version__ = "0.11.0"  # semantic versioning: https://semver.org
+__version__ = "0.12.0"  # semantic versioning: https://semver.org
