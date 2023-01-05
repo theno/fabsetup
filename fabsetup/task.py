@@ -47,6 +47,22 @@ def issue_16_workaround(context):
         context.config["run"]["env"]["SSH_AUTH_SOCK"] = ssh_agent
 
 
+def issue_833_workaround():
+    """Assign `inspect.getfullargspec` to `inspect.getargspec` if it not exists.
+
+    Workaround for `Invoke issue 833
+    <https://github.com/pyinvoke/invoke/issues/833>`_ provided by `ian-em
+    <https://github.com/pyinvoke/invoke/issues/833#issuecomment-1293148106>`_.
+    """
+    import inspect
+
+    if not hasattr(inspect, 'getargspec'):
+            inspect.getargspec = inspect.getfullargspec
+
+
+issue_833_workaround()
+
+
 def from_config(config, path, default):
     res = config
     for item in path:
