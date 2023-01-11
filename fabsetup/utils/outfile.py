@@ -228,7 +228,7 @@ class Tee(metaclass=Singleton):
         :param str `missed_output`:
         """
         self._start(append=True)
-        if missed_output:
+        if self.outfile_handle and missed_output:
             self.outfile_handle.write(missed_output)
 
 
