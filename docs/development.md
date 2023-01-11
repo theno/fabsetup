@@ -177,3 +177,6 @@ rm docs/api/modules.rst
 
 cd docs && make clean html; cd ..
 ```
+
+This commands are executed to create the readthedocs documentation:
+<https://github.com/theno/fabsetup/blob/main/.readthedocs.yaml>
